@@ -1,0 +1,5 @@
+import Link from "next/link";
+import { MenuIcon, SearchIcon } from "@/components/icons";
+const navigation = ["Home", "Movies", "TV Shows", "Discover"];
+const hrefFor = (item: string) => item === "Home" ? "/" : `#${item.toLowerCase().replaceAll(" ", "-")}`;
+export function Navbar() { return <header className="site-header"><nav className="shell navbar" aria-label="Main navigation"><Link className="brand" href="/" aria-label="Project Y home">PROJECT<span>Y</span></Link><div className="nav-links">{navigation.map((item) => <Link key={item} href={hrefFor(item)}>{item}</Link>)}</div><div className="nav-actions"><button className="icon-button" aria-label="Search"><SearchIcon /></button><button className="sign-in">Sign in</button></div><details className="mobile-menu"><summary aria-label="Open navigation"><MenuIcon /></summary><div className="mobile-menu-panel">{navigation.map((item) => <Link key={item} href={hrefFor(item)}>{item}</Link>)}<button className="mobile-sign-in">Sign in</button></div></details></nav></header>; }

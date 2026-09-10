@@ -1,0 +1,29 @@
+{
+  "name": "private-friends-chat",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Self-hosted, invite-only friends chat application",
+  "packageManager": "npm@11.16.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n api,web -c blue,magenta \"npm run dev --workspace @private-chat/api\" \"npm run dev --workspace @private-chat/web\"",
+    "build": "npm run build --workspace @private-chat/shared && npm run build --workspace @private-chat/api && npm run build --workspace @private-chat/web",
+    "check": "npm run build --workspace @private-chat/shared && npm run check --workspace @private-chat/api && npm run check --workspace @private-chat/web",
+    "test": "npm run test --workspace @private-chat/api",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "db:up": "docker compose up -d db",
+    "db:down": "docker compose down",
+    "db:logs": "docker compose logs -f db",
+    "db:migrate": "npm run db:migrate --workspace @private-chat/api",
+    "create-owner": "npm run create-owner --workspace @private-chat/api"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.3"
+  }
+}

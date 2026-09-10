@@ -1,0 +1,1 @@
+export default function Loading(){return <main className="shell loading-page" aria-live="polite"><p className="eyebrow">Loading</p><div className="loading-title"/><div className="loading-grid">{Array.from({length:6},(_,index)=><div className="loading-card" key={index}/>)}</div><span className="sr-only">Loading titles…</span></main>}

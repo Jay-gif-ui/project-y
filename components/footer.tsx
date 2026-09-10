@@ -1,0 +1,2 @@
+import Link from "next/link";
+export function Footer() { return <footer className="footer"><div className="shell footer-inner"><div><Link className="brand" href="/">PROJECT<span>Y</span></Link><p>Find something worth watching.</p></div><div className="footer-links"><Link href="#discover">Discover</Link><Link href="#movies">Movies</Link><Link href="#tv-shows">TV Shows</Link></div><p className="copyright">© 2026 Project Y</p></div></footer>; }
