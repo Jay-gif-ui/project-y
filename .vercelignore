@@ -1,0 +1,4 @@
+private-friends-chat/
+.npm-cache/
+.next/
+node_modules/
