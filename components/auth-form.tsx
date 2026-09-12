@@ -15,7 +15,7 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
     if (password.length < 8) { setError("Password must contain at least 8 characters."); return; }
     setLoading(true); const supabase = getSupabaseBrowserClient();
     if (!supabase) { setError("Authentication has not been configured yet."); setLoading(false); return; }
-    const result = signup ? await supabase.auth.signUp({ email, password, options: { emailRedirectTo: `${window.location.origin}/login` } }) : await supabase.auth.signInWithPassword({ email, password });
+    const result = signup ? await supabase.auth.signUp({ email, password, options: { emailRedirectTo: `${window.location.origin}/auth/callback?next=/` } }) : await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
     if (result.error) { setError(result.error.message); return; }
     if (signup && !result.data.session) { setMessage("Check your email to confirm your account, then sign in."); return; }
