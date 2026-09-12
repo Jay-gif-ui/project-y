@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/components/auth-provider";
 import { getSupabaseBrowserClient } from "@/lib/supabase-browser";
-import { imageUrl, type Media, type MediaType } from "@/lib/media";
+import { imageUrl, type MediaType } from "@/lib/media";
 
 type WishlistRow = { id:string; tmdb_id:number; media_type:MediaType; title:string; poster_path:string|null; release_date:string|null; rating:number|null };
 export function WishlistPage() {
