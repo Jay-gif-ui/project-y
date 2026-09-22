@@ -7,6 +7,8 @@ import { MovieGrid } from "@/components/movie-grid";
 import { Navbar } from "@/components/navbar";
 import { WatchProviders } from "@/components/watch-providers";
 import { getTitleDetails, getWatchProviders, imageUrl, type MediaType } from "@/lib/tmdb";
+import { cookies } from "next/headers";
+import { COUNTRY_PREFERENCE_COOKIE, getCountry } from "@/lib/countries";
 
 type PageProps = { params: Promise<{ type: string; id: string }> };
 const valid = (type: string, id: string): type is MediaType => (type === "movie" || type === "tv") && /^\d+$/.test(id);
@@ -24,7 +26,8 @@ export default async function TitlePage({ params }: PageProps) {
   const { type, id } = await params;
   if (!valid(type, id)) notFound();
   const titleId = Number(id);
-  const [detailResult, providerResult] = await Promise.all([getTitleDetails(type, titleId), getWatchProviders(type, titleId, "US")]);
+  const country = getCountry((await cookies()).get(COUNTRY_PREFERENCE_COOKIE)?.value);
+  const [detailResult, providerResult] = await Promise.all([getTitleDetails(type, titleId), getWatchProviders(type, titleId, country.tmdbRegion)]);
   if (!("data" in detailResult) || !detailResult.data) {
     if (detailResult.error === "not-found") notFound();
     return <><Navbar /><main className="shell title-error"><p className="eyebrow">Service update</p><h1>Title details are temporarily unavailable.</h1><p>We could not load this title from the movie service. Please try again shortly.</p><Link href="/" className="primary-link">Back to discovery</Link></main><Footer /></>;
