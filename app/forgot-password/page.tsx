@@ -1,5 +1,5 @@
-import { PasswordRecoveryRequest } from "@/components/password-recovery-request";
+import { redirect } from "next/navigation";
 
 export default function ForgotPasswordPage() {
-  return <PasswordRecoveryRequest />;
+  redirect("/login");
 }
