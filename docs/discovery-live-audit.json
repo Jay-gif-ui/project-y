@@ -1,0 +1,1828 @@
+{
+  "auditedAt": "2026-09-23T16:51:11.566Z",
+  "dns": "Process-only Cloudflare DNS for api.themoviedb.org; normal system DNS timed out. HTTPS hostname and certificate validation unchanged.",
+  "window": {
+    "recentStart": "2025-01-01",
+    "today": "2026-09-23"
+  },
+  "countries": [
+    {
+      "region": "IN",
+      "before": {
+        "count": 18,
+        "recent": 7
+      },
+      "after": {
+        "count": 18,
+        "recent": 18,
+        "movies": 9,
+        "tv": 9
+      },
+      "items": [
+        {
+          "id": 1641629,
+          "type": "movie",
+          "title": "You+Me - Against the World",
+          "date": "2026-09-18"
+        },
+        {
+          "id": 275102,
+          "type": "tv",
+          "title": "The Scandal",
+          "date": "2026-09-18"
+        },
+        {
+          "id": 1440098,
+          "type": "movie",
+          "title": "Drawn Together",
+          "date": "2026-09-09"
+        },
+        {
+          "id": 299939,
+          "type": "tv",
+          "title": "Monster: The Lizzie Borden Story",
+          "date": "2026-09-17"
+        },
+        {
+          "id": 1451944,
+          "type": "movie",
+          "title": "Lust Stories 3",
+          "date": "2026-09-18"
+        },
+        {
+          "id": 331932,
+          "type": "tv",
+          "title": "Ali Baba Aur 40 Bhoot",
+          "date": "2026-09-11"
+        },
+        {
+          "id": 1386315,
+          "type": "movie",
+          "title": "The Runner",
+          "date": "2026-09-03"
+        },
+        {
+          "id": 273207,
+          "type": "tv",
+          "title": "Neagley",
+          "date": "2026-09-16"
+        },
+        {
+          "id": 1137844,
+          "type": "movie",
+          "title": "Mayday",
+          "date": "2026-09-03"
+        },
+        {
+          "id": 95350,
+          "type": "tv",
+          "title": "Lanterns",
+          "date": "2026-08-16"
+        },
+        {
+          "id": 1408162,
+          "type": "movie",
+          "title": "Vishwanath & Sons",
+          "date": "2026-08-14"
+        },
+        {
+          "id": 313172,
+          "type": "tv",
+          "title": "Chumbak",
+          "date": "2026-09-10"
+        },
+        {
+          "id": 1516698,
+          "type": "movie",
+          "title": "The Last Sunrise",
+          "date": "2026-08-26"
+        },
+        {
+          "id": 260249,
+          "type": "tv",
+          "title": "The Trial",
+          "date": "2026-09-11"
+        },
+        {
+          "id": 1621552,
+          "type": "movie",
+          "title": "Facing El Chapo",
+          "date": "2026-08-21"
+        },
+        {
+          "id": 300507,
+          "type": "tv",
+          "title": "Crew Girl",
+          "date": "2026-09-10"
+        },
+        {
+          "id": 1685882,
+          "type": "movie",
+          "title": "Modha Rathri",
+          "date": "2026-08-21"
+        },
+        {
+          "id": 249863,
+          "type": "tv",
+          "title": "The Revolutionaries",
+          "date": "2026-09-11"
+        }
+      ],
+      "providerSamples": [
+        {
+          "id": 1641629,
+          "type": "movie",
+          "providers": [
+            "Amazon Prime Video",
+            "Amazon Prime Video with Ads"
+          ]
+        },
+        {
+          "id": 275102,
+          "type": "tv",
+          "providers": [
+            "Netflix"
+          ]
+        },
+        {
+          "id": 1440098,
+          "type": "movie",
+          "providers": [
+            "Amazon Prime Video",
+            "Amazon Prime Video with Ads"
+          ]
+        },
+        {
+          "id": 299939,
+          "type": "tv",
+          "providers": [
+            "Netflix"
+          ]
+        }
+      ]
+    },
+    {
+      "region": "US",
+      "before": {
+        "count": 18,
+        "recent": 9
+      },
+      "after": {
+        "count": 18,
+        "recent": 18,
+        "movies": 9,
+        "tv": 9
+      },
+      "items": [
+        {
+          "id": 1101383,
+          "type": "movie",
+          "title": "The End of Oak Street",
+          "date": "2026-08-12"
+        },
+        {
+          "id": 275102,
+          "type": "tv",
+          "title": "The Scandal",
+          "date": "2026-09-18"
+        },
+        {
+          "id": 1607127,
+          "type": "movie",
+          "title": "One Last Shot",
+          "date": "2026-09-22"
+        },
+        {
+          "id": 95350,
+          "type": "tv",
+          "title": "Lanterns",
+          "date": "2026-08-16"
+        },
+        {
+          "id": 1240889,
+          "type": "movie",
+          "title": "Teenage Sex and Death at Camp Miasma",
+          "date": "2026-08-06"
+        },
+        {
+          "id": 299939,
+          "type": "tv",
+          "title": "Monster: The Lizzie Borden Story",
+          "date": "2026-09-17"
+        },
+        {
+          "id": 1641629,
+          "type": "movie",
+          "title": "You+Me - Against the World",
+          "date": "2026-09-18"
+        },
+        {
+          "id": 273207,
+          "type": "tv",
+          "title": "Neagley",
+          "date": "2026-09-16"
+        },
+        {
+          "id": 1440098,
+          "type": "movie",
+          "title": "Drawn Together",
+          "date": "2026-09-09"
+        },
+        {
+          "id": 239618,
+          "type": "tv",
+          "title": "American Hostage",
+          "date": "2026-09-20"
+        },
+        {
+          "id": 1751701,
+          "type": "movie",
+          "title": "After Impact",
+          "date": "2026-09-15"
+        },
+        {
+          "id": 332657,
+          "type": "tv",
+          "title": "Route 187",
+          "date": "2026-09-16"
+        },
+        {
+          "id": 1288445,
+          "type": "movie",
+          "title": "Mutiny",
+          "date": "2026-08-19"
+        },
+        {
+          "id": 282326,
+          "type": "tv",
+          "title": "Against the Current",
+          "date": "2026-09-11"
+        },
+        {
+          "id": 1386315,
+          "type": "movie",
+          "title": "The Runner",
+          "date": "2026-09-03"
+        },
+        {
+          "id": 260249,
+          "type": "tv",
+          "title": "The Trial",
+          "date": "2026-09-11"
+        },
+        {
+          "id": 1137844,
+          "type": "movie",
+          "title": "Mayday",
+          "date": "2026-09-03"
+        },
+        {
+          "id": 287620,
+          "type": "tv",
+          "title": "Stuart Fails to Save the Universe",
+          "date": "2026-07-23"
+        }
+      ],
+      "providerSamples": [
+        {
+          "id": 1101383,
+          "type": "movie",
+          "providers": [
+            "Amazon Video",
+            "Apple TV Store",
+            "Google Play Movies",
+            "YouTube",
+            "Fandango At Home",
+            "Plex"
+          ]
+        },
+        {
+          "id": 275102,
+          "type": "tv",
+          "providers": [
+            "Netflix",
+            "Netflix Standard with Ads"
+          ]
+        },
+        {
+          "id": 1607127,
+          "type": "movie",
+          "providers": [
+            "Amazon Video",
+            "Fandango At Home",
+            "Plex"
+          ]
+        },
+        {
+          "id": 95350,
+          "type": "tv",
+          "providers": [
+            "HBO Max Amazon Channel",
+            "HBO Max"
+          ]
+        }
+      ]
+    },
+    {
+      "region": "GB",
+      "before": {
+        "count": 18,
+        "recent": 9
+      },
+      "after": {
+        "count": 18,
+        "recent": 18,
+        "movies": 9,
+        "tv": 9
+      },
+      "items": [
+        {
+          "id": 1101383,
+          "type": "movie",
+          "title": "The End of Oak Street",
+          "date": "2026-08-12"
+        },
+        {
+          "id": 275102,
+          "type": "tv",
+          "title": "The Scandal",
+          "date": "2026-09-18"
+        },
+        {
+          "id": 1641629,
+          "type": "movie",
+          "title": "You+Me - Against the World",
+          "date": "2026-09-18"
+        },
+        {
+          "id": 95350,
+          "type": "tv",
+          "title": "Lanterns",
+          "date": "2026-08-16"
+        },
+        {
+          "id": 1386315,
+          "type": "movie",
+          "title": "The Runner",
+          "date": "2026-09-03"
+        },
+        {
+          "id": 285418,
+          "type": "tv",
+          "title": "Youth",
+          "date": "2026-09-21"
+        },
+        {
+          "id": 1440098,
+          "type": "movie",
+          "title": "Drawn Together",
+          "date": "2026-09-09"
+        },
+        {
+          "id": 299939,
+          "type": "tv",
+          "title": "Monster: The Lizzie Borden Story",
+          "date": "2026-09-17"
+        },
+        {
+          "id": 1228834,
+          "type": "movie",
+          "title": "The Fix",
+          "date": "2026-09-10"
+        },
+        {
+          "id": 273207,
+          "type": "tv",
+          "title": "Neagley",
+          "date": "2026-09-16"
+        },
+        {
+          "id": 1477712,
+          "type": "movie",
+          "title": "Ice Cream Man",
+          "date": "2026-08-03"
+        },
+        {
+          "id": 319851,
+          "type": "tv",
+          "title": "The Blame",
+          "date": "2026-09-20"
+        },
+        {
+          "id": 1137844,
+          "type": "movie",
+          "title": "Mayday",
+          "date": "2026-09-03"
+        },
+        {
+          "id": 260249,
+          "type": "tv",
+          "title": "The Trial",
+          "date": "2026-09-11"
+        },
+        {
+          "id": 1084244,
+          "type": "movie",
+          "title": "Toy Story 5",
+          "date": "2026-06-17"
+        },
+        {
+          "id": 300507,
+          "type": "tv",
+          "title": "Crew Girl",
+          "date": "2026-09-10"
+        },
+        {
+          "id": 1232569,
+          "type": "movie",
+          "title": "Pinocchio: Unstrung",
+          "date": "2026-07-22"
+        },
+        {
+          "id": 258230,
+          "type": "tv",
+          "title": "Last Seen",
+          "date": "2026-09-09"
+        }
+      ],
+      "providerSamples": [
+        {
+          "id": 1101383,
+          "type": "movie",
+          "providers": [
+            "Apple TV Store",
+            "Rakuten TV",
+            "Amazon Video",
+            "Sky Store"
+          ]
+        },
+        {
+          "id": 275102,
+          "type": "tv",
+          "providers": [
+            "Netflix",
+            "Netflix Standard with Ads"
+          ]
+        },
+        {
+          "id": 1641629,
+          "type": "movie",
+          "providers": [
+            "Amazon Prime Video",
+            "Amazon Prime Video with Ads"
+          ]
+        },
+        {
+          "id": 95350,
+          "type": "tv",
+          "providers": [
+            "HBO Max Amazon Channel",
+            "HBO Max"
+          ]
+        }
+      ]
+    },
+    {
+      "region": "JP",
+      "before": {
+        "count": 18,
+        "recent": 6
+      },
+      "after": {
+        "count": 18,
+        "recent": 18,
+        "movies": 9,
+        "tv": 9
+      },
+      "items": [
+        {
+          "id": 1641629,
+          "type": "movie",
+          "title": "You+Me - Against the World",
+          "date": "2026-09-18"
+        },
+        {
+          "id": 275102,
+          "type": "tv",
+          "title": "The Scandal",
+          "date": "2026-09-18"
+        },
+        {
+          "id": 1440098,
+          "type": "movie",
+          "title": "Drawn Together",
+          "date": "2026-09-09"
+        },
+        {
+          "id": 299939,
+          "type": "tv",
+          "title": "Monster: The Lizzie Borden Story",
+          "date": "2026-09-17"
+        },
+        {
+          "id": 1679730,
+          "type": "movie",
+          "title": "THE RIBBON HERO",
+          "date": "2026-08-07"
+        },
+        {
+          "id": 298008,
+          "type": "tv",
+          "title": "Plastic Beauty",
+          "date": "2026-09-17"
+        },
+        {
+          "id": 1386315,
+          "type": "movie",
+          "title": "The Runner",
+          "date": "2026-09-03"
+        },
+        {
+          "id": 273207,
+          "type": "tv",
+          "title": "Neagley",
+          "date": "2026-09-16"
+        },
+        {
+          "id": 1137844,
+          "type": "movie",
+          "title": "Mayday",
+          "date": "2026-09-03"
+        },
+        {
+          "id": 95350,
+          "type": "tv",
+          "title": "Lanterns",
+          "date": "2026-08-16"
+        },
+        {
+          "id": 1659389,
+          "type": "movie",
+          "title": "One Piece Heroines",
+          "date": "2026-07-05"
+        },
+        {
+          "id": 286345,
+          "type": "tv",
+          "title": "Though I Am an Inept Villainess",
+          "date": "2026-07-12"
+        },
+        {
+          "id": 1516698,
+          "type": "movie",
+          "title": "The Last Sunrise",
+          "date": "2026-08-26"
+        },
+        {
+          "id": 300507,
+          "type": "tv",
+          "title": "Crew Girl",
+          "date": "2026-09-10"
+        },
+        {
+          "id": 1621552,
+          "type": "movie",
+          "title": "Facing El Chapo",
+          "date": "2026-08-21"
+        },
+        {
+          "id": 291496,
+          "type": "tv",
+          "title": "Our Sticky Love",
+          "date": "2026-08-07"
+        },
+        {
+          "id": 1542877,
+          "type": "movie",
+          "title": "Assassination Classroom the Movie: Our Time",
+          "date": "2026-03-20"
+        },
+        {
+          "id": 270603,
+          "type": "tv",
+          "title": "The Exiled Heavy Knight Knows How to Game the System",
+          "date": "2026-07-03"
+        }
+      ],
+      "providerSamples": [
+        {
+          "id": 1641629,
+          "type": "movie",
+          "providers": [
+            "Amazon Prime Video",
+            "Amazon Prime Video with Ads"
+          ]
+        },
+        {
+          "id": 275102,
+          "type": "tv",
+          "providers": [
+            "Netflix",
+            "Netflix Standard with Ads"
+          ]
+        },
+        {
+          "id": 1440098,
+          "type": "movie",
+          "providers": [
+            "Amazon Prime Video",
+            "Amazon Prime Video with Ads"
+          ]
+        },
+        {
+          "id": 299939,
+          "type": "tv",
+          "providers": [
+            "Netflix",
+            "Netflix Standard with Ads"
+          ]
+        }
+      ]
+    },
+    {
+      "region": "KR",
+      "before": {
+        "count": 18,
+        "recent": 7
+      },
+      "after": {
+        "count": 18,
+        "recent": 18,
+        "movies": 9,
+        "tv": 9
+      },
+      "items": [
+        {
+          "id": 1641629,
+          "type": "movie",
+          "title": "You+Me - Against the World",
+          "date": "2026-09-18"
+        },
+        {
+          "id": 275102,
+          "type": "tv",
+          "title": "The Scandal",
+          "date": "2026-09-18"
+        },
+        {
+          "id": 1440098,
+          "type": "movie",
+          "title": "Drawn Together",
+          "date": "2026-09-09"
+        },
+        {
+          "id": 299939,
+          "type": "tv",
+          "title": "Monster: The Lizzie Borden Story",
+          "date": "2026-09-17"
+        },
+        {
+          "id": 1451344,
+          "type": "movie",
+          "title": "Husbands in Action",
+          "date": "2026-06-15"
+        },
+        {
+          "id": 314939,
+          "type": "tv",
+          "title": "A Love Other Than Yours",
+          "date": "2026-09-12"
+        },
+        {
+          "id": 1514863,
+          "type": "movie",
+          "title": "Best of the Best",
+          "date": "2026-09-18"
+        },
+        {
+          "id": 273207,
+          "type": "tv",
+          "title": "Neagley",
+          "date": "2026-09-16"
+        },
+        {
+          "id": 1386315,
+          "type": "movie",
+          "title": "The Runner",
+          "date": "2026-09-03"
+        },
+        {
+          "id": 260249,
+          "type": "tv",
+          "title": "The Trial",
+          "date": "2026-09-11"
+        },
+        {
+          "id": 1628123,
+          "type": "movie",
+          "title": "BTS THE COMEBACK LIVE | ARIRANG",
+          "date": "2026-03-21"
+        },
+        {
+          "id": 305644,
+          "type": "tv",
+          "title": "Four Hands, Two Sonatas",
+          "date": "2026-08-29"
+        },
+        {
+          "id": 1137844,
+          "type": "movie",
+          "title": "Mayday",
+          "date": "2026-09-03"
+        },
+        {
+          "id": 300507,
+          "type": "tv",
+          "title": "Crew Girl",
+          "date": "2026-09-10"
+        },
+        {
+          "id": 1516698,
+          "type": "movie",
+          "title": "The Last Sunrise",
+          "date": "2026-08-26"
+        },
+        {
+          "id": 299952,
+          "type": "tv",
+          "title": "The Early Spring",
+          "date": "2026-08-26"
+        },
+        {
+          "id": 1268127,
+          "type": "movie",
+          "title": "Humint",
+          "date": "2026-02-11"
+        },
+        {
+          "id": 294636,
+          "type": "tv",
+          "title": "The Ordinary Jackpot",
+          "date": "2026-09-10"
+        }
+      ],
+      "providerSamples": [
+        {
+          "id": 1641629,
+          "type": "movie",
+          "providers": [
+            "Amazon Prime Video"
+          ]
+        },
+        {
+          "id": 275102,
+          "type": "tv",
+          "providers": [
+            "Netflix",
+            "Netflix Standard with Ads"
+          ]
+        },
+        {
+          "id": 1440098,
+          "type": "movie",
+          "providers": [
+            "Amazon Prime Video"
+          ]
+        },
+        {
+          "id": 299939,
+          "type": "tv",
+          "providers": [
+            "Netflix",
+            "Netflix Standard with Ads"
+          ]
+        }
+      ]
+    }
+  ],
+  "genres": [
+    {
+      "region": "IN",
+      "type": "movie",
+      "genre": "Drama",
+      "count": 18,
+      "recent": 18
+    },
+    {
+      "region": "US",
+      "type": "movie",
+      "genre": "Drama",
+      "count": 18,
+      "recent": 18
+    },
+    {
+      "region": "IN",
+      "type": "tv",
+      "genre": "Drama",
+      "count": 18,
+      "recent": 16
+    },
+    {
+      "region": "US",
+      "type": "tv",
+      "genre": "Drama",
+      "count": 18,
+      "recent": 17
+    }
+  ],
+  "queries": [
+    {
+      "path": "/3/trending/movie/week",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/trending/tv/week",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "IN",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-01-01",
+        "include_video": "false",
+        "with_origin_country": "IN"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "IN",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-01-01",
+        "include_video": "false"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false",
+        "watch_region": "IN",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "vote_count.gte": "25"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "IN",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-01-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "with_origin_country": "IN"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false",
+        "watch_region": "IN",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "vote_count.gte": "25"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "IN",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "air_date.gte": "2026-06-25",
+        "air_date.lte": "2026-09-23"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false",
+        "watch_region": "IN",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "vote_count.gte": "25",
+        "with_origin_country": "IN"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false",
+        "watch_region": "IN",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "vote_count.gte": "25",
+        "with_origin_country": "IN"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "IN",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-01-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "IN",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "include_video": "false"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/movie/1641629/watch/providers",
+      "params": {
+        "include_adult": "false"
+      },
+      "status": 200
+    },
+    {
+      "path": "/3/tv/275102/watch/providers",
+      "params": {
+        "include_adult": "false"
+      },
+      "status": 200
+    },
+    {
+      "path": "/3/movie/1440098/watch/providers",
+      "params": {
+        "include_adult": "false"
+      },
+      "status": 200
+    },
+    {
+      "path": "/3/tv/299939/watch/providers",
+      "params": {
+        "include_adult": "false"
+      },
+      "status": 200
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "US",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-01-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "with_origin_country": "US"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false",
+        "watch_region": "US",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "vote_count.gte": "25"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false",
+        "watch_region": "US",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "vote_count.gte": "25",
+        "with_origin_country": "US"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "US",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "air_date.gte": "2026-06-25",
+        "air_date.lte": "2026-09-23"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "US",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-01-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "US",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-01-01",
+        "include_video": "false"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false",
+        "watch_region": "US",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "vote_count.gte": "25"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "US",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-01-01",
+        "include_video": "false",
+        "with_origin_country": "US"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "US",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "include_video": "false"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false",
+        "watch_region": "US",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "vote_count.gte": "25",
+        "with_origin_country": "US"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/movie/1101383/watch/providers",
+      "params": {
+        "include_adult": "false"
+      },
+      "status": 200
+    },
+    {
+      "path": "/3/movie/1607127/watch/providers",
+      "params": {
+        "include_adult": "false"
+      },
+      "status": 200
+    },
+    {
+      "path": "/3/tv/95350/watch/providers",
+      "params": {
+        "include_adult": "false"
+      },
+      "status": 200
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "GB",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-01-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "with_origin_country": "GB"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false",
+        "watch_region": "GB",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "vote_count.gte": "25",
+        "with_origin_country": "GB"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false",
+        "watch_region": "GB",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "vote_count.gte": "25",
+        "with_origin_country": "GB"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "GB",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "include_video": "false"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "GB",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "air_date.gte": "2026-06-25",
+        "air_date.lte": "2026-09-23"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "GB",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-01-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false",
+        "watch_region": "GB",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "vote_count.gte": "25"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false",
+        "watch_region": "GB",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "vote_count.gte": "25"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "GB",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-01-01",
+        "include_video": "false",
+        "with_origin_country": "GB"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "GB",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-01-01",
+        "include_video": "false"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "JP",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-01-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "with_origin_country": "JP"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "JP",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "air_date.gte": "2026-06-25",
+        "air_date.lte": "2026-09-23"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false",
+        "watch_region": "JP",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "vote_count.gte": "25",
+        "with_origin_country": "JP"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "JP",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "include_video": "false"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "JP",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-01-01",
+        "include_video": "false",
+        "with_origin_country": "JP"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "JP",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-01-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false",
+        "watch_region": "JP",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "vote_count.gte": "25",
+        "with_origin_country": "JP"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "JP",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-01-01",
+        "include_video": "false"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false",
+        "watch_region": "JP",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "vote_count.gte": "25"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false",
+        "watch_region": "JP",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "vote_count.gte": "25"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "KR",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "air_date.gte": "2026-06-25",
+        "air_date.lte": "2026-09-23"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "KR",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-01-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "with_origin_country": "KR"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false",
+        "watch_region": "KR",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "vote_count.gte": "25",
+        "with_origin_country": "KR"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false",
+        "watch_region": "KR",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "vote_count.gte": "25"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false",
+        "watch_region": "KR",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "vote_count.gte": "25"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false",
+        "watch_region": "KR",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "vote_count.gte": "25",
+        "with_origin_country": "KR"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "KR",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-01-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "KR",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-01-01",
+        "include_video": "false",
+        "with_origin_country": "KR"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "KR",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "include_video": "false"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "KR",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-01-01",
+        "include_video": "false"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/genre/movie/list",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false"
+      },
+      "status": 200
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "IN",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-01-01",
+        "include_video": "false",
+        "with_genres": "18"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "IN",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "include_video": "false",
+        "with_genres": "18"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "US",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-01-01",
+        "include_video": "false",
+        "with_genres": "18"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "US",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "include_video": "false",
+        "with_genres": "18"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/genre/tv/list",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false"
+      },
+      "status": 200
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "IN",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "air_date.gte": "2026-06-25",
+        "air_date.lte": "2026-09-23",
+        "with_genres": "18"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "IN",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-01-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "with_genres": "18"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "US",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-01-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "with_genres": "18"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "US",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "air_date.gte": "2026-06-25",
+        "air_date.lte": "2026-09-23",
+        "with_genres": "18"
+      },
+      "status": 200,
+      "count": 20
+    }
+  ]
+}

@@ -1,9 +1,11 @@
 import "server-only";
+import { isEnabledCountryCode } from "@/lib/countries";
+import { combineDiscovery, discoveryParams, rankDiscovery, type DiscoveryCandidate, type DiscoveryPeriod, type Genre } from "@/lib/discovery";
 import { type Media, type MediaType, type Provider, type WatchProviders } from "@/lib/media";
 
 export { imageUrl, type Media, type MediaType, type Provider, type WatchProviders } from "@/lib/media";
 
-export type TmdbResult<T> = { data:T; error?:never } | { data?:never; error:"not-configured"|"not-found"|"unauthorized"|"upstream" };
+export type TmdbResult<T> = { data:T; partial?:boolean; error?:never } | { data?:never; partial?:never; error:"not-configured"|"not-found"|"unauthorized"|"upstream" };
 export type Person = { id:number; name:string; role:string; profilePath?:string };
 export type Video = { id:string; name:string; key:string; site:"YouTube"; type:string; official:boolean };
 export type Review = { id:string; author:string; content:string; createdAt?:string; url?:string };
@@ -11,16 +13,80 @@ export type TitleDetails = Media & { originalTitle?:string; tagline?:string; run
 const API = "https://api.themoviedb.org/3";
 const key = () => process.env.TMDB_API_KEY?.trim();
 const REQUEST_TIMEOUT_MS = 10_000;
-const successfulCollections = new Map<string, Media[]>();
 type Diagnostic = { name:string; endpoint:string; success:boolean; status:number|null; durationMs:number; hasResults:boolean; resultCount:number; error?:"not-configured"|"timeout"|"network"|"invalid-response"|"http" };
-function toMedia(raw: Record<string, unknown>, explicitType?: MediaType): Media { const mediaType=explicitType ?? (raw.media_type === "tv" ? "tv" : "movie"); return { id:Number(raw.id), mediaType, title:String(mediaType === "tv" ? raw.name ?? "Untitled series" : raw.title ?? "Untitled movie"), overview:String(raw.overview ?? ""), posterPath:typeof raw.poster_path === "string" ? raw.poster_path : undefined, backdropPath:typeof raw.backdrop_path === "string" ? raw.backdrop_path : undefined, releaseDate:String(mediaType === "tv" ? raw.first_air_date ?? "" : raw.release_date ?? "") || undefined, rating:Number(raw.vote_average ?? 0), voteCount:Number(raw.vote_count ?? 0), genreIds:Array.isArray(raw.genre_ids) ? raw.genre_ids.map(Number) : [] }; }
+function toMedia(raw: Record<string, unknown>, explicitType?: MediaType): Media { const mediaType=explicitType ?? (raw.media_type === "tv" ? "tv" : "movie"); return { id:Number(raw.id), mediaType, title:String(mediaType === "tv" ? raw.name ?? "Untitled series" : raw.title ?? "Untitled movie"), overview:String(raw.overview ?? ""), posterPath:typeof raw.poster_path === "string" ? raw.poster_path : undefined, backdropPath:typeof raw.backdrop_path === "string" ? raw.backdrop_path : undefined, releaseDate:String(mediaType === "tv" ? raw.first_air_date ?? "" : raw.release_date ?? "") || undefined, popularity:Math.max(0, Number(raw.popularity) || 0), rating:Number(raw.vote_average ?? 0), voteCount:Number(raw.vote_count ?? 0), genreIds:Array.isArray(raw.genre_ids) ? raw.genre_ids.map(Number) : [] }; }
 const wait=(milliseconds:number)=>new Promise(resolve=>setTimeout(resolve,milliseconds));
-async function request<T>(path:string, params:Record<string,string> = {}):Promise<TmdbResult<T>> { const apiKey=key(); if(!apiKey)return{error:"not-configured"}; const url=new URL(`${API}${path}`); Object.entries({...params,api_key:apiKey,include_adult:"false"}).forEach(([name,value])=>url.searchParams.set(name,value)); for(let attempt=0;attempt<3;attempt+=1){const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),REQUEST_TIMEOUT_MS);try { const response=await fetch(url,{next:{revalidate:1800},signal:controller.signal}); if(response.status===401||response.status===403)return{error:"unauthorized"}; if(response.status===404)return{error:"not-found"}; if(response.ok){const json=await response.json();if(json&&typeof json==="object")return{data:json as T};} if(response.status<500&&response.status!==429)return{error:"upstream"}; } catch { /* Retry transient network failures and timeouts. */ } finally { clearTimeout(timeout); } if(attempt<2)await wait(350*(attempt+1)); } return{error:"upstream"}; }
-export async function getCollection(type:MediaType, collection:"popular"|"top_rated"|"trending", region?:string):Promise<TmdbResult<Media[]>> { const normalizedRegion=/^[A-Z]{2}$/.test(region?.toUpperCase() ?? "") ? region!.toUpperCase() : undefined; const supportsRegion=type === "movie" && collection === "popular"; const cacheKey=`${type}:${collection}:${supportsRegion ? normalizedRegion ?? "global" : "global"}`; const path=collection === "trending" ? `/trending/${type}/week` : `/${type}/${collection}`; const result=await request<{results?:Record<string,unknown>[] }>(path,{language:"en-US",...(supportsRegion&&normalizedRegion?{region:normalizedRegion}:{})}); if("data"in result && result.data){const mapped=Array.isArray(result.data.results)?result.data.results.map(item=>toMedia(item,type)):[];if(mapped.length)successfulCollections.set(cacheKey,mapped);return{data:mapped};} const lastSuccess=successfulCollections.get(cacheKey); return lastSuccess?{data:lastSuccess}:result; }
-function discoverItems(result:TmdbResult<{results?:Record<string,unknown>[] }>, type:MediaType):Media[] { return "data"in result&&result.data&&Array.isArray(result.data.results)?result.data.results.map(item=>toMedia(item,type)):[]; }
-function alternateMedia(movies:Media[], tv:Media[]):Media[] { const result:Media[]=[]; for(let index=0;index<Math.max(movies.length,tv.length);index+=1){if(movies[index])result.push(movies[index]);if(tv[index])result.push(tv[index]);} return result; }
-function balanceCountryAvailability(globalItems:Media[], localItems:Media[], limit=18):Media[] { const result:Media[]=[]; const seen=new Set<string>(); let globalIndex=0,localIndex=0; const add=(item:Media|undefined)=>{if(!item||result.length>=limit)return false;const key=`${item.mediaType}-${item.id}`;if(seen.has(key))return false;seen.add(key);result.push(item);return true;}; while(result.length<limit&&(globalIndex<globalItems.length||localIndex<localItems.length)){let progressed=false;for(let count=0;count<2&&globalIndex<globalItems.length;count+=1)progressed=add(globalItems[globalIndex++])||progressed;if(localIndex<localItems.length)progressed=add(localItems[localIndex++])||progressed;if(!progressed&&globalIndex>=globalItems.length&&localIndex>=localItems.length)break;} return result; }
-export async function getPopularAvailableInRegion(region:string):Promise<TmdbResult<Media[]>> { const normalizedRegion=region.toUpperCase(); if(!/^[A-Z]{2}$/.test(normalizedRegion))return{error:"not-found"}; const cacheKey=`available-balanced:${normalizedRegion}`; const availability={language:"en-US",watch_region:normalizedRegion,with_watch_monetization_types:"flatrate|free|ads|rent|buy",sort_by:"popularity.desc","vote_count.gte":"25"}; const localAvailability={...availability,with_origin_country:normalizedRegion}; const [globalMovies,globalTV,localMovies,localTV]=await Promise.all([request<{results?:Record<string,unknown>[] }>("/discover/movie",availability),request<{results?:Record<string,unknown>[] }>("/discover/tv",availability),request<{results?:Record<string,unknown>[] }>("/discover/movie",localAvailability),request<{results?:Record<string,unknown>[] }>("/discover/tv",localAvailability)]); const globalItems=alternateMedia(discoverItems(globalMovies,"movie"),discoverItems(globalTV,"tv")); const localItems=alternateMedia(discoverItems(localMovies,"movie"),discoverItems(localTV,"tv")); const merged=balanceCountryAvailability(globalItems,localItems); if(merged.length){successfulCollections.set(cacheKey,merged);return{data:merged};} const lastSuccess=successfulCollections.get(cacheKey); if(lastSuccess)return{data:lastSuccess}; const upstreamError=("error"in globalMovies&&globalMovies.error)||("error"in globalTV&&globalTV.error)||("error"in localMovies&&localMovies.error)||("error"in localTV&&localTV.error)||"upstream"; return{error:upstreamError}; }
+async function request<T>(path:string, params:Record<string,string> = {}, revalidate=1800):Promise<TmdbResult<T>> { const apiKey=key(); if(!apiKey)return{error:"not-configured"}; const url=new URL(`${API}${path}`); Object.entries({...params,api_key:apiKey,include_adult:"false"}).forEach(([name,value])=>url.searchParams.set(name,value)); for(let attempt=0;attempt<3;attempt+=1){const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),REQUEST_TIMEOUT_MS);try { const response=await fetch(url,{cache:"force-cache",next:{revalidate},signal:controller.signal}); if(response.status===401||response.status===403)return{error:"unauthorized"}; if(response.status===404)return{error:"not-found"}; if(response.ok){const json=await response.json();if(json&&typeof json==="object")return{data:json as T};} if(response.status<500&&response.status!==429)return{error:"upstream"}; } catch { /* Retry transient network failures and timeouts. */ } finally { clearTimeout(timeout); } if(attempt<2)await wait(350*(attempt+1)); } return{error:"upstream"}; }
+type RawCollection = { results?: Record<string, unknown>[] };
+
+async function requestMedia(path: string, type: MediaType, params: Record<string, string> = {}): Promise<TmdbResult<Media[]>> {
+  const result = await request<RawCollection>(path, params);
+  if (!result.data) return { error: result.error };
+  if (!Array.isArray(result.data.results)) return { error: "upstream" };
+  return { data: result.data.results.filter(item => item.adult !== true).map(item => toMedia(item, type)) };
+}
+
+export async function getCollection(type: MediaType, collection: "popular" | "top_rated" | "trending", region?: string): Promise<TmdbResult<Media[]>> {
+  const normalizedRegion = region?.toUpperCase();
+  const path = collection === "trending" ? `/trending/${type}/week` : `/${type}/${collection}`;
+  // Global trending order is preserved. No country filter or freshness re-ranking here.
+  return requestMedia(path, type, { language: "en-US", ...(type === "movie" && collection === "popular" && isEnabledCountryCode(normalizedRegion) ? { region: normalizedRegion } : {}) });
+}
+
+export async function getGenres(type: MediaType): Promise<TmdbResult<Genre[]>> {
+  const result = await request<{ genres?: Genre[] }>(`/genre/${type}/list`, { language: "en-US" }, 86400);
+  if (!result.data) return { error: result.error };
+  if (!Array.isArray(result.data.genres)) return { error: "upstream" };
+  return { data: result.data.genres.filter(genre => Number.isSafeInteger(genre.id) && genre.id > 0 && typeof genre.name === "string") };
+}
+
+export async function getPopularAvailableInRegion(region: string, trends: { movie: Promise<TmdbResult<Media[]>>; tv: Promise<TmdbResult<Media[]>> }, now = new Date()): Promise<TmdbResult<Media[]>> {
+  const normalizedRegion = region.toUpperCase();
+  if (!isEnabledCountryCode(normalizedRegion)) return { error: "not-found" };
+  const pools = await Promise.all((["movie", "tv"] as const).map(async type => {
+    const [recent, local, activity, trending] = await Promise.all([
+      requestMedia(`/discover/${type}`, type, discoveryParams(type, normalizedRegion, now)),
+      requestMedia(`/discover/${type}`, type, discoveryParams(type, normalizedRegion, now, { local: true })),
+      requestMedia(`/discover/${type}`, type, discoveryParams(type, normalizedRegion, now, { activity: true })),
+      trends[type],
+    ]);
+    const candidates: DiscoveryCandidate[] = [
+      ...(recent.data ?? []).map(media => ({ media })),
+      ...(local.data ?? []).map(media => ({ media, local: true })),
+      ...(activity.data ?? []).map(media => ({ media, recentlyAired: type === "tv" })),
+    ];
+    return {
+      items: rankDiscovery(candidates, trending.data ?? [], now, { limit: 9, balanceLocal: true }),
+      results: [recent, local, activity, trending],
+    };
+  }));
+  const items = combineDiscovery(pools[0].items, pools[1].items);
+  const error = pools.flatMap(pool => pool.results).find(result => result.error)?.error;
+  if (!items.length && error) return { error };
+  return { data: items, partial: Boolean(error) };
+}
+
+export async function discoverGenre(type: MediaType, region: string, genreId: number, period: DiscoveryPeriod, now = new Date()): Promise<TmdbResult<Media[]>> {
+  const normalizedRegion = region.toUpperCase();
+  if (!isEnabledCountryCode(normalizedRegion) || !Number.isSafeInteger(genreId) || genreId < 1) return { error: "not-found" };
+  const genres = await getGenres(type);
+  if (!genres.data) return { error: genres.error };
+  if (!genres.data.some(genre => genre.id === genreId)) return { error: "not-found" };
+  const [recent, activity, trending] = await Promise.all([
+    requestMedia(`/discover/${type}`, type, discoveryParams(type, normalizedRegion, now, { genreId, period })),
+    period === "year" ? Promise.resolve({ data: [] } as TmdbResult<Media[]>) : requestMedia(`/discover/${type}`, type, discoveryParams(type, normalizedRegion, now, { genreId, activity: true })),
+    getCollection(type, "trending"),
+  ]);
+  const candidates: DiscoveryCandidate[] = [
+    ...(recent.data ?? []).map(media => ({ media })),
+    ...(activity.data ?? []).map(media => ({ media, recentlyAired: type === "tv" })),
+  ];
+  const items = rankDiscovery(candidates.filter(({ media }) => media.genreIds.includes(genreId)), trending.data ?? [], now, { period });
+  const error = [recent, activity, trending].find(result => result.error)?.error;
+  if (!items.length && error) return { error };
+  return { data: items, partial: Boolean(error) };
+}
+
 export async function searchMedia(query:string):Promise<TmdbResult<Media[]>> { const cleaned=query.trim(); if(!cleaned)return{data:[]}; const result=await request<{results?:Record<string,unknown>[] }>("/search/multi",{query:cleaned,language:"en-US"}); if("data"in result&&result.data)return{data:(result.data.results??[]).filter(item=>item.media_type==="movie"||item.media_type==="tv").map(item=>toMedia(item))}; return result; }
 function list(raw:unknown):Record<string,unknown>[] { return Array.isArray(raw) ? raw.filter((item):item is Record<string,unknown> => Boolean(item) && typeof item === "object") : []; }
 function namedList(raw:unknown):string[] { return Array.isArray(raw) ? raw.map(item => typeof item === "string" ? item : item && typeof item === "object" && typeof (item as Record<string,unknown>).name === "string" ? String((item as Record<string,unknown>).name) : "").filter(Boolean) : []; }
