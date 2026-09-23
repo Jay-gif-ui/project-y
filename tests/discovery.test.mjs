@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import loadTypescript from './load-typescript.mjs';
 const load = loadTypescript();
-const { discoveryDates, discoveryParams, rankDiscovery, combineDiscovery } = load('lib/discovery.ts');
+const { discoveryDates, discoveryParams, rankDiscovery, rankCountryDiscovery, combineDiscovery } = load('lib/discovery.ts');
 const { ENABLED_COUNTRIES } = load('lib/countries.ts');
 const now = new Date('2026-09-23T12:00:00Z');
 // Synthetic fixtures are only used for deterministic tests, never rendered by the app.
@@ -60,10 +60,9 @@ test('future/undated items are excluded and same IDs across media types stay dis
   assert.notEqual(result[0].mediaType, result[1].mediaType);
 });
 
-test('local slots remain mixed with unrestricted picks and missing pools return shorter lists', () => {
+test('mixed media preserves both types and missing pools return shorter lists', () => {
   const candidates = Array.from({length:12}, (_,i) => ({media:media(i+1),local:i>=9}));
-  const result = rankDiscovery(candidates, [], now, {limit:9,balanceLocal:true});
-  assert.deepEqual([result[2].id,result[5].id,result[8].id], [10,11,12]);
+  const result = rankDiscovery(candidates, [], now, {limit:9});
   const combined = combineDiscovery(result, result.map(item => ({...item,mediaType:'tv'})));
   assert.equal(combined.length,18);
   assert.equal(combined.filter(item=>item.mediaType==='tv').length,9);
@@ -84,9 +83,9 @@ function api(mock) {
   }})('lib/tmdb.ts');
   return {tmdb,calls};
 }
-const raw=(id,type,date='2026-08-01')=>({id,title:`Movie fixture ${id}`,name:`TV fixture ${id}`,release_date:date,first_air_date:date,popularity:30,genre_ids:[type==='tv'?10759:28]});
+const raw=(id,type,date='2026-08-01')=>({id,title:`Movie fixture ${id}`,name:`TV fixture ${id}`,release_date:date,first_air_date:date,popularity:30,vote_count:60,vote_average:7,genre_ids:[type==='tv'?10759:28]});
 
-test('country orchestration uses exactly six Discover calls, shared global trends, and 9+9 unique picks',async()=>{
+test('homepage uses six Discover calls, shared global trends, and at most 6+6 unique picks',async()=>{
   const {tmdb,calls}=api(async url=>{
     const type=url.pathname.endsWith('/tv')?'tv':'movie';
     const offset=url.searchParams.has('with_origin_country')?100:0;
@@ -94,10 +93,91 @@ test('country orchestration uses exactly six Discover calls, shared global trend
   });
   const result=await tmdb.getPopularAvailableInRegion('US',{movie:Promise.resolve({data:[]}),tv:Promise.resolve({data:[]})},now);
   assert.equal(calls.length,6);
-  assert.equal(result.data.length,18);
-  assert.equal(result.data.filter(item=>item.mediaType==='tv').length,9);
-  assert.equal(new Set(result.data.map(item=>`${item.mediaType}:${item.id}`)).size,18);
+  assert.equal(result.data.length,12);
+  assert.equal(result.data.filter(item=>item.mediaType==='tv').length,6);
+  assert.equal(new Set(result.data.map(item=>`${item.mediaType}:${item.id}`)).size,12);
   for(const call of calls){assert.equal(call.params.watch_region,'US');assert.equal(call.options.next.revalidate,1800);assert.equal(call.options.cache,'force-cache');}
+});
+
+const qualityMedia=(id,date='2026-08-01',extra={})=>media(id,date,{rating:7,voteCount:100,popularity:40,...extra});
+
+test('all enabled countries receive the same strong local-origin preference without local quotas',()=>{
+  for(const country of ENABLED_COUNTRIES){
+    const locals=Array.from({length:5},(_,i)=>qualityMedia(i+1,'2026-08-01',{originCountries:[country.code]}));
+    const international=Array.from({length:5},(_,i)=>qualityMedia(i+101));
+    const result=rankCountryDiscovery([...locals,...international].map(media=>({media})),[],country.code,now,{limit:6});
+    assert.equal(result.filter(pick=>pick.local).length,5,country.code);
+    assert.equal(result.at(-1).local,false);
+    const params=discoveryParams('movie',country.code,now,{countryFocused:true,local:true});
+    assert.equal(params['primary_release_date.gte'],'2025-07-01');
+    assert.equal(params.with_origin_country,country.code);
+  }
+});
+
+test('weak and unsupported local titles cannot be inserted to meet a percentage',()=>{
+  const weak=qualityMedia(1,'2026-09-01',{rating:3,voteCount:1000,popularity:1000});
+  const unknown=qualityMedia(2,'2026-01-01',{rating:0,voteCount:0});
+  const strong=qualityMedia(3,'2026-09-01',{popularity:1000});
+  const result=rankCountryDiscovery([{media:weak,local:true},{media:unknown,local:true},{media:strong}], [strong], 'IN', now);
+  assert.deepEqual(Array.from(result,pick=>pick.media.id),[3]);
+});
+
+test('strong international current trends can beat weaker local releases without a fixed split',()=>{
+  const local=qualityMedia(1,'2025-09-01',{popularity:2});
+  const international=qualityMedia(2,'2026-09-20',{popularity:1000});
+  const result=rankCountryDiscovery([{media:local,local:true},{media:international}],[international],'JP',now);
+  assert.equal(result[0].media.id,2);
+  assert.equal(result[1].local,true);
+});
+
+test('old catalog popularity alone is excluded; supported exceptions stay behind all recent picks',()=>{
+  const recent=Array.from({length:6},(_,i)=>({media:qualityMedia(i+1,'2025-07-01',{popularity:1}),local:true}));
+  const old=qualityMedia(50,'2016-01-01',{popularity:1e8,rating:9,voteCount:1000});
+  assert.ok(!rankCountryDiscovery([...recent,{media:old,local:true}],[],'IN',now).some(pick=>pick.media.id===50));
+  const result=rankCountryDiscovery([...recent,{media:old,local:true}],[old],'IN',now);
+  assert.equal(result.length,6);
+  assert.equal(result.at(-1).media.id,50);
+  assert.equal(result.filter(pick=>pick.media.releaseDate<'2025-07-01').length,1);
+  assert.equal(rankCountryDiscovery([{media:old,local:true}],[old],'IN',now).length,0);
+});
+
+test('country quality uses vote confidence; future and undated titles never qualify',()=>{
+  const candidates=[qualityMedia(1, '2026-08-01',{voteCount:25}),qualityMedia(2, '2026-08-01',{voteCount:500}),qualityMedia(3,'2027-01-01'),qualityMedia(4,undefined,{releaseDate:undefined})].map(media=>({media,local:true}));
+  const result=rankCountryDiscovery(candidates,[],'KR',now);
+  assert.deepEqual(Array.from(result,pick=>pick.media.id),[2,1]);
+});
+
+test('browse strengthens locality, expands only local pools, and TV filtering skips movie requests',async()=>{
+  const {tmdb,calls}=api(async url=>{
+    const local=url.searchParams.has('with_origin_country');
+    const page=Number(url.searchParams.get('page')||1);
+    return Response.json({total_pages:2,results:Array.from({length:20},(_,i)=>raw((local?100:0)+page*20+i,'tv'))});
+  });
+  const result=await tmdb.getCountryDiscovery('KR',{surface:'browse',filter:'tv'},undefined,now);
+  assert.equal(result.data.items.length,36);
+  assert.equal(result.data.localIds.length,36);
+  assert.ok(result.data.items.every(item=>item.mediaType==='tv'));
+  assert.equal(calls.filter(call=>call.path.includes('/discover/')).length,4);
+  assert.ok(calls.every(call=>!call.path.includes('/movie')));
+  assert.equal(calls.find(call=>call.params.page==='2').params.with_origin_country,'KR');
+  const one={media:qualityMedia(1),local:true};
+  const home=rankCountryDiscovery([one],[],'KR',now)[0];
+  const browse=rankCountryDiscovery([one],[],'KR',now,{surface:'browse'})[0];
+  assert.ok(browse.score>home.score);
+});
+
+test('origin/production metadata is normalized and sparse countries do not request nonexistent page 2',async()=>{
+  const {tmdb,calls}=api(async()=>Response.json({total_pages:1,results:[{...raw(1,'movie'),origin_country:['CA'],production_countries:[{iso_3166_1:'GB'}]}]}));
+  const result=await tmdb.getCountryDiscovery('CA',{surface:'browse',filter:'movie'},undefined,now);
+  assert.deepEqual(Array.from(result.data.items[0].originCountries),['CA','GB']);
+  assert.equal(calls.filter(call=>call.path.includes('/discover/')).length,3);
+  assert.ok(!calls.some(call=>call.params.page==='2'));
+});
+
+test('failed local services cannot fall back to a global-only country chart',async()=>{
+  const {tmdb}=api(async url=>url.searchParams.has('with_origin_country')?Response.json({}, {status:401}):Response.json({results:[raw(1,'movie')]}));
+  const result=await tmdb.getCountryDiscovery('US',{surface:'home',filter:'movie'},undefined,now);
+  assert.equal(result.error,'unauthorized');
 });
 
 test('global trending preserves upstream order, includes genuine older trends, and ignores region',async()=>{

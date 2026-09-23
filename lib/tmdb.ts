@@ -1,6 +1,6 @@
 import "server-only";
 import { isEnabledCountryCode } from "@/lib/countries";
-import { combineDiscovery, discoveryParams, rankDiscovery, type DiscoveryCandidate, type DiscoveryPeriod, type Genre } from "@/lib/discovery";
+import { combineDiscovery, discoveryDates, discoveryParams, rankCountryDiscovery, rankDiscovery, type CountryMediaFilter, type CountrySurface, type DiscoveryCandidate, type DiscoveryPeriod, type Genre } from "@/lib/discovery";
 import { type Media, type MediaType, type Provider, type WatchProviders } from "@/lib/media";
 
 export { imageUrl, type Media, type MediaType, type Provider, type WatchProviders } from "@/lib/media";
@@ -14,16 +14,22 @@ const API = "https://api.themoviedb.org/3";
 const key = () => process.env.TMDB_API_KEY?.trim();
 const REQUEST_TIMEOUT_MS = 10_000;
 type Diagnostic = { name:string; endpoint:string; success:boolean; status:number|null; durationMs:number; hasResults:boolean; resultCount:number; error?:"not-configured"|"timeout"|"network"|"invalid-response"|"http" };
-function toMedia(raw: Record<string, unknown>, explicitType?: MediaType): Media { const mediaType=explicitType ?? (raw.media_type === "tv" ? "tv" : "movie"); return { id:Number(raw.id), mediaType, title:String(mediaType === "tv" ? raw.name ?? "Untitled series" : raw.title ?? "Untitled movie"), overview:String(raw.overview ?? ""), posterPath:typeof raw.poster_path === "string" ? raw.poster_path : undefined, backdropPath:typeof raw.backdrop_path === "string" ? raw.backdrop_path : undefined, releaseDate:String(mediaType === "tv" ? raw.first_air_date ?? "" : raw.release_date ?? "") || undefined, popularity:Math.max(0, Number(raw.popularity) || 0), rating:Number(raw.vote_average ?? 0), voteCount:Number(raw.vote_count ?? 0), genreIds:Array.isArray(raw.genre_ids) ? raw.genre_ids.map(Number) : [] }; }
+function toMedia(raw: Record<string, unknown>, explicitType?: MediaType): Media { const mediaType=explicitType ?? (raw.media_type === "tv" ? "tv" : "movie"); return { id:Number(raw.id), mediaType, title:String(mediaType === "tv" ? raw.name ?? "Untitled series" : raw.title ?? "Untitled movie"), overview:String(raw.overview ?? ""), posterPath:typeof raw.poster_path === "string" ? raw.poster_path : undefined, backdropPath:typeof raw.backdrop_path === "string" ? raw.backdrop_path : undefined, releaseDate:String(mediaType === "tv" ? raw.first_air_date ?? "" : raw.release_date ?? "") || undefined, popularity:Math.max(0, Number(raw.popularity) || 0), originCountries:originCountries(raw), rating:Number(raw.vote_average ?? 0), voteCount:Number(raw.vote_count ?? 0), genreIds:Array.isArray(raw.genre_ids) ? raw.genre_ids.map(Number) : [] }; }
 const wait=(milliseconds:number)=>new Promise(resolve=>setTimeout(resolve,milliseconds));
 async function request<T>(path:string, params:Record<string,string> = {}, revalidate=1800):Promise<TmdbResult<T>> { const apiKey=key(); if(!apiKey)return{error:"not-configured"}; const url=new URL(`${API}${path}`); Object.entries({...params,api_key:apiKey,include_adult:"false"}).forEach(([name,value])=>url.searchParams.set(name,value)); for(let attempt=0;attempt<3;attempt+=1){const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),REQUEST_TIMEOUT_MS);try { const response=await fetch(url,{cache:"force-cache",next:{revalidate},signal:controller.signal}); if(response.status===401||response.status===403)return{error:"unauthorized"}; if(response.status===404)return{error:"not-found"}; if(response.ok){const json=await response.json();if(json&&typeof json==="object")return{data:json as T};} if(response.status<500&&response.status!==429)return{error:"upstream"}; } catch { /* Retry transient network failures and timeouts. */ } finally { clearTimeout(timeout); } if(attempt<2)await wait(350*(attempt+1)); } return{error:"upstream"}; }
-type RawCollection = { results?: Record<string, unknown>[] };
+function originCountries(raw: Record<string, unknown>): string[] {
+  const origin = Array.isArray(raw.origin_country) ? raw.origin_country.filter((value): value is string => typeof value === "string") : [];
+  const production = list(raw.production_countries).map(item => item.iso_3166_1).filter((value): value is string => typeof value === "string");
+  return [...new Set([...origin, ...production].filter(code => /^[A-Z]{2}$/.test(code)))];
+}
 
-async function requestMedia(path: string, type: MediaType, params: Record<string, string> = {}): Promise<TmdbResult<Media[]>> {
+type RawCollection = { results?: Record<string, unknown>[]; total_pages?: number };
+
+async function requestMedia(path: string, type: MediaType, params: Record<string, string> = {}): Promise<TmdbResult<Media[]> & { totalPages?: number }> {
   const result = await request<RawCollection>(path, params);
   if (!result.data) return { error: result.error };
   if (!Array.isArray(result.data.results)) return { error: "upstream" };
-  return { data: result.data.results.filter(item => item.adult !== true).map(item => toMedia(item, type)) };
+  return { data: result.data.results.filter(item => item.adult !== true).map(item => toMedia(item, type)), totalPages: result.data.total_pages ?? 1 };
 }
 
 export async function getCollection(type: MediaType, collection: "popular" | "top_rated" | "trending", region?: string): Promise<TmdbResult<Media[]>> {
@@ -40,31 +46,53 @@ export async function getGenres(type: MediaType): Promise<TmdbResult<Genre[]>> {
   return { data: result.data.genres.filter(genre => Number.isSafeInteger(genre.id) && genre.id > 0 && typeof genre.name === "string") };
 }
 
-export async function getPopularAvailableInRegion(region: string, trends: { movie: Promise<TmdbResult<Media[]>>; tv: Promise<TmdbResult<Media[]>> }, now = new Date()): Promise<TmdbResult<Media[]>> {
+export type CountryDiscoveryData = { items: Media[]; localIds: string[] };
+
+export async function getCountryDiscovery(region: string, options: { surface?: CountrySurface; filter?: CountryMediaFilter } = {}, trends?: { movie: Promise<TmdbResult<Media[]>>; tv: Promise<TmdbResult<Media[]>> }, now = new Date()): Promise<TmdbResult<CountryDiscoveryData>> {
   const normalizedRegion = region.toUpperCase();
   if (!isEnabledCountryCode(normalizedRegion)) return { error: "not-found" };
-  const pools = await Promise.all((["movie", "tv"] as const).map(async type => {
-    const [recent, local, activity, trending] = await Promise.all([
-      requestMedia(`/discover/${type}`, type, discoveryParams(type, normalizedRegion, now)),
-      requestMedia(`/discover/${type}`, type, discoveryParams(type, normalizedRegion, now, { local: true })),
-      requestMedia(`/discover/${type}`, type, discoveryParams(type, normalizedRegion, now, { activity: true })),
-      trends[type],
+  const surface = options.surface ?? "home";
+  const filter = options.filter ?? "all";
+  const types: MediaType[] = filter === "all" ? ["movie", "tv"] : [filter];
+  const totalLimit = surface === "home" ? 12 : 36;
+  const limitPerType = totalLimit / types.length;
+  const pools = await Promise.all(types.map(async type => {
+    const params = { countryFocused: true };
+    const [localRecent, internationalRecent, localActivity, trending] = await Promise.all([
+      requestMedia(`/discover/${type}`, type, discoveryParams(type, normalizedRegion, now, { ...params, local: true })),
+      requestMedia(`/discover/${type}`, type, discoveryParams(type, normalizedRegion, now, params)),
+      requestMedia(`/discover/${type}`, type, discoveryParams(type, normalizedRegion, now, { ...params, local: true, activity: true })),
+      trends?.[type] ?? getCollection(type, "trending"),
     ]);
-    const candidates: DiscoveryCandidate[] = [
-      ...(recent.data ?? []).map(media => ({ media })),
-      ...(local.data ?? []).map(media => ({ media, local: true })),
-      ...(activity.data ?? []).map(media => ({ media, recentlyAired: type === "tv" })),
+    // Browse expands local candidates only. Never request page 2 in an empty/small market.
+    const moreLocal = surface === "browse" && (localRecent.totalPages ?? 1) > 1
+      ? await requestMedia(`/discover/${type}`, type, discoveryParams(type, normalizedRegion, now, { ...params, local: true, page: 2 }))
+      : { data: [] } as TmdbResult<Media[]>;
+    const results = [localRecent, internationalRecent, localActivity, moreLocal, trending];
+    // A failed local service must not turn this into a global-only fallback chart.
+    const candidates: DiscoveryCandidate[] = localRecent.error && localActivity.error ? [] : [
+      ...(localRecent.data ?? []).map(media => ({ media, local: true })),
+      ...(moreLocal.data ?? []).map(media => ({ media, local: true })),
+      ...(localActivity.data ?? []).map(media => ({ media, local: true, recentlyAired: type === "tv" })),
+      ...(internationalRecent.data ?? []).map(media => ({ media })),
     ];
-    return {
-      items: rankDiscovery(candidates, trending.data ?? [], now, { limit: 9, balanceLocal: true }),
-      results: [recent, local, activity, trending],
-    };
+    return { type, picks: rankCountryDiscovery(candidates, trending.data ?? [], normalizedRegion, now, { surface, limit: limitPerType }), results };
   }));
-  const items = combineDiscovery(pools[0].items, pools[1].items);
+  const movies = pools.find(pool => pool.type === "movie")?.picks ?? [];
+  const tv = pools.find(pool => pool.type === "tv")?.picks ?? [];
+  const combined = combineDiscovery(movies.map(pick => pick.media), tv.map(pick => pick.media), totalLimit);
+  const recentStart = `${discoveryDates(now).year - 1}-07-01`;
+  const items = [...combined.filter(media => media.releaseDate! >= recentStart), ...combined.filter(media => media.releaseDate! < recentStart)];
   const error = pools.flatMap(pool => pool.results).find(result => result.error)?.error;
   if (!items.length && error) return { error };
-  return { data: items, partial: Boolean(error) };
+  return { data: { items, localIds: [...movies, ...tv].filter(pick => pick.local).map(pick => `${pick.media.mediaType}:${pick.media.id}`) }, partial: Boolean(error) };
 }
+
+export async function getPopularAvailableInRegion(region: string, trends: { movie: Promise<TmdbResult<Media[]>>; tv: Promise<TmdbResult<Media[]>> }, now = new Date()): Promise<TmdbResult<Media[]>> {
+  const result = await getCountryDiscovery(region, { surface: "home" }, trends, now);
+  return result.data ? { data: result.data.items, partial: result.partial } : { error: result.error };
+}
+
 
 export async function discoverGenre(type: MediaType, region: string, genreId: number, period: DiscoveryPeriod, now = new Date()): Promise<TmdbResult<Media[]>> {
   const normalizedRegion = region.toUpperCase();

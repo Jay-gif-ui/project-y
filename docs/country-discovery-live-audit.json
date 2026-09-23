@@ -1,0 +1,3924 @@
+{
+  "auditedAt": "2026-09-23T17:25:53.024Z",
+  "dns": "Process-only Cloudflare DNS for api.themoviedb.org; normal system DNS timed out. HTTPS hostname and certificate validation unchanged.",
+  "window": {
+    "recentStart": "2025-07-01",
+    "today": "2026-09-23"
+  },
+  "countries": [
+    {
+      "region": "IN",
+      "home": {
+        "region": "IN",
+        "surface": "home",
+        "count": 12,
+        "local": 8,
+        "recent": 12,
+        "movies": 6,
+        "tv": 6,
+        "items": [
+          {
+            "id": 1451944,
+            "type": "movie",
+            "title": "Lust Stories 3",
+            "date": "2026-09-18",
+            "local": true,
+            "origins": [],
+            "rating": 6.5,
+            "votes": 6,
+            "popularity": 49.5056
+          },
+          {
+            "id": 331932,
+            "type": "tv",
+            "title": "Ali Baba Aur 40 Bhoot",
+            "date": "2026-09-11",
+            "local": true,
+            "origins": [
+              "IN"
+            ],
+            "rating": 0,
+            "votes": 0,
+            "popularity": 29.9582
+          },
+          {
+            "id": 1408162,
+            "type": "movie",
+            "title": "Vishwanath & Sons",
+            "date": "2026-08-14",
+            "local": true,
+            "origins": [],
+            "rating": 7.3,
+            "votes": 28,
+            "popularity": 94.6603
+          },
+          {
+            "id": 273207,
+            "type": "tv",
+            "title": "Neagley",
+            "date": "2026-09-16",
+            "local": false,
+            "origins": [
+              "US"
+            ],
+            "rating": 8.061,
+            "votes": 114,
+            "popularity": 164.7382
+          },
+          {
+            "id": 1355228,
+            "type": "movie",
+            "title": "Gandhari",
+            "date": "2026-09-03",
+            "local": true,
+            "origins": [],
+            "rating": 7.068,
+            "votes": 22,
+            "popularity": 25.6563
+          },
+          {
+            "id": 299939,
+            "type": "tv",
+            "title": "Monster: The Lizzie Borden Story",
+            "date": "2026-09-17",
+            "local": false,
+            "origins": [
+              "US"
+            ],
+            "rating": 7,
+            "votes": 80,
+            "popularity": 165.6148
+          },
+          {
+            "id": 1685882,
+            "type": "movie",
+            "title": "Modha Rathri",
+            "date": "2026-08-21",
+            "local": true,
+            "origins": [],
+            "rating": 7.2,
+            "votes": 5,
+            "popularity": 69.3461
+          },
+          {
+            "id": 275102,
+            "type": "tv",
+            "title": "The Scandal",
+            "date": "2026-09-18",
+            "local": false,
+            "origins": [
+              "KR"
+            ],
+            "rating": 6.6,
+            "votes": 12,
+            "popularity": 3190.8628
+          },
+          {
+            "id": 1441228,
+            "type": "movie",
+            "title": "Irumudi",
+            "date": "2026-08-20",
+            "local": true,
+            "origins": [],
+            "rating": 6.6,
+            "votes": 22,
+            "popularity": 48.7545
+          },
+          {
+            "id": 95350,
+            "type": "tv",
+            "title": "Lanterns",
+            "date": "2026-08-16",
+            "local": false,
+            "origins": [
+              "US"
+            ],
+            "rating": 8.245,
+            "votes": 412,
+            "popularity": 276.6365
+          },
+          {
+            "id": 1760576,
+            "type": "movie",
+            "title": "Zakir Khan: Papa Yaar",
+            "date": "2026-09-18",
+            "local": true,
+            "origins": [],
+            "rating": 10,
+            "votes": 1,
+            "popularity": 9.4509
+          },
+          {
+            "id": 308482,
+            "type": "tv",
+            "title": "Taskaree: The Smuggler's Web",
+            "date": "2026-01-14",
+            "local": true,
+            "origins": [
+              "IN"
+            ],
+            "rating": 6.742,
+            "votes": 31,
+            "popularity": 6.7239
+          }
+        ]
+      },
+      "browse": {
+        "region": "IN",
+        "surface": "browse",
+        "count": 28,
+        "local": 23,
+        "recent": 27,
+        "movies": 18,
+        "tv": 10,
+        "items": [
+          {
+            "id": 1451944,
+            "type": "movie",
+            "title": "Lust Stories 3",
+            "date": "2026-09-18",
+            "local": true,
+            "origins": [],
+            "rating": 6.5,
+            "votes": 6,
+            "popularity": 49.5056
+          },
+          {
+            "id": 331932,
+            "type": "tv",
+            "title": "Ali Baba Aur 40 Bhoot",
+            "date": "2026-09-11",
+            "local": true,
+            "origins": [
+              "IN"
+            ],
+            "rating": 0,
+            "votes": 0,
+            "popularity": 29.9582
+          },
+          {
+            "id": 1408162,
+            "type": "movie",
+            "title": "Vishwanath & Sons",
+            "date": "2026-08-14",
+            "local": true,
+            "origins": [],
+            "rating": 7.3,
+            "votes": 28,
+            "popularity": 94.6603
+          },
+          {
+            "id": 308482,
+            "type": "tv",
+            "title": "Taskaree: The Smuggler's Web",
+            "date": "2026-01-14",
+            "local": true,
+            "origins": [
+              "IN"
+            ],
+            "rating": 6.742,
+            "votes": 31,
+            "popularity": 6.7239
+          },
+          {
+            "id": 1355228,
+            "type": "movie",
+            "title": "Gandhari",
+            "date": "2026-09-03",
+            "local": true,
+            "origins": [],
+            "rating": 7.068,
+            "votes": 22,
+            "popularity": 25.6563
+          },
+          {
+            "id": 273207,
+            "type": "tv",
+            "title": "Neagley",
+            "date": "2026-09-16",
+            "local": false,
+            "origins": [
+              "US"
+            ],
+            "rating": 8.061,
+            "votes": 114,
+            "popularity": 164.7382
+          },
+          {
+            "id": 1685882,
+            "type": "movie",
+            "title": "Modha Rathri",
+            "date": "2026-08-21",
+            "local": true,
+            "origins": [],
+            "rating": 7.2,
+            "votes": 5,
+            "popularity": 69.3461
+          },
+          {
+            "id": 299939,
+            "type": "tv",
+            "title": "Monster: The Lizzie Borden Story",
+            "date": "2026-09-17",
+            "local": false,
+            "origins": [
+              "US"
+            ],
+            "rating": 7,
+            "votes": 80,
+            "popularity": 165.6148
+          },
+          {
+            "id": 1441228,
+            "type": "movie",
+            "title": "Irumudi",
+            "date": "2026-08-20",
+            "local": true,
+            "origins": [],
+            "rating": 6.6,
+            "votes": 22,
+            "popularity": 48.7545
+          },
+          {
+            "id": 275102,
+            "type": "tv",
+            "title": "The Scandal",
+            "date": "2026-09-18",
+            "local": false,
+            "origins": [
+              "KR"
+            ],
+            "rating": 6.6,
+            "votes": 12,
+            "popularity": 3190.8628
+          },
+          {
+            "id": 1760576,
+            "type": "movie",
+            "title": "Zakir Khan: Papa Yaar",
+            "date": "2026-09-18",
+            "local": true,
+            "origins": [],
+            "rating": 10,
+            "votes": 1,
+            "popularity": 9.4509
+          },
+          {
+            "id": 95350,
+            "type": "tv",
+            "title": "Lanterns",
+            "date": "2026-08-16",
+            "local": false,
+            "origins": [
+              "US"
+            ],
+            "rating": 8.245,
+            "votes": 412,
+            "popularity": 276.6365
+          },
+          {
+            "id": 1479832,
+            "type": "movie",
+            "title": "DC",
+            "date": "2026-08-07",
+            "local": true,
+            "origins": [],
+            "rating": 7.9,
+            "votes": 23,
+            "popularity": 10.4212
+          },
+          {
+            "id": 300894,
+            "type": "tv",
+            "title": "Kurukshetra: The Great War of Mahabharata",
+            "date": "2025-10-10",
+            "local": true,
+            "origins": [
+              "IN"
+            ],
+            "rating": 8,
+            "votes": 33,
+            "popularity": 4.8229
+          },
+          {
+            "id": 1489543,
+            "type": "movie",
+            "title": "G.D.N",
+            "date": "2026-08-07",
+            "local": true,
+            "origins": [],
+            "rating": 7,
+            "votes": 1,
+            "popularity": 14.7938
+          },
+          {
+            "id": 247043,
+            "type": "tv",
+            "title": "The Ba***ds of Bollywood",
+            "date": "2025-09-18",
+            "local": true,
+            "origins": [
+              "IN"
+            ],
+            "rating": 6.82,
+            "votes": 50,
+            "popularity": 5.6406
+          },
+          {
+            "id": 1515729,
+            "type": "movie",
+            "title": "Blast",
+            "date": "2026-05-28",
+            "local": true,
+            "origins": [],
+            "rating": 7.8,
+            "votes": 68,
+            "popularity": 10.0415
+          },
+          {
+            "id": 247831,
+            "type": "tv",
+            "title": "Mandala Murders",
+            "date": "2025-07-25",
+            "local": true,
+            "origins": [
+              "IN"
+            ],
+            "rating": 7.241,
+            "votes": 29,
+            "popularity": 3.7483
+          },
+          {
+            "id": 1367220,
+            "type": "movie",
+            "title": "Karuppu",
+            "date": "2026-05-14",
+            "local": true,
+            "origins": [],
+            "rating": 6.8,
+            "votes": 30,
+            "popularity": 7.8753
+          },
+          {
+            "id": 1582770,
+            "type": "movie",
+            "title": "Dhurandhar: The Revenge",
+            "date": "2026-03-18",
+            "local": true,
+            "origins": [],
+            "rating": 7.3,
+            "votes": 162,
+            "popularity": 8.4479
+          },
+          {
+            "id": 1561687,
+            "type": "movie",
+            "title": "Made in Korea",
+            "date": "2026-03-12",
+            "local": true,
+            "origins": [],
+            "rating": 7.25,
+            "votes": 42,
+            "popularity": 7.271
+          },
+          {
+            "id": 1542352,
+            "type": "movie",
+            "title": "Youth",
+            "date": "2026-03-19",
+            "local": true,
+            "origins": [],
+            "rating": 6.9,
+            "votes": 22,
+            "popularity": 6.559
+          },
+          {
+            "id": 1339876,
+            "type": "movie",
+            "title": "Mardaani 3",
+            "date": "2026-01-30",
+            "local": true,
+            "origins": [],
+            "rating": 7.6,
+            "votes": 44,
+            "popularity": 6.7631
+          },
+          {
+            "id": 1446616,
+            "type": "movie",
+            "title": "Tu Yaa Main",
+            "date": "2026-02-11",
+            "local": true,
+            "origins": [],
+            "rating": 6.393,
+            "votes": 61,
+            "popularity": 5.1817
+          },
+          {
+            "id": 1213898,
+            "type": "movie",
+            "title": "Border 2",
+            "date": "2026-01-23",
+            "local": true,
+            "origins": [],
+            "rating": 7.583,
+            "votes": 36,
+            "popularity": 5.7391
+          },
+          {
+            "id": 1291608,
+            "type": "movie",
+            "title": "Dhurandhar",
+            "date": "2025-12-05",
+            "local": true,
+            "origins": [],
+            "rating": 7.316,
+            "votes": 358,
+            "popularity": 10.1492
+          },
+          {
+            "id": 1641629,
+            "type": "movie",
+            "title": "You+Me - Against the World",
+            "date": "2026-09-18",
+            "local": false,
+            "origins": [],
+            "rating": 5.731,
+            "votes": 39,
+            "popularity": 94.6606
+          },
+          {
+            "id": 911,
+            "type": "tv",
+            "title": "Kaun Banega Crorepati",
+            "date": "2000-07-03",
+            "local": true,
+            "origins": [
+              "IN"
+            ],
+            "rating": 6.6,
+            "votes": 33,
+            "popularity": 16.4469
+          }
+        ]
+      },
+      "providerSamples": [
+        {
+          "id": 1451944,
+          "type": "movie",
+          "providers": [
+            "Netflix"
+          ]
+        },
+        {
+          "id": 331932,
+          "type": "tv",
+          "providers": [
+            "JioHotstar"
+          ]
+        },
+        {
+          "id": 273207,
+          "type": "tv",
+          "providers": [
+            "Amazon Prime Video",
+            "Amazon Prime Video with Ads"
+          ]
+        }
+      ]
+    },
+    {
+      "region": "US",
+      "home": {
+        "region": "US",
+        "surface": "home",
+        "count": 12,
+        "local": 12,
+        "recent": 12,
+        "movies": 6,
+        "tv": 6,
+        "items": [
+          {
+            "id": 1101383,
+            "type": "movie",
+            "title": "The End of Oak Street",
+            "date": "2026-08-12",
+            "local": true,
+            "origins": [],
+            "rating": 6.999,
+            "votes": 1446,
+            "popularity": 485.8521
+          },
+          {
+            "id": 273207,
+            "type": "tv",
+            "title": "Neagley",
+            "date": "2026-09-16",
+            "local": true,
+            "origins": [
+              "US"
+            ],
+            "rating": 8.061,
+            "votes": 114,
+            "popularity": 164.7382
+          },
+          {
+            "id": 1607127,
+            "type": "movie",
+            "title": "One Last Shot",
+            "date": "2026-09-22",
+            "local": true,
+            "origins": [],
+            "rating": 7.706,
+            "votes": 17,
+            "popularity": 90.7214
+          },
+          {
+            "id": 299939,
+            "type": "tv",
+            "title": "Monster: The Lizzie Borden Story",
+            "date": "2026-09-17",
+            "local": true,
+            "origins": [
+              "US"
+            ],
+            "rating": 7,
+            "votes": 80,
+            "popularity": 165.6148
+          },
+          {
+            "id": 1084244,
+            "type": "movie",
+            "title": "Toy Story 5",
+            "date": "2026-06-17",
+            "local": true,
+            "origins": [],
+            "rating": 8.357,
+            "votes": 2250,
+            "popularity": 146.8947
+          },
+          {
+            "id": 95350,
+            "type": "tv",
+            "title": "Lanterns",
+            "date": "2026-08-16",
+            "local": true,
+            "origins": [
+              "US"
+            ],
+            "rating": 8.245,
+            "votes": 412,
+            "popularity": 276.6365
+          },
+          {
+            "id": 1240889,
+            "type": "movie",
+            "title": "Teenage Sex and Death at Camp Miasma",
+            "date": "2026-08-06",
+            "local": true,
+            "origins": [],
+            "rating": 6.424,
+            "votes": 170,
+            "popularity": 130.0998
+          },
+          {
+            "id": 239618,
+            "type": "tv",
+            "title": "American Hostage",
+            "date": "2026-09-20",
+            "local": true,
+            "origins": [
+              "US"
+            ],
+            "rating": 7.2,
+            "votes": 5,
+            "popularity": 42.0913
+          },
+          {
+            "id": 1137844,
+            "type": "movie",
+            "title": "Mayday",
+            "date": "2026-09-03",
+            "local": true,
+            "origins": [],
+            "rating": 8.047,
+            "votes": 770,
+            "popularity": 91.2819
+          },
+          {
+            "id": 260249,
+            "type": "tv",
+            "title": "The Trial",
+            "date": "2026-09-11",
+            "local": true,
+            "origins": [
+              "MX",
+              "US"
+            ],
+            "rating": 9.182,
+            "votes": 44,
+            "popularity": 50.1295
+          },
+          {
+            "id": 1386315,
+            "type": "movie",
+            "title": "The Runner",
+            "date": "2026-09-03",
+            "local": true,
+            "origins": [],
+            "rating": 6.8,
+            "votes": 556,
+            "popularity": 123.862
+          },
+          {
+            "id": 332657,
+            "type": "tv",
+            "title": "Route 187",
+            "date": "2026-09-16",
+            "local": true,
+            "origins": [
+              "US"
+            ],
+            "rating": 6.808,
+            "votes": 13,
+            "popularity": 42.3913
+          }
+        ]
+      },
+      "browse": {
+        "region": "US",
+        "surface": "browse",
+        "count": 36,
+        "local": 36,
+        "recent": 36,
+        "movies": 18,
+        "tv": 18,
+        "items": [
+          {
+            "id": 1101383,
+            "type": "movie",
+            "title": "The End of Oak Street",
+            "date": "2026-08-12",
+            "local": true,
+            "origins": [],
+            "rating": 6.999,
+            "votes": 1446,
+            "popularity": 485.8521
+          },
+          {
+            "id": 273207,
+            "type": "tv",
+            "title": "Neagley",
+            "date": "2026-09-16",
+            "local": true,
+            "origins": [
+              "US"
+            ],
+            "rating": 8.061,
+            "votes": 114,
+            "popularity": 164.7382
+          },
+          {
+            "id": 1607127,
+            "type": "movie",
+            "title": "One Last Shot",
+            "date": "2026-09-22",
+            "local": true,
+            "origins": [],
+            "rating": 7.706,
+            "votes": 17,
+            "popularity": 90.7214
+          },
+          {
+            "id": 299939,
+            "type": "tv",
+            "title": "Monster: The Lizzie Borden Story",
+            "date": "2026-09-17",
+            "local": true,
+            "origins": [
+              "US"
+            ],
+            "rating": 7,
+            "votes": 80,
+            "popularity": 165.6148
+          },
+          {
+            "id": 1084244,
+            "type": "movie",
+            "title": "Toy Story 5",
+            "date": "2026-06-17",
+            "local": true,
+            "origins": [],
+            "rating": 8.357,
+            "votes": 2250,
+            "popularity": 146.8947
+          },
+          {
+            "id": 95350,
+            "type": "tv",
+            "title": "Lanterns",
+            "date": "2026-08-16",
+            "local": true,
+            "origins": [
+              "US"
+            ],
+            "rating": 8.245,
+            "votes": 412,
+            "popularity": 276.6365
+          },
+          {
+            "id": 1240889,
+            "type": "movie",
+            "title": "Teenage Sex and Death at Camp Miasma",
+            "date": "2026-08-06",
+            "local": true,
+            "origins": [],
+            "rating": 6.424,
+            "votes": 170,
+            "popularity": 130.0998
+          },
+          {
+            "id": 239618,
+            "type": "tv",
+            "title": "American Hostage",
+            "date": "2026-09-20",
+            "local": true,
+            "origins": [
+              "US"
+            ],
+            "rating": 7.2,
+            "votes": 5,
+            "popularity": 42.0913
+          },
+          {
+            "id": 1137844,
+            "type": "movie",
+            "title": "Mayday",
+            "date": "2026-09-03",
+            "local": true,
+            "origins": [],
+            "rating": 8.047,
+            "votes": 770,
+            "popularity": 91.2819
+          },
+          {
+            "id": 260249,
+            "type": "tv",
+            "title": "The Trial",
+            "date": "2026-09-11",
+            "local": true,
+            "origins": [
+              "MX",
+              "US"
+            ],
+            "rating": 9.182,
+            "votes": 44,
+            "popularity": 50.1295
+          },
+          {
+            "id": 1386315,
+            "type": "movie",
+            "title": "The Runner",
+            "date": "2026-09-03",
+            "local": true,
+            "origins": [],
+            "rating": 6.8,
+            "votes": 556,
+            "popularity": 123.862
+          },
+          {
+            "id": 332657,
+            "type": "tv",
+            "title": "Route 187",
+            "date": "2026-09-16",
+            "local": true,
+            "origins": [
+              "US"
+            ],
+            "rating": 6.808,
+            "votes": 13,
+            "popularity": 42.3913
+          },
+          {
+            "id": 1288445,
+            "type": "movie",
+            "title": "Mutiny",
+            "date": "2026-08-19",
+            "local": true,
+            "origins": [],
+            "rating": 6.424,
+            "votes": 434,
+            "popularity": 229.0152
+          },
+          {
+            "id": 252105,
+            "type": "tv",
+            "title": "Golden Axe",
+            "date": "2026-09-16",
+            "local": true,
+            "origins": [
+              "US"
+            ],
+            "rating": 7.571,
+            "votes": 7,
+            "popularity": 39.2544
+          },
+          {
+            "id": 1108427,
+            "type": "movie",
+            "title": "Moana",
+            "date": "2026-07-08",
+            "local": true,
+            "origins": [],
+            "rating": 7.425,
+            "votes": 751,
+            "popularity": 183.5472
+          },
+          {
+            "id": 304842,
+            "type": "tv",
+            "title": "The Drop: A Snowfall Saga",
+            "date": "2026-09-08",
+            "local": true,
+            "origins": [
+              "US"
+            ],
+            "rating": 6.8,
+            "votes": 12,
+            "popularity": 25.6172
+          },
+          {
+            "id": 1516698,
+            "type": "movie",
+            "title": "The Last Sunrise",
+            "date": "2026-08-26",
+            "local": true,
+            "origins": [],
+            "rating": 6.793,
+            "votes": 188,
+            "popularity": 96.0388
+          },
+          {
+            "id": 287620,
+            "type": "tv",
+            "title": "Stuart Fails to Save the Universe",
+            "date": "2026-07-23",
+            "local": true,
+            "origins": [
+              "US"
+            ],
+            "rating": 8.701,
+            "votes": 179,
+            "popularity": 56.1205
+          },
+          {
+            "id": 860508,
+            "type": "movie",
+            "title": "The Whisper Man",
+            "date": "2026-08-27",
+            "local": true,
+            "origins": [],
+            "rating": 6.86,
+            "votes": 780,
+            "popularity": 63.7537
+          },
+          {
+            "id": 283297,
+            "type": "tv",
+            "title": "Sterling Point",
+            "date": "2026-08-05",
+            "local": true,
+            "origins": [
+              "US"
+            ],
+            "rating": 8.2,
+            "votes": 147,
+            "popularity": 28.2994
+          },
+          {
+            "id": 1751701,
+            "type": "movie",
+            "title": "After Impact",
+            "date": "2026-09-15",
+            "local": true,
+            "origins": [],
+            "rating": 5.1,
+            "votes": 5,
+            "popularity": 112.8876
+          },
+          {
+            "id": 287238,
+            "type": "tv",
+            "title": "Furious",
+            "date": "2026-07-27",
+            "local": true,
+            "origins": [
+              "US"
+            ],
+            "rating": 7.4,
+            "votes": 134,
+            "popularity": 34.1654
+          },
+          {
+            "id": 1506560,
+            "type": "movie",
+            "title": "Clash of the Thundermans",
+            "date": "2026-09-03",
+            "local": true,
+            "origins": [],
+            "rating": 6.7,
+            "votes": 60,
+            "popularity": 78.1683
+          },
+          {
+            "id": 298168,
+            "type": "tv",
+            "title": "The Shards",
+            "date": "2026-08-05",
+            "local": true,
+            "origins": [
+              "US"
+            ],
+            "rating": 7.148,
+            "votes": 61,
+            "popularity": 30.8605
+          },
+          {
+            "id": 1318467,
+            "type": "movie",
+            "title": "The Last Kiss",
+            "date": "2026-09-15",
+            "local": true,
+            "origins": [],
+            "rating": 6.393,
+            "votes": 14,
+            "popularity": 66.5672
+          },
+          {
+            "id": 278624,
+            "type": "tv",
+            "title": "Lucky",
+            "date": "2026-07-14",
+            "local": true,
+            "origins": [
+              "US"
+            ],
+            "rating": 7.285,
+            "votes": 274,
+            "popularity": 30.3558
+          },
+          {
+            "id": 980431,
+            "type": "movie",
+            "title": "Avatar Aang: The Last Airbender",
+            "date": "2026-07-24",
+            "local": true,
+            "origins": [],
+            "rating": 9.153,
+            "votes": 1183,
+            "popularity": 83.0092
+          },
+          {
+            "id": 296756,
+            "type": "tv",
+            "title": "President Curtis",
+            "date": "2026-07-26",
+            "local": true,
+            "origins": [
+              "US"
+            ],
+            "rating": 6.692,
+            "votes": 52,
+            "popularity": 41.7096
+          },
+          {
+            "id": 1339713,
+            "type": "movie",
+            "title": "Obsession",
+            "date": "2026-05-13",
+            "local": true,
+            "origins": [],
+            "rating": 8.192,
+            "votes": 5688,
+            "popularity": 123.629
+          },
+          {
+            "id": 278178,
+            "type": "tv",
+            "title": "I Will Find You",
+            "date": "2026-06-18",
+            "local": true,
+            "origins": [
+              "US"
+            ],
+            "rating": 8.227,
+            "votes": 499,
+            "popularity": 30.4511
+          },
+          {
+            "id": 1315772,
+            "type": "movie",
+            "title": "Minions & Monsters",
+            "date": "2026-06-24",
+            "local": true,
+            "origins": [],
+            "rating": 7.555,
+            "votes": 1158,
+            "popularity": 120.1224
+          },
+          {
+            "id": 273240,
+            "type": "tv",
+            "title": "Off Campus",
+            "date": "2026-05-13",
+            "local": true,
+            "origins": [
+              "US"
+            ],
+            "rating": 8.91,
+            "votes": 859,
+            "popularity": 68.9882
+          },
+          {
+            "id": 1212763,
+            "type": "movie",
+            "title": "Evil Dead Burn",
+            "date": "2026-07-07",
+            "local": true,
+            "origins": [],
+            "rating": 7.7,
+            "votes": 1572,
+            "popularity": 60.0734
+          },
+          {
+            "id": 299167,
+            "type": "tv",
+            "title": "Dutton Ranch",
+            "date": "2026-05-15",
+            "local": true,
+            "origins": [
+              "US"
+            ],
+            "rating": 9.166,
+            "votes": 597,
+            "popularity": 44.0968
+          },
+          {
+            "id": 1083381,
+            "type": "movie",
+            "title": "Backrooms",
+            "date": "2026-05-27",
+            "local": true,
+            "origins": [],
+            "rating": 7.029,
+            "votes": 3384,
+            "popularity": 91.0767
+          },
+          {
+            "id": 220102,
+            "type": "tv",
+            "title": "Spider-Noir",
+            "date": "2026-05-25",
+            "local": true,
+            "origins": [
+              "US"
+            ],
+            "rating": 8.348,
+            "votes": 856,
+            "popularity": 32.7762
+          }
+        ]
+      },
+      "providerSamples": [
+        {
+          "id": 1101383,
+          "type": "movie",
+          "providers": [
+            "Amazon Video",
+            "Apple TV Store",
+            "Google Play Movies",
+            "YouTube",
+            "Fandango At Home",
+            "Plex"
+          ]
+        },
+        {
+          "id": 273207,
+          "type": "tv",
+          "providers": [
+            "Amazon Prime Video",
+            "Amazon Prime Video with Ads",
+            "Amazon Prime Video Free with Ads"
+          ]
+        }
+      ]
+    },
+    {
+      "region": "GB",
+      "home": {
+        "region": "GB",
+        "surface": "home",
+        "count": 12,
+        "local": 10,
+        "recent": 12,
+        "movies": 6,
+        "tv": 6,
+        "items": [
+          {
+            "id": 1386315,
+            "type": "movie",
+            "title": "The Runner",
+            "date": "2026-09-03",
+            "local": true,
+            "origins": [],
+            "rating": 6.8,
+            "votes": 556,
+            "popularity": 123.862
+          },
+          {
+            "id": 285418,
+            "type": "tv",
+            "title": "Youth",
+            "date": "2026-09-21",
+            "local": true,
+            "origins": [
+              "GB"
+            ],
+            "rating": 7.8,
+            "votes": 5,
+            "popularity": 34.5878
+          },
+          {
+            "id": 1232569,
+            "type": "movie",
+            "title": "Pinocchio: Unstrung",
+            "date": "2026-07-22",
+            "local": true,
+            "origins": [],
+            "rating": 6.565,
+            "votes": 107,
+            "popularity": 137.4338
+          },
+          {
+            "id": 258230,
+            "type": "tv",
+            "title": "Last Seen",
+            "date": "2026-09-09",
+            "local": true,
+            "origins": [
+              "GB"
+            ],
+            "rating": 8.235,
+            "votes": 17,
+            "popularity": 35.9071
+          },
+          {
+            "id": 1477317,
+            "type": "movie",
+            "title": "Your Fault: London",
+            "date": "2026-06-17",
+            "local": true,
+            "origins": [],
+            "rating": 7.437,
+            "votes": 198,
+            "popularity": 16.4014
+          },
+          {
+            "id": 319851,
+            "type": "tv",
+            "title": "The Blame",
+            "date": "2026-09-20",
+            "local": true,
+            "origins": [
+              "GB"
+            ],
+            "rating": 8.7,
+            "votes": 7,
+            "popularity": 28.3189
+          },
+          {
+            "id": 1301421,
+            "type": "movie",
+            "title": "The Sheep Detectives",
+            "date": "2026-04-30",
+            "local": true,
+            "origins": [],
+            "rating": 7.929,
+            "votes": 1706,
+            "popularity": 53.001
+          },
+          {
+            "id": 300480,
+            "type": "tv",
+            "title": "Ricky Gervais Alley Cats",
+            "date": "2026-08-07",
+            "local": true,
+            "origins": [
+              "GB"
+            ],
+            "rating": 7.915,
+            "votes": 59,
+            "popularity": 11.3968
+          },
+          {
+            "id": 1130948,
+            "type": "movie",
+            "title": "Rosebush Pruning",
+            "date": "2026-04-23",
+            "local": true,
+            "origins": [],
+            "rating": 6.136,
+            "votes": 55,
+            "popularity": 83.9119
+          },
+          {
+            "id": 273207,
+            "type": "tv",
+            "title": "Neagley",
+            "date": "2026-09-16",
+            "local": false,
+            "origins": [
+              "US"
+            ],
+            "rating": 8.061,
+            "votes": 114,
+            "popularity": 164.7382
+          },
+          {
+            "id": 1339588,
+            "type": "movie",
+            "title": "Finding Emily",
+            "date": "2026-05-21",
+            "local": true,
+            "origins": [],
+            "rating": 6.8,
+            "votes": 59,
+            "popularity": 26.1982
+          },
+          {
+            "id": 299939,
+            "type": "tv",
+            "title": "Monster: The Lizzie Borden Story",
+            "date": "2026-09-17",
+            "local": false,
+            "origins": [
+              "US"
+            ],
+            "rating": 7,
+            "votes": 80,
+            "popularity": 165.6148
+          }
+        ]
+      },
+      "browse": {
+        "region": "GB",
+        "surface": "browse",
+        "count": 36,
+        "local": 36,
+        "recent": 35,
+        "movies": 18,
+        "tv": 18,
+        "items": [
+          {
+            "id": 1386315,
+            "type": "movie",
+            "title": "The Runner",
+            "date": "2026-09-03",
+            "local": true,
+            "origins": [],
+            "rating": 6.8,
+            "votes": 556,
+            "popularity": 123.862
+          },
+          {
+            "id": 285418,
+            "type": "tv",
+            "title": "Youth",
+            "date": "2026-09-21",
+            "local": true,
+            "origins": [
+              "GB"
+            ],
+            "rating": 7.8,
+            "votes": 5,
+            "popularity": 34.5878
+          },
+          {
+            "id": 1232569,
+            "type": "movie",
+            "title": "Pinocchio: Unstrung",
+            "date": "2026-07-22",
+            "local": true,
+            "origins": [],
+            "rating": 6.565,
+            "votes": 107,
+            "popularity": 137.4338
+          },
+          {
+            "id": 258230,
+            "type": "tv",
+            "title": "Last Seen",
+            "date": "2026-09-09",
+            "local": true,
+            "origins": [
+              "GB"
+            ],
+            "rating": 8.235,
+            "votes": 17,
+            "popularity": 35.9071
+          },
+          {
+            "id": 1468683,
+            "type": "movie",
+            "title": "Heartstopper Forever",
+            "date": "2026-07-14",
+            "local": true,
+            "origins": [],
+            "rating": 7.247,
+            "votes": 271,
+            "popularity": 11.0305
+          },
+          {
+            "id": 319851,
+            "type": "tv",
+            "title": "The Blame",
+            "date": "2026-09-20",
+            "local": true,
+            "origins": [
+              "GB"
+            ],
+            "rating": 8.7,
+            "votes": 7,
+            "popularity": 28.3189
+          },
+          {
+            "id": 1723460,
+            "type": "movie",
+            "title": "A Toxic Love Story",
+            "date": "2026-07-22",
+            "local": true,
+            "origins": [],
+            "rating": 6.407,
+            "votes": 54,
+            "popularity": 7.2649
+          },
+          {
+            "id": 300480,
+            "type": "tv",
+            "title": "Ricky Gervais Alley Cats",
+            "date": "2026-08-07",
+            "local": true,
+            "origins": [
+              "GB"
+            ],
+            "rating": 7.915,
+            "votes": 59,
+            "popularity": 11.3968
+          },
+          {
+            "id": 1477317,
+            "type": "movie",
+            "title": "Your Fault: London",
+            "date": "2026-06-17",
+            "local": true,
+            "origins": [],
+            "rating": 7.437,
+            "votes": 198,
+            "popularity": 16.4014
+          },
+          {
+            "id": 257994,
+            "type": "tv",
+            "title": "Half Man",
+            "date": "2026-04-28",
+            "local": true,
+            "origins": [
+              "GB"
+            ],
+            "rating": 8.049,
+            "votes": 152,
+            "popularity": 12.5028
+          },
+          {
+            "id": 1301421,
+            "type": "movie",
+            "title": "The Sheep Detectives",
+            "date": "2026-04-30",
+            "local": true,
+            "origins": [],
+            "rating": 7.929,
+            "votes": 1706,
+            "popularity": 53.001
+          },
+          {
+            "id": 262280,
+            "type": "tv",
+            "title": "Legends",
+            "date": "2026-05-07",
+            "local": true,
+            "origins": [
+              "GB"
+            ],
+            "rating": 7.605,
+            "votes": 114,
+            "popularity": 10.9199
+          },
+          {
+            "id": 1130948,
+            "type": "movie",
+            "title": "Rosebush Pruning",
+            "date": "2026-04-23",
+            "local": true,
+            "origins": [],
+            "rating": 6.136,
+            "votes": 55,
+            "popularity": 83.9119
+          },
+          {
+            "id": 286617,
+            "type": "tv",
+            "title": "Tip Toe",
+            "date": "2026-05-31",
+            "local": true,
+            "origins": [
+              "GB"
+            ],
+            "rating": 6.789,
+            "votes": 38,
+            "popularity": 8.0652
+          },
+          {
+            "id": 1339588,
+            "type": "movie",
+            "title": "Finding Emily",
+            "date": "2026-05-21",
+            "local": true,
+            "origins": [],
+            "rating": 6.8,
+            "votes": 59,
+            "popularity": 26.1982
+          },
+          {
+            "id": 255661,
+            "type": "tv",
+            "title": "Young Sherlock",
+            "date": "2026-03-04",
+            "local": true,
+            "origins": [
+              "GB",
+              "US"
+            ],
+            "rating": 7.804,
+            "votes": 312,
+            "popularity": 22.5804
+          },
+          {
+            "id": 1245859,
+            "type": "movie",
+            "title": "Savage House",
+            "date": "2026-06-05",
+            "local": true,
+            "origins": [],
+            "rating": 6.9,
+            "votes": 45,
+            "popularity": 10.4238
+          },
+          {
+            "id": 262848,
+            "type": "tv",
+            "title": "Unchosen",
+            "date": "2026-04-21",
+            "local": true,
+            "origins": [
+              "GB"
+            ],
+            "rating": 6.732,
+            "votes": 82,
+            "popularity": 12.0075
+          },
+          {
+            "id": 1662317,
+            "type": "movie",
+            "title": "The Crash",
+            "date": "2026-05-14",
+            "local": true,
+            "origins": [],
+            "rating": 6.866,
+            "votes": 186,
+            "popularity": 9.1236
+          },
+          {
+            "id": 249597,
+            "type": "tv",
+            "title": "Detective Hole",
+            "date": "2026-03-26",
+            "local": true,
+            "origins": [
+              "NO",
+              "GB",
+              "US"
+            ],
+            "rating": 7.4,
+            "votes": 127,
+            "popularity": 14.2752
+          },
+          {
+            "id": 1290821,
+            "type": "movie",
+            "title": "Shelter",
+            "date": "2026-01-28",
+            "local": true,
+            "origins": [],
+            "rating": 7.761,
+            "votes": 1897,
+            "popularity": 47.6081
+          },
+          {
+            "id": 313298,
+            "type": "tv",
+            "title": "The Dinosaurs",
+            "date": "2026-03-06",
+            "local": true,
+            "origins": [
+              "GB",
+              "US"
+            ],
+            "rating": 8.039,
+            "votes": 165,
+            "popularity": 10.3808
+          },
+          {
+            "id": 875828,
+            "type": "movie",
+            "title": "Peaky Blinders: The Immortal Man",
+            "date": "2026-03-05",
+            "local": true,
+            "origins": [],
+            "rating": 7.178,
+            "votes": 1233,
+            "popularity": 22.7836
+          },
+          {
+            "id": 254071,
+            "type": "tv",
+            "title": "Steal",
+            "date": "2026-01-21",
+            "local": true,
+            "origins": [
+              "GB"
+            ],
+            "rating": 7.456,
+            "votes": 171,
+            "popularity": 16.973
+          },
+          {
+            "id": 1171145,
+            "type": "movie",
+            "title": "Crime 101",
+            "date": "2026-02-11",
+            "local": true,
+            "origins": [],
+            "rating": 7.016,
+            "votes": 1372,
+            "popularity": 37.3503
+          },
+          {
+            "id": 270572,
+            "type": "tv",
+            "title": "Lord of the Flies",
+            "date": "2026-02-08",
+            "local": true,
+            "origins": [
+              "GB"
+            ],
+            "rating": 7.6,
+            "votes": 125,
+            "popularity": 8.139
+          },
+          {
+            "id": 1316092,
+            "type": "movie",
+            "title": "“Wuthering Heights”",
+            "date": "2026-02-11",
+            "local": true,
+            "origins": [],
+            "rating": 6.651,
+            "votes": 1360,
+            "popularity": 25.1304
+          },
+          {
+            "id": 233079,
+            "type": "tv",
+            "title": "How to Get to Heaven from Belfast",
+            "date": "2026-02-12",
+            "local": true,
+            "origins": [
+              "GB"
+            ],
+            "rating": 7.094,
+            "votes": 90,
+            "popularity": 7.9449
+          },
+          {
+            "id": 467905,
+            "type": "movie",
+            "title": "How to Make a Killing",
+            "date": "2026-02-16",
+            "local": true,
+            "origins": [],
+            "rating": 6.962,
+            "votes": 751,
+            "popularity": 18.4406
+          },
+          {
+            "id": 306603,
+            "type": "tv",
+            "title": "Gone",
+            "date": "2026-03-08",
+            "local": true,
+            "origins": [
+              "GB"
+            ],
+            "rating": 6.7,
+            "votes": 30,
+            "popularity": 9.118
+          },
+          {
+            "id": 1140521,
+            "type": "movie",
+            "title": "The Magic Faraway Tree",
+            "date": "2026-03-26",
+            "local": true,
+            "origins": [],
+            "rating": 6.368,
+            "votes": 72,
+            "popularity": 17.0372
+          },
+          {
+            "id": 250505,
+            "type": "tv",
+            "title": "Agatha Christie's Seven Dials",
+            "date": "2026-01-15",
+            "local": true,
+            "origins": [
+              "GB"
+            ],
+            "rating": 6.291,
+            "votes": 230,
+            "popularity": 9.2866
+          },
+          {
+            "id": 1272837,
+            "type": "movie",
+            "title": "28 Years Later: The Bone Temple",
+            "date": "2026-01-14",
+            "local": true,
+            "origins": [],
+            "rating": 7.084,
+            "votes": 1764,
+            "popularity": 25.544
+          },
+          {
+            "id": 262262,
+            "type": "tv",
+            "title": "Under Salt Marsh",
+            "date": "2026-01-30",
+            "local": true,
+            "origins": [
+              "GB"
+            ],
+            "rating": 6.689,
+            "votes": 66,
+            "popularity": 7.8622
+          },
+          {
+            "id": 1662432,
+            "type": "movie",
+            "title": "Finding Harry: The Craft Behind the Magic",
+            "date": "2026-04-05",
+            "local": true,
+            "origins": [],
+            "rating": 7.726,
+            "votes": 42,
+            "popularity": 12.0911
+          },
+          {
+            "id": 247718,
+            "type": "tv",
+            "title": "MobLand",
+            "date": "2025-03-30",
+            "local": true,
+            "origins": [
+              "GB",
+              "US"
+            ],
+            "rating": 8.4,
+            "votes": 884,
+            "popularity": 255.9333
+          }
+        ]
+      },
+      "providerSamples": [
+        {
+          "id": 1386315,
+          "type": "movie",
+          "providers": [
+            "Amazon Prime Video",
+            "Amazon Prime Video with Ads"
+          ]
+        },
+        {
+          "id": 285418,
+          "type": "tv",
+          "providers": [
+            "HBO Max Amazon Channel",
+            "HBO Max"
+          ]
+        },
+        {
+          "id": 273207,
+          "type": "tv",
+          "providers": [
+            "Amazon Prime Video",
+            "Amazon Prime Video with Ads"
+          ]
+        }
+      ]
+    },
+    {
+      "region": "JP",
+      "home": {
+        "region": "JP",
+        "surface": "home",
+        "count": 12,
+        "local": 12,
+        "recent": 12,
+        "movies": 6,
+        "tv": 6,
+        "items": [
+          {
+            "id": 1679730,
+            "type": "movie",
+            "title": "THE RIBBON HERO",
+            "date": "2026-08-07",
+            "local": true,
+            "origins": [],
+            "rating": 6.4,
+            "votes": 24,
+            "popularity": 15.2915
+          },
+          {
+            "id": 298008,
+            "type": "tv",
+            "title": "Plastic Beauty",
+            "date": "2026-09-17",
+            "local": true,
+            "origins": [
+              "JP"
+            ],
+            "rating": 6.7,
+            "votes": 3,
+            "popularity": 36.5541
+          },
+          {
+            "id": 1659389,
+            "type": "movie",
+            "title": "One Piece Heroines",
+            "date": "2026-07-05",
+            "local": true,
+            "origins": [],
+            "rating": 6.6,
+            "votes": 25,
+            "popularity": 7.3485
+          },
+          {
+            "id": 270603,
+            "type": "tv",
+            "title": "The Exiled Heavy Knight Knows How to Game the System",
+            "date": "2026-07-03",
+            "local": true,
+            "origins": [
+              "JP"
+            ],
+            "rating": 8.5,
+            "votes": 22,
+            "popularity": 44.9346
+          },
+          {
+            "id": 1363974,
+            "type": "movie",
+            "title": "That Time I Got Reincarnated as a Slime the Movie: Tears of the Azure Sea",
+            "date": "2026-02-27",
+            "local": true,
+            "origins": [],
+            "rating": 8.2,
+            "votes": 62,
+            "popularity": 11.2812
+          },
+          {
+            "id": 296286,
+            "type": "tv",
+            "title": "Smoking Behind the Supermarket with You",
+            "date": "2026-07-09",
+            "local": true,
+            "origins": [
+              "JP"
+            ],
+            "rating": 9.1,
+            "votes": 49,
+            "popularity": 33.2485
+          },
+          {
+            "id": 1575337,
+            "type": "movie",
+            "title": "Cosmic Princess Kaguya!",
+            "date": "2026-01-22",
+            "local": true,
+            "origins": [],
+            "rating": 8.1,
+            "votes": 116,
+            "popularity": 14.0733
+          },
+          {
+            "id": 312949,
+            "type": "tv",
+            "title": "Chainsmoker Cat",
+            "date": "2026-07-03",
+            "local": true,
+            "origins": [
+              "JP"
+            ],
+            "rating": 8.538,
+            "votes": 66,
+            "popularity": 30.4191
+          },
+          {
+            "id": 1397201,
+            "type": "movie",
+            "title": "Golden Kamuy -The Abashiri Prison Raid-",
+            "date": "2026-03-13",
+            "local": true,
+            "origins": [],
+            "rating": 7.357,
+            "votes": 35,
+            "popularity": 6.3384
+          },
+          {
+            "id": 285993,
+            "type": "tv",
+            "title": "BLACK TORCH",
+            "date": "2026-07-04",
+            "local": true,
+            "origins": [
+              "JP"
+            ],
+            "rating": 8.4,
+            "votes": 48,
+            "popularity": 35.2847
+          },
+          {
+            "id": 1530941,
+            "type": "movie",
+            "title": "Gintama the Movie 2026: Yoshiwara in Flames",
+            "date": "2026-02-13",
+            "local": true,
+            "origins": [],
+            "rating": 8.95,
+            "votes": 20,
+            "popularity": 11.7998
+          },
+          {
+            "id": 288659,
+            "type": "tv",
+            "title": "Agents of the Four Seasons Dance of Spring",
+            "date": "2026-03-29",
+            "local": true,
+            "origins": [
+              "JP"
+            ],
+            "rating": 7.1,
+            "votes": 24,
+            "popularity": 42.1827
+          }
+        ]
+      },
+      "browse": {
+        "region": "JP",
+        "surface": "browse",
+        "count": 36,
+        "local": 32,
+        "recent": 33,
+        "movies": 18,
+        "tv": 18,
+        "items": [
+          {
+            "id": 1679730,
+            "type": "movie",
+            "title": "THE RIBBON HERO",
+            "date": "2026-08-07",
+            "local": true,
+            "origins": [],
+            "rating": 6.4,
+            "votes": 24,
+            "popularity": 15.2915
+          },
+          {
+            "id": 298008,
+            "type": "tv",
+            "title": "Plastic Beauty",
+            "date": "2026-09-17",
+            "local": true,
+            "origins": [
+              "JP"
+            ],
+            "rating": 6.7,
+            "votes": 3,
+            "popularity": 36.5541
+          },
+          {
+            "id": 1659389,
+            "type": "movie",
+            "title": "One Piece Heroines",
+            "date": "2026-07-05",
+            "local": true,
+            "origins": [],
+            "rating": 6.6,
+            "votes": 25,
+            "popularity": 7.3485
+          },
+          {
+            "id": 270603,
+            "type": "tv",
+            "title": "The Exiled Heavy Knight Knows How to Game the System",
+            "date": "2026-07-03",
+            "local": true,
+            "origins": [
+              "JP"
+            ],
+            "rating": 8.5,
+            "votes": 22,
+            "popularity": 44.9346
+          },
+          {
+            "id": 1363974,
+            "type": "movie",
+            "title": "That Time I Got Reincarnated as a Slime the Movie: Tears of the Azure Sea",
+            "date": "2026-02-27",
+            "local": true,
+            "origins": [],
+            "rating": 8.2,
+            "votes": 62,
+            "popularity": 11.2812
+          },
+          {
+            "id": 296286,
+            "type": "tv",
+            "title": "Smoking Behind the Supermarket with You",
+            "date": "2026-07-09",
+            "local": true,
+            "origins": [
+              "JP"
+            ],
+            "rating": 9.1,
+            "votes": 49,
+            "popularity": 33.2485
+          },
+          {
+            "id": 1575337,
+            "type": "movie",
+            "title": "Cosmic Princess Kaguya!",
+            "date": "2026-01-22",
+            "local": true,
+            "origins": [],
+            "rating": 8.1,
+            "votes": 116,
+            "popularity": 14.0733
+          },
+          {
+            "id": 312949,
+            "type": "tv",
+            "title": "Chainsmoker Cat",
+            "date": "2026-07-03",
+            "local": true,
+            "origins": [
+              "JP"
+            ],
+            "rating": 8.538,
+            "votes": 66,
+            "popularity": 30.4191
+          },
+          {
+            "id": 1397201,
+            "type": "movie",
+            "title": "Golden Kamuy -The Abashiri Prison Raid-",
+            "date": "2026-03-13",
+            "local": true,
+            "origins": [],
+            "rating": 7.357,
+            "votes": 35,
+            "popularity": 6.3384
+          },
+          {
+            "id": 285993,
+            "type": "tv",
+            "title": "BLACK TORCH",
+            "date": "2026-07-04",
+            "local": true,
+            "origins": [
+              "JP"
+            ],
+            "rating": 8.4,
+            "votes": 48,
+            "popularity": 35.2847
+          },
+          {
+            "id": 1530941,
+            "type": "movie",
+            "title": "Gintama the Movie 2026: Yoshiwara in Flames",
+            "date": "2026-02-13",
+            "local": true,
+            "origins": [],
+            "rating": 8.95,
+            "votes": 20,
+            "popularity": 11.7998
+          },
+          {
+            "id": 255358,
+            "type": "tv",
+            "title": "THE GHOST IN THE SHELL",
+            "date": "2026-07-07",
+            "local": true,
+            "origins": [
+              "JP"
+            ],
+            "rating": 8.242,
+            "votes": 66,
+            "popularity": 20.8895
+          },
+          {
+            "id": 1598785,
+            "type": "movie",
+            "title": "Milky☆Subway: The Galactic Limited Express - the Movie",
+            "date": "2026-02-06",
+            "local": true,
+            "origins": [],
+            "rating": 8.75,
+            "votes": 44,
+            "popularity": 6.0273
+          },
+          {
+            "id": 288659,
+            "type": "tv",
+            "title": "Agents of the Four Seasons Dance of Spring",
+            "date": "2026-03-29",
+            "local": true,
+            "origins": [
+              "JP"
+            ],
+            "rating": 7.1,
+            "votes": 24,
+            "popularity": 42.1827
+          },
+          {
+            "id": 910850,
+            "type": "movie",
+            "title": "MOBILE SUIT GUNDAM HATHAWAY The Sorcery of Nymph Circe",
+            "date": "2026-01-30",
+            "local": true,
+            "origins": [],
+            "rating": 7.946,
+            "votes": 28,
+            "popularity": 9.3542
+          },
+          {
+            "id": 260463,
+            "type": "tv",
+            "title": "Daemons of the Shadow Realm",
+            "date": "2026-04-04",
+            "local": true,
+            "origins": [
+              "JP"
+            ],
+            "rating": 8.418,
+            "votes": 73,
+            "popularity": 33.9607
+          },
+          {
+            "id": 1570282,
+            "type": "movie",
+            "title": "This Is I",
+            "date": "2026-02-09",
+            "local": true,
+            "origins": [],
+            "rating": 7.1,
+            "votes": 23,
+            "popularity": 3.4888
+          },
+          {
+            "id": 283428,
+            "type": "tv",
+            "title": "The Ramparts of Ice",
+            "date": "2026-04-02",
+            "local": true,
+            "origins": [
+              "JP"
+            ],
+            "rating": 8.6,
+            "votes": 57,
+            "popularity": 30.2206
+          },
+          {
+            "id": 1432547,
+            "type": "movie",
+            "title": "ALL YOU NEED IS KILL",
+            "date": "2026-01-09",
+            "local": true,
+            "origins": [],
+            "rating": 6.389,
+            "votes": 36,
+            "popularity": 5.2086
+          },
+          {
+            "id": 297438,
+            "type": "tv",
+            "title": "Akane-banashi",
+            "date": "2026-04-04",
+            "local": true,
+            "origins": [
+              "JP"
+            ],
+            "rating": 7.981,
+            "votes": 27,
+            "popularity": 29.2594
+          },
+          {
+            "id": 1218925,
+            "type": "movie",
+            "title": "Chainsaw Man - The Movie: Reze Arc",
+            "date": "2025-09-19",
+            "local": true,
+            "origins": [],
+            "rating": 8.6,
+            "votes": 1197,
+            "popularity": 33.0295
+          },
+          {
+            "id": 278043,
+            "type": "tv",
+            "title": "You and I Are Polar Opposites",
+            "date": "2026-01-11",
+            "local": true,
+            "origins": [
+              "JP"
+            ],
+            "rating": 8.6,
+            "votes": 95,
+            "popularity": 34.3024
+          },
+          {
+            "id": 1400032,
+            "type": "movie",
+            "title": "10DANCE",
+            "date": "2025-12-17",
+            "local": true,
+            "origins": [],
+            "rating": 7.6,
+            "votes": 126,
+            "popularity": 5.6549
+          },
+          {
+            "id": 280049,
+            "type": "tv",
+            "title": "HELL MODE: The Hardcore Gamer Dominates in Another World with Garbage Balancing",
+            "date": "2026-01-10",
+            "local": true,
+            "origins": [
+              "JP"
+            ],
+            "rating": 7.364,
+            "votes": 33,
+            "popularity": 23.4238
+          },
+          {
+            "id": 1408208,
+            "type": "movie",
+            "title": "Exit 8",
+            "date": "2025-08-03",
+            "local": true,
+            "origins": [],
+            "rating": 7.019,
+            "votes": 804,
+            "popularity": 12.3172
+          },
+          {
+            "id": 273207,
+            "type": "tv",
+            "title": "Neagley",
+            "date": "2026-09-16",
+            "local": false,
+            "origins": [
+              "US"
+            ],
+            "rating": 8.061,
+            "votes": 114,
+            "popularity": 164.7382
+          },
+          {
+            "id": 1406657,
+            "type": "movie",
+            "title": "Scarlet",
+            "date": "2025-11-21",
+            "local": true,
+            "origins": [],
+            "rating": 7,
+            "votes": 138,
+            "popularity": 6.3826
+          },
+          {
+            "id": 299939,
+            "type": "tv",
+            "title": "Monster: The Lizzie Borden Story",
+            "date": "2026-09-17",
+            "local": false,
+            "origins": [
+              "US"
+            ],
+            "rating": 7,
+            "votes": 80,
+            "popularity": 165.6148
+          },
+          {
+            "id": 1641629,
+            "type": "movie",
+            "title": "You+Me - Against the World",
+            "date": "2026-09-18",
+            "local": false,
+            "origins": [],
+            "rating": 5.731,
+            "votes": 39,
+            "popularity": 94.6606
+          },
+          {
+            "id": 275102,
+            "type": "tv",
+            "title": "The Scandal",
+            "date": "2026-09-18",
+            "local": false,
+            "origins": [
+              "KR"
+            ],
+            "rating": 6.6,
+            "votes": 12,
+            "popularity": 3190.8628
+          },
+          {
+            "id": 1295026,
+            "type": "movie",
+            "title": "100 METERS",
+            "date": "2025-09-19",
+            "local": true,
+            "origins": [],
+            "rating": 7.818,
+            "votes": 151,
+            "popularity": 4.9141
+          },
+          {
+            "id": 1422404,
+            "type": "movie",
+            "title": "Tokyo Taxi",
+            "date": "2025-11-21",
+            "local": true,
+            "origins": [],
+            "rating": 7.3,
+            "votes": 20,
+            "popularity": 3.6775
+          },
+          {
+            "id": 1359916,
+            "type": "movie",
+            "title": "5 Centimeters per Second",
+            "date": "2025-10-10",
+            "local": true,
+            "origins": [],
+            "rating": 7.917,
+            "votes": 24,
+            "popularity": 3.977
+          },
+          {
+            "id": 65942,
+            "type": "tv",
+            "title": "Re:ZERO -Starting Life in Another World-",
+            "date": "2016-04-04",
+            "local": true,
+            "origins": [
+              "JP"
+            ],
+            "rating": 8.1,
+            "votes": 787,
+            "popularity": 160.5247
+          },
+          {
+            "id": 94664,
+            "type": "tv",
+            "title": "Mushoku Tensei: Jobless Reincarnation",
+            "date": "2021-01-11",
+            "local": true,
+            "origins": [
+              "JP"
+            ],
+            "rating": 8.4,
+            "votes": 1728,
+            "popularity": 275.1399
+          },
+          {
+            "id": 30984,
+            "type": "tv",
+            "title": "Bleach",
+            "date": "2004-10-05",
+            "local": true,
+            "origins": [
+              "JP"
+            ],
+            "rating": 8.35,
+            "votes": 2277,
+            "popularity": 208.5297
+          }
+        ]
+      },
+      "providerSamples": [
+        {
+          "id": 1679730,
+          "type": "movie",
+          "providers": [
+            "Netflix",
+            "Netflix Standard with Ads"
+          ]
+        },
+        {
+          "id": 298008,
+          "type": "tv",
+          "providers": [
+            "Netflix",
+            "Netflix Standard with Ads"
+          ]
+        }
+      ]
+    },
+    {
+      "region": "KR",
+      "home": {
+        "region": "KR",
+        "surface": "home",
+        "count": 12,
+        "local": 11,
+        "recent": 12,
+        "movies": 6,
+        "tv": 6,
+        "items": [
+          {
+            "id": 1451344,
+            "type": "movie",
+            "title": "Husbands in Action",
+            "date": "2026-06-15",
+            "local": true,
+            "origins": [],
+            "rating": 7.346,
+            "votes": 130,
+            "popularity": 6.8545
+          },
+          {
+            "id": 275102,
+            "type": "tv",
+            "title": "The Scandal",
+            "date": "2026-09-18",
+            "local": true,
+            "origins": [
+              "KR"
+            ],
+            "rating": 6.6,
+            "votes": 12,
+            "popularity": 3190.8628
+          },
+          {
+            "id": 1628123,
+            "type": "movie",
+            "title": "BTS THE COMEBACK LIVE | ARIRANG",
+            "date": "2026-03-21",
+            "local": true,
+            "origins": [],
+            "rating": 8.698,
+            "votes": 116,
+            "popularity": 6.9413
+          },
+          {
+            "id": 314939,
+            "type": "tv",
+            "title": "A Love Other Than Yours",
+            "date": "2026-09-12",
+            "local": true,
+            "origins": [
+              "KR"
+            ],
+            "rating": 8,
+            "votes": 1,
+            "popularity": 39.9872
+          },
+          {
+            "id": 1268127,
+            "type": "movie",
+            "title": "Humint",
+            "date": "2026-02-11",
+            "local": true,
+            "origins": [],
+            "rating": 7.438,
+            "votes": 184,
+            "popularity": 11.3837
+          },
+          {
+            "id": 291496,
+            "type": "tv",
+            "title": "Our Sticky Love",
+            "date": "2026-08-07",
+            "local": true,
+            "origins": [
+              "KR"
+            ],
+            "rating": 8.824,
+            "votes": 102,
+            "popularity": 46.9956
+          },
+          {
+            "id": 1628116,
+            "type": "movie",
+            "title": "BTS: THE RETURN",
+            "date": "2026-03-27",
+            "local": true,
+            "origins": [],
+            "rating": 8.577,
+            "votes": 52,
+            "popularity": 4.9685
+          },
+          {
+            "id": 305644,
+            "type": "tv",
+            "title": "Four Hands, Two Sonatas",
+            "date": "2026-08-29",
+            "local": true,
+            "origins": [
+              "KR"
+            ],
+            "rating": 9.3,
+            "votes": 27,
+            "popularity": 32.441
+          },
+          {
+            "id": 1268609,
+            "type": "movie",
+            "title": "Pavane",
+            "date": "2026-02-19",
+            "local": true,
+            "origins": [],
+            "rating": 7.3,
+            "votes": 67,
+            "popularity": 5.49
+          },
+          {
+            "id": 297826,
+            "type": "tv",
+            "title": "Tomb Raider King",
+            "date": "2026-07-09",
+            "local": true,
+            "origins": [
+              "KR"
+            ],
+            "rating": 8.333,
+            "votes": 28,
+            "popularity": 37.6311
+          },
+          {
+            "id": 1641629,
+            "type": "movie",
+            "title": "You+Me - Against the World",
+            "date": "2026-09-18",
+            "local": false,
+            "origins": [],
+            "rating": 5.731,
+            "votes": 39,
+            "popularity": 94.6606
+          },
+          {
+            "id": 290193,
+            "type": "tv",
+            "title": "Mousetrap",
+            "date": "2026-08-28",
+            "local": true,
+            "origins": [
+              "KR"
+            ],
+            "rating": 8.15,
+            "votes": 40,
+            "popularity": 19.9001
+          }
+        ]
+      },
+      "browse": {
+        "region": "KR",
+        "surface": "browse",
+        "count": 36,
+        "local": 35,
+        "recent": 36,
+        "movies": 18,
+        "tv": 18,
+        "items": [
+          {
+            "id": 1451344,
+            "type": "movie",
+            "title": "Husbands in Action",
+            "date": "2026-06-15",
+            "local": true,
+            "origins": [],
+            "rating": 7.346,
+            "votes": 130,
+            "popularity": 6.8545
+          },
+          {
+            "id": 275102,
+            "type": "tv",
+            "title": "The Scandal",
+            "date": "2026-09-18",
+            "local": true,
+            "origins": [
+              "KR"
+            ],
+            "rating": 6.6,
+            "votes": 12,
+            "popularity": 3190.8628
+          },
+          {
+            "id": 1396749,
+            "type": "movie",
+            "title": "Wild Sing",
+            "date": "2026-06-03",
+            "local": true,
+            "origins": [],
+            "rating": 6.333,
+            "votes": 24,
+            "popularity": 3.4433
+          },
+          {
+            "id": 314939,
+            "type": "tv",
+            "title": "A Love Other Than Yours",
+            "date": "2026-09-12",
+            "local": true,
+            "origins": [
+              "KR"
+            ],
+            "rating": 8,
+            "votes": 1,
+            "popularity": 39.9872
+          },
+          {
+            "id": 1628123,
+            "type": "movie",
+            "title": "BTS THE COMEBACK LIVE | ARIRANG",
+            "date": "2026-03-21",
+            "local": true,
+            "origins": [],
+            "rating": 8.698,
+            "votes": 116,
+            "popularity": 6.9413
+          },
+          {
+            "id": 291496,
+            "type": "tv",
+            "title": "Our Sticky Love",
+            "date": "2026-08-07",
+            "local": true,
+            "origins": [
+              "KR"
+            ],
+            "rating": 8.824,
+            "votes": 102,
+            "popularity": 46.9956
+          },
+          {
+            "id": 1268127,
+            "type": "movie",
+            "title": "Humint",
+            "date": "2026-02-11",
+            "local": true,
+            "origins": [],
+            "rating": 7.438,
+            "votes": 184,
+            "popularity": 11.3837
+          },
+          {
+            "id": 305644,
+            "type": "tv",
+            "title": "Four Hands, Two Sonatas",
+            "date": "2026-08-29",
+            "local": true,
+            "origins": [
+              "KR"
+            ],
+            "rating": 9.3,
+            "votes": 27,
+            "popularity": 32.441
+          },
+          {
+            "id": 1628116,
+            "type": "movie",
+            "title": "BTS: THE RETURN",
+            "date": "2026-03-27",
+            "local": true,
+            "origins": [],
+            "rating": 8.577,
+            "votes": 52,
+            "popularity": 4.9685
+          },
+          {
+            "id": 297826,
+            "type": "tv",
+            "title": "Tomb Raider King",
+            "date": "2026-07-09",
+            "local": true,
+            "origins": [
+              "KR"
+            ],
+            "rating": 8.333,
+            "votes": 28,
+            "popularity": 37.6311
+          },
+          {
+            "id": 1268609,
+            "type": "movie",
+            "title": "Pavane",
+            "date": "2026-02-19",
+            "local": true,
+            "origins": [],
+            "rating": 7.3,
+            "votes": 67,
+            "popularity": 5.49
+          },
+          {
+            "id": 290193,
+            "type": "tv",
+            "title": "Mousetrap",
+            "date": "2026-08-28",
+            "local": true,
+            "origins": [
+              "KR"
+            ],
+            "rating": 8.15,
+            "votes": 40,
+            "popularity": 19.9001
+          },
+          {
+            "id": 1600421,
+            "type": "movie",
+            "title": "Stray Kids: The dominATE Experience",
+            "date": "2026-02-04",
+            "local": true,
+            "origins": [],
+            "rating": 9.102,
+            "votes": 64,
+            "popularity": 2.7699
+          },
+          {
+            "id": 276161,
+            "type": "tv",
+            "title": "Teach You a Lesson",
+            "date": "2026-06-05",
+            "local": true,
+            "origins": [
+              "KR"
+            ],
+            "rating": 9.395,
+            "votes": 923,
+            "popularity": 53.1765
+          },
+          {
+            "id": 1401542,
+            "type": "movie",
+            "title": "Project Y",
+            "date": "2026-01-21",
+            "local": true,
+            "origins": [],
+            "rating": 6,
+            "votes": 20,
+            "popularity": 4.4385
+          },
+          {
+            "id": 298610,
+            "type": "tv",
+            "title": "Spooky in Love",
+            "date": "2026-07-18",
+            "local": true,
+            "origins": [
+              "KR"
+            ],
+            "rating": 8.727,
+            "votes": 88,
+            "popularity": 16.3802
+          },
+          {
+            "id": 1466115,
+            "type": "movie",
+            "title": "Even If This Love Disappears Tonight",
+            "date": "2025-12-24",
+            "local": true,
+            "origins": [],
+            "rating": 8.506,
+            "votes": 234,
+            "popularity": 6.9767
+          },
+          {
+            "id": 296206,
+            "type": "tv",
+            "title": "Agent Kim Reactivated",
+            "date": "2026-06-26",
+            "local": true,
+            "origins": [
+              "KR"
+            ],
+            "rating": 8.45,
+            "votes": 190,
+            "popularity": 30.86
+          },
+          {
+            "id": 639988,
+            "type": "movie",
+            "title": "No Other Choice",
+            "date": "2025-09-24",
+            "local": true,
+            "origins": [],
+            "rating": 7.507,
+            "votes": 1292,
+            "popularity": 15.5465
+          },
+          {
+            "id": 279323,
+            "type": "tv",
+            "title": "The East Palace",
+            "date": "2026-07-17",
+            "local": true,
+            "origins": [
+              "KR"
+            ],
+            "rating": 8.165,
+            "votes": 97,
+            "popularity": 11.1533
+          },
+          {
+            "id": 1355666,
+            "type": "movie",
+            "title": "Love Untangled",
+            "date": "2025-08-28",
+            "local": true,
+            "origins": [],
+            "rating": 8.232,
+            "votes": 235,
+            "popularity": 6.2436
+          },
+          {
+            "id": 300727,
+            "type": "tv",
+            "title": "The Apartment Job",
+            "date": "2026-07-11",
+            "local": true,
+            "origins": [
+              "KR"
+            ],
+            "rating": 8.658,
+            "votes": 38,
+            "popularity": 11.7182
+          },
+          {
+            "id": 1641629,
+            "type": "movie",
+            "title": "You+Me - Against the World",
+            "date": "2026-09-18",
+            "local": false,
+            "origins": [],
+            "rating": 5.731,
+            "votes": 39,
+            "popularity": 94.6606
+          },
+          {
+            "id": 253960,
+            "type": "tv",
+            "title": "Human Vapor",
+            "date": "2026-07-02",
+            "local": true,
+            "origins": [
+              "JP",
+              "KR"
+            ],
+            "rating": 7.42,
+            "votes": 69,
+            "popularity": 12.2587
+          },
+          {
+            "id": 1267319,
+            "type": "movie",
+            "title": "Mantis",
+            "date": "2025-09-25",
+            "local": true,
+            "origins": [],
+            "rating": 6.446,
+            "votes": 193,
+            "popularity": 5.8308
+          },
+          {
+            "id": 289763,
+            "type": "tv",
+            "title": "See You at Work Tomorrow!",
+            "date": "2026-06-22",
+            "local": true,
+            "origins": [
+              "KR"
+            ],
+            "rating": 8.825,
+            "votes": 77,
+            "popularity": 11.2892
+          },
+          {
+            "id": 1131759,
+            "type": "movie",
+            "title": "Omniscient Reader: The Prophecy",
+            "date": "2025-07-23",
+            "local": true,
+            "origins": [],
+            "rating": 7.1,
+            "votes": 110,
+            "popularity": 9.0192
+          },
+          {
+            "id": 286360,
+            "type": "tv",
+            "title": "Notes from the Last Row",
+            "date": "2026-06-26",
+            "local": true,
+            "origins": [
+              "KR"
+            ],
+            "rating": 7.9,
+            "votes": 50,
+            "popularity": 10.9063
+          },
+          {
+            "id": 1269208,
+            "type": "movie",
+            "title": "Wall to Wall",
+            "date": "2025-07-17",
+            "local": true,
+            "origins": [],
+            "rating": 6.17,
+            "votes": 282,
+            "popularity": 7.0115
+          },
+          {
+            "id": 259837,
+            "type": "tv",
+            "title": "The WONDERfools",
+            "date": "2026-05-15",
+            "local": true,
+            "origins": [
+              "KR"
+            ],
+            "rating": 8.863,
+            "votes": 267,
+            "popularity": 20.5732
+          },
+          {
+            "id": 1296404,
+            "type": "movie",
+            "title": "Good News",
+            "date": "2025-09-05",
+            "local": true,
+            "origins": [],
+            "rating": 7,
+            "votes": 101,
+            "popularity": 4.1235
+          },
+          {
+            "id": 322055,
+            "type": "tv",
+            "title": "The Prosecutor's Proposal",
+            "date": "2026-06-25",
+            "local": true,
+            "origins": [
+              "KR"
+            ],
+            "rating": 6.781,
+            "votes": 32,
+            "popularity": 11.9138
+          },
+          {
+            "id": 1241624,
+            "type": "movie",
+            "title": "Ghost Train",
+            "date": "2025-07-09",
+            "local": true,
+            "origins": [],
+            "rating": 7.3,
+            "votes": 151,
+            "popularity": 4.051
+          },
+          {
+            "id": 303143,
+            "type": "tv",
+            "title": "My Royal Nemesis",
+            "date": "2026-05-08",
+            "local": true,
+            "origins": [
+              "KR"
+            ],
+            "rating": 8.771,
+            "votes": 109,
+            "popularity": 14.0303
+          },
+          {
+            "id": 1317512,
+            "type": "movie",
+            "title": "The World of Love",
+            "date": "2025-10-22",
+            "local": true,
+            "origins": [],
+            "rating": 7.7,
+            "votes": 37,
+            "popularity": 2.535
+          },
+          {
+            "id": 278573,
+            "type": "tv",
+            "title": "Perfect Crown",
+            "date": "2026-04-10",
+            "local": true,
+            "origins": [
+              "KR"
+            ],
+            "rating": 9.097,
+            "votes": 212,
+            "popularity": 23.7576
+          }
+        ]
+      },
+      "providerSamples": [
+        {
+          "id": 1451344,
+          "type": "movie",
+          "providers": [
+            "Netflix",
+            "Netflix Standard with Ads"
+          ]
+        },
+        {
+          "id": 275102,
+          "type": "tv",
+          "providers": [
+            "Netflix",
+            "Netflix Standard with Ads"
+          ]
+        },
+        {
+          "id": 1641629,
+          "type": "movie",
+          "providers": [
+            "Amazon Prime Video"
+          ]
+        }
+      ]
+    }
+  ],
+  "genreChecks": [
+    {
+      "type": "movie",
+      "region": "IN",
+      "countryFilterCount": 36,
+      "genreCount": 18,
+      "recent": 18
+    },
+    {
+      "type": "tv",
+      "region": "IN",
+      "countryFilterCount": 10,
+      "genreCount": 18,
+      "recent": 16
+    }
+  ],
+  "queries": [
+    {
+      "path": "/3/trending/tv/week",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/trending/movie/week",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "IN",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-07-01",
+        "include_video": "false",
+        "with_origin_country": "IN"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "IN",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-07-01",
+        "include_video": "false"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "IN",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-07-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "IN",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "air_date.gte": "2026-06-25",
+        "air_date.lte": "2026-09-23",
+        "with_origin_country": "IN"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "IN",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "include_video": "false",
+        "with_origin_country": "IN"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "IN",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-07-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "with_origin_country": "IN"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "IN",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "2",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-07-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "with_origin_country": "IN"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "IN",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "2",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-07-01",
+        "include_video": "false",
+        "with_origin_country": "IN"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/movie/1451944/watch/providers",
+      "params": {
+        "include_adult": "false"
+      },
+      "status": 200
+    },
+    {
+      "path": "/3/tv/331932/watch/providers",
+      "params": {
+        "include_adult": "false"
+      },
+      "status": 200
+    },
+    {
+      "path": "/3/tv/273207/watch/providers",
+      "params": {
+        "include_adult": "false"
+      },
+      "status": 200
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "US",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-07-01",
+        "include_video": "false"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "US",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-07-01",
+        "include_video": "false",
+        "with_origin_country": "US"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "US",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-07-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "with_origin_country": "US"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "US",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "air_date.gte": "2026-06-25",
+        "air_date.lte": "2026-09-23",
+        "with_origin_country": "US"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "US",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-07-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "US",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "include_video": "false",
+        "with_origin_country": "US"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "US",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "2",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-07-01",
+        "include_video": "false",
+        "with_origin_country": "US"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "US",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "2",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-07-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "with_origin_country": "US"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/movie/1101383/watch/providers",
+      "params": {
+        "include_adult": "false"
+      },
+      "status": 200
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "GB",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-07-01",
+        "include_video": "false",
+        "with_origin_country": "GB"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "GB",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-07-01",
+        "include_video": "false"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "GB",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-07-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "GB",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "air_date.gte": "2026-06-25",
+        "air_date.lte": "2026-09-23",
+        "with_origin_country": "GB"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "GB",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "include_video": "false",
+        "with_origin_country": "GB"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "GB",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-07-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "with_origin_country": "GB"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "GB",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "2",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-07-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "with_origin_country": "GB"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "GB",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "2",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-07-01",
+        "include_video": "false",
+        "with_origin_country": "GB"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/movie/1386315/watch/providers",
+      "params": {
+        "include_adult": "false"
+      },
+      "status": 200
+    },
+    {
+      "path": "/3/tv/285418/watch/providers",
+      "params": {
+        "include_adult": "false"
+      },
+      "status": 200
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "JP",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-07-01",
+        "include_video": "false"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "JP",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-07-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "JP",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-07-01",
+        "include_video": "false",
+        "with_origin_country": "JP"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "JP",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "air_date.gte": "2026-06-25",
+        "air_date.lte": "2026-09-23",
+        "with_origin_country": "JP"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "JP",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "include_video": "false",
+        "with_origin_country": "JP"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "JP",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-07-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "with_origin_country": "JP"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "JP",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "2",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-07-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "with_origin_country": "JP"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "JP",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "2",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-07-01",
+        "include_video": "false",
+        "with_origin_country": "JP"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/movie/1679730/watch/providers",
+      "params": {
+        "include_adult": "false"
+      },
+      "status": 200
+    },
+    {
+      "path": "/3/tv/298008/watch/providers",
+      "params": {
+        "include_adult": "false"
+      },
+      "status": 200
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "KR",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-07-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "KR",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-07-01",
+        "include_video": "false"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "KR",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-07-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "with_origin_country": "KR"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "KR",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-07-01",
+        "include_video": "false",
+        "with_origin_country": "KR"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "KR",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "include_video": "false",
+        "with_origin_country": "KR"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "KR",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "air_date.gte": "2026-06-25",
+        "air_date.lte": "2026-09-23",
+        "with_origin_country": "KR"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "KR",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "2",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-07-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "with_origin_country": "KR"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "KR",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "2",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-07-01",
+        "include_video": "false",
+        "with_origin_country": "KR"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/movie/1451344/watch/providers",
+      "params": {
+        "include_adult": "false"
+      },
+      "status": 200
+    },
+    {
+      "path": "/3/tv/275102/watch/providers",
+      "params": {
+        "include_adult": "false"
+      },
+      "status": 200
+    },
+    {
+      "path": "/3/movie/1641629/watch/providers",
+      "params": {
+        "include_adult": "false"
+      },
+      "status": 200
+    },
+    {
+      "path": "/3/genre/movie/list",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false"
+      },
+      "status": 200
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "IN",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "include_video": "false",
+        "with_genres": "18"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/movie",
+      "params": {
+        "language": "en-US",
+        "watch_region": "IN",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "primary_release_date.lte": "2026-09-23",
+        "primary_release_date.gte": "2025-01-01",
+        "include_video": "false",
+        "with_genres": "18"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/genre/tv/list",
+      "params": {
+        "language": "en-US",
+        "include_adult": "false"
+      },
+      "status": 200
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "IN",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "first_air_date.gte": "2025-01-01",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "with_genres": "18"
+      },
+      "status": 200,
+      "count": 20
+    },
+    {
+      "path": "/3/discover/tv",
+      "params": {
+        "language": "en-US",
+        "watch_region": "IN",
+        "with_watch_monetization_types": "flatrate|free|ads|rent|buy",
+        "sort_by": "popularity.desc",
+        "include_adult": "false",
+        "page": "1",
+        "first_air_date.lte": "2026-09-23",
+        "include_null_first_air_dates": "false",
+        "timezone": "UTC",
+        "air_date.gte": "2026-06-25",
+        "air_date.lte": "2026-09-23",
+        "with_genres": "18"
+      },
+      "status": 200,
+      "count": 20
+    }
+  ]
+}
