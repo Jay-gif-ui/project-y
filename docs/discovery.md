@@ -1,104 +1,101 @@
-# TMDB current discovery — 24 September 2026
+# Country discovery and local/international allocation — 24 September 2026
 
-This update implements the user's choice to improve TMDB discovery after comparing iFynex with JustWatch. It prioritizes current interest over the previous large local-origin bonus. Code is updated locally; deployment is a separate step. Production contains no hardcoded title names, fabricated provider data or invented iFynex activity.
+The latest request replaces the former soft country preference with an explicit local-led mix. Production has no hardcoded titles or invented activity/provider data. Changes are local and have not been deployed by this task.
 
-## Why older and overly local results appeared
+## Selection and limits
 
-The original movie activity query was `/discover/movie` with `watch_region`, `with_origin_country`, monetization types, `primary_release_date.lte` and `sort_by=popularity.desc`, without a lower release-date bound. Old popular catalog titles therefore entered the pool. Original home/browse local bonuses differed (44/60) and older exceptions could replace recent slots. There were partial trend/airing safeguards, so not every older title was admitted purely on popularity.
+- Country homepage: up to **16 local + 8 international** movies/TV, interleaved two local then one international. No numbered country chart is shown, because placement includes this editorial allocation.
+- See All: up to **200 local + 50 international = 250** qualified titles. The default first page matches the homepage; remaining picks favor local content four-to-one while preserving rank within each origin bucket. Missing slots never admit stale or unqualified titles.
+- If fewer than 200 local picks qualify, the international cap is `min(50, max(8, floor(localCount / 4)))`. This preserves the eight homepage picks while keeping larger, shorter lists locally focused. If either bucket lacks supply, actual counts are smaller. The UI reports those actual counts.
+- Default page one contains the same up-to-24 cards as home. Later pages contain up to 24 remaining items. Sparse first pages do not cause skipped or duplicated titles. Full 250-title lists have 11 pages.
+- All / Movies / TV, From Country, current-year, and current/newest filters act on eligible candidates before allocation. Newest preserves the capped membership and sorts it chronologically across every page. Its first page can differ from the default home preview. Latest releases has its own 60-day window and chronological See All.
+- Both media types share the score scale and use `mediaType:id` identity. Within an origin bucket, after three cards of one type an alternate type can move up if within 10 score points and in the same freshness group.
 
-The first current-only revision closed that unbounded movie query, but its local bonus was still 32 points — as large as the entire weekly trend contribution. A very recent local release needed normalized popularity only 0.4 (roughly 5.3 raw popularity), even with no votes. That promoted obscure recent local titles as though they were trends. The latest update fixes this ranking problem and separates latest releases from trends.
+## Endpoints and origin verification
 
-## Endpoints and request budget
+Global rows still use `/trending/movie/week` and `/trending/tv/week` in TMDB's returned order. Country ranking also uses `/trending/movie/day` and `/trending/tv/day`.
 
-- Global rows still use `/trending/movie/week` and `/trending/tv/week`, preserving their original returned order.
-- Country ranking additionally uses `/trending/movie/day` and `/trending/tv/day`.
-- Each type uses four bounded, first-page Discover pools: local and all-origin releases in the last 180 days; local and all-origin movie releases in the last 60 days (newest first), or TV airing in the last 28 days. No arbitrary catalog pagination.
-- Discover always pairs `watch_region` with `with_watch_monetization_types=flatrate|free|ads|rent|buy`. Local pools also use `with_origin_country`. All release dates end at today. A small candidate floor (5 votes, rating 6) avoids unrated stubs crowding the limited pool. Trending feeds do not use that Discover floor.
-- Up to four unseen daily/weekly titles per type receive actual `/{type}/{id}/watch/providers` checks. Empty regional offers mean exclusion. Provider names and links still come only from TMDB.
-- Maximum cold request budget: eight Discover calls, four shared feeds, eight bounded provider probes = 20. Homepage adds two genre calls. Latest releases reuse the same fetched candidates. Filters and pagination reuse cached URLs; no per-card detail requests.
-- Requests stay server-side with the existing 30-minute Next fetch cache/revalidation; genres retain 24-hour caching. The API key is never sent to the browser. Refresh happens on subsequent requests after cache expiry, not through an invented background job.
+Per type, four paginated `/discover/movie` or `/discover/tv` pools supply candidates:
 
-## Eligibility before scoring
+| Pool | Window / activity | Maximum pages |
+|---|---|---:|
+| Selected-country origin | Released/premiered within 180 days | 10 |
+| All origins | Released/premiered within 180 days | 4 |
+| Selected-country activity | Movies released within 60 days, newest first; TV aired within 28 days | 2 |
+| All-origin activity | Same activity windows | 1 |
 
-Require a valid media ID, a valid nonfuture release/premiere date, and reported legal offers in the selected country. Reject rating below 5.5 when at least 10 votes exist. Country origin never relaxes these rules.
+All Discover queries require `watch_region` plus `with_watch_monetization_types=flatrate|free|ads|rent|buy`, nonfuture premiere/release, at least 5 votes and rating 6. Local queries use `with_origin_country`. Pagination stops at the source's end; this is bounded current discovery, not arbitrary catalog pagination.
 
-At least one current-interest signal must exist:
+Selected country comes from the existing CountryProvider/cookie/profile architecture. A matching origin-filtered result proves local relevance. Actual origin/production metadata also establishes origin; a co-production may be local in multiple countries. Language and title names never determine nationality.
 
-1. Actual daily or weekly TMDB feed membership.
-2. Release in the last 90 days, at least 20 votes, rating at least 6, popularity at least 20.
-3. Emerging release in the last 45 days, at least 5 votes, rating at least 6, popularity at least 20. Lower vote counts reflect sparse TMDB coverage; this is explicitly labeled audience interest, not an actual TMDB trend.
-4. TV with episode-airing evidence in the last 28 days, at least 100 votes, rating at least 6.5 and popularity at least 30. A series' premiere year is not treated as the date of its latest season.
-5. A future verified country-matched iFynex signal of at least 0.5, with at least 20 votes and rating 6. This signal is absent in production.
+TMDB movie Discover results may omit origin metadata. An all-origin movie can be classified as nonlocal by absence from the identical local recent query ONLY after that query is fully exhausted successfully. The movie activity window is a subset of that query. Truncated or failed local coverage never proves nonlocality. Unknown-origin items are omitted unless verified.
 
-Older titles (before July 1 of the previous year) additionally require at least 20 votes and rating 6. Mere lifetime popularity, vote accumulation, availability or origin cannot qualify a stale title.
+Up to four otherwise-uncovered daily/weekly candidates or unknown-origin candidates per type use `/{type}/{id}?append_to_response=watch/providers`. This supplies real origin and regional offers in one request. A title without reported regional offers is excluded. Existing Where to Watch/provider-link helpers are unchanged.
 
-## Exact score
+Maximum cold budget: 34 Discover page requests + 4 global feeds + 8 bounded detail/offer probes = **46**, excluding retries. Home additionally loads two genre endpoints. Actual requests stop early for small pools. The five-country audit used 119 unique requests in total, including filtered views, all pagination and provider samples. Pagination/filter navigation reused cached URLs without fetching a new catalog. Existing server-only fetch caching/revalidation remains 30 minutes (genres 24 hours); the key stays server-side.
+
+## Current eligibility and exact score
+
+Require a valid ID and nonfuture date, classified origin, and real regional availability. Reject ratings below 5.5 when there are at least 10 votes. At least one of these signals is required:
+
+1. Membership in the actual global daily or weekly trend feed.
+2. Release within 90 days with at least 20 votes, rating 6 and popularity 20.
+3. Emerging release within 45 days with at least 5 votes, rating 6 and popularity 20.
+4. Recent TV episode evidence within 28 days with at least 100 votes, rating 6.5 and popularity 30.
+5. For the requested combined trending/latest surface: release within 180 days, at least 5 votes, rating 6 and popularity 3. These supported releases carry a **Recent release** badge, never a fabricated trending badge. This criterion is symmetric for both origins.
+6. A future verified country-matched iFynex activity signal >= 0.5, with at least 20 votes and rating 6. Production does not supply this signal.
+
+Titles before July 1 of the previous year additionally need 20 votes and rating 6. High popularity, accumulated votes or local origin alone never qualify an old catalog title.
 
 ```text
-S = 50 × max(D, 0.85 × W) + 10 × B
-  + 18 × R + 6 × E + 12 × P + 4 × Q + 8 × L + 20 × I
+S = 50 * max(D, 0.85 * W) + 10 * B
+  + 18 * R + 6 * E + 12 * P + 4 * Q + 8 * L + 20 * I
 
-D, W = 0 if absent; otherwise 0.25 + 0.75 × (N - index) / N
-       in the respective type-specific daily / weekly feed (zero-based index).
-B = 1 only when present in both feeds; otherwise 0.
-P = clamp(ln(1 + max(0, popularity)) / ln(101), 0, 1).
-Q = clamp(rating / 10, 0, 1) × votes / (votes + 50).
-R = max(2^(-releaseAgeDays / 90), 0.8 if qualified recent TV airing else 0).
-E = 1 if qualified recent TV airing; otherwise 2^(-age / 30)
-    for releases within 90 days, or 0 for earlier releases.
+D,W = 0 when absent; otherwise 0.25 + 0.75 * (N - index) / N
+      in that media type's daily/weekly feed, index starting at zero.
+B = 1 when present in both feeds, otherwise 0.
+P = clamp(ln(1 + max(0,popularity)) / ln(101), 0, 1).
+Q = clamp(rating / 10, 0, 1) * votes / (votes + 50).
+R = max(2^(-ageDays / 90), 0.8 for qualifying recent TV airing else 0).
+E = 1 for qualifying recent TV airing;
+    otherwise 2^(-ageDays / 30) within 90 days, else 0.
 L = 1 for selected-country origin, otherwise 0.
-I = validated trailing-seven-day iFynex score, currently always 0.
+I = validated recent country activity, currently zero.
 ```
 
-Daily/weekly evidence contributes up to 60 points. Country origin now contributes 8 rather than 32. Popularity is bounded at 12 and quality at 4. A date alone never grants trending eligibility. No measured growth or rank-change claim is made: daily/weekly agreement is confirmation, not a historical momentum series.
+Scoring orders titles within their local/international buckets; allocation sets the requested composition. Local score bonus cannot admit a weak title. Feed agreement is evidence, not a measured growth rate.
 
-## Country relevance and selection
+Qualified older returning series can compete on score, capped at 20% of each bucket's leading selection (four current releases precede the first). Other older genuine revivals are appended after current picks, capped by `min(floor(selectedCount/9), floor(bucketLimit/10), remainingSpace)`. No old slots are reserved. Newest sorting changes display order, not eligibility or membership.
 
-The existing CountrySelector, CountryProvider, cookie/localStorage and profile-country architecture are unchanged. Region comes from that architecture, never a hardcoded India default in the ranker. Locality comes from actual origin/production metadata or a `with_origin_country` query. Co-productions can be local in multiple countries. Reported regional offers are mandatory for both local and international results.
+Dates roll with server UTC, not a hardcoded 2026. On September 24, 2026, 180-day retrieval starts March 28; latest releases start July 26; episode activity starts August 27. A late-2025 release still qualifies with current daily/weekly or appropriate episode evidence. Latest releases remain a separate 60-day surface requiring 5 votes, rating 6 and popularity 10. Movie releases/series premieres are not provider-addition or new-season timestamps.
 
-Current/carryover releases are ranked by score, date, media type and ID. Qualified older series with recent episodes can compete by score, but take at most 20% of any leading selection: at least four current releases precede the first returning series. This is a ceiling, not a quota. After three of one media type, the other type can move up only if within 10 points and the same freshness group.
+## Why the previous results were wrong
 
-Other genuine older resurfacing titles are appended only after the current selection, at most `min(floor(selectedCount/9), floor(limit/10), remainingSpace)`. No slots are reserved for them. The finite chart is capped at 120. Newest sorting reorders that same eligible set; it never broadens discovery.
+The original movie activity query used `sort_by=popularity.desc` with an upper date but no lower date, letting old popular catalog movies enter the candidate pool. Later revisions fixed that unbounded query. The previous soft 8-point origin preference then allowed international trend-feed picks to dominate the homepage: the prior live audit had only five local India cards. The requested hard allocation now happens after eligibility, rather than trying to solve composition by inflating a nationality score.
 
-There is deliberately no guaranteed local majority. With sparse current TMDB evidence, forcing one would recreate the weak local filler the user rejected. Local content is fetched explicitly and receives an origin preference; strong international trends can lead. A **From [Country]** origin filter and homepage link expose qualifying local titles without weakening eligibility. The five-country counts below make this tradeoff explicit.
+## Remaining limitation and future iFynex activity
 
-## Freshness and the Latest releases surface
+TMDB does not expose JustWatch-style country-level user viewing charts. This selection estimates current relevance using global feeds, recent releases/episodes, origin, popularity/votes and reported country offers. It cannot truthfully claim actual Indian/US/etc. viewing ranks, guarantee 200 current local titles in every country, or infer unreported streaming availability.
 
-Dates roll with the server's UTC date. On this audit: 180-day retrieval starts March 28, the 60-day latest window starts July 26, and recent TV airing starts August 27, 2026. Late-2025 titles can remain when daily/weekly or qualifying episode activity supports them. Older popular movies with no current signal are excluded.
+The pure ranker retains a typed CountryActivitySignal adapter: region, asOf and normalized recentScore. It rejects other-country, future and older-than-seven-day activity. A later server adapter can aggregate real searches, detail views, wishlists and provider clicks. No fake activity or process-memory momentum has been added. Auth, Google sign-in, country preference storage, wishlist and detail/provider flows were not changed.
 
-Latest releases are separate from Trending: release/premiere within 60 days, at least 5 votes, rating 6 and popularity 10, plus reported country offers. They sort by date first, then bounded popularity and a 5-point origin tiebreaker. This is a curated recent-release selection, not a complete release calendar. It does **not** claim a streaming-service addition timestamp, an exact regional premiere date, or new-season dates.
-
-## Homepage, Movies + TV, and See All
-
-Homepage: compact search header → Trending in selected country (up to 24) → Latest releases (up to 24) → original global movie/TV weekly rows → separate genre discovery. Evidence badges distinguish TMDB today, TMDB this week, recent episodes and recent release/audience-interest signals.
-
-Both media types have independent trend feeds and candidate pools, combined on the same score scale. Identity is `mediaType:id`, so matching numeric IDs do not collide.
-
-`/country/trending` and home use the same eligible pool/ranking, paginated by 24. All/Movies/TV, origin, release-year and current/newest controls narrow or reorder that finite pool. `/country/releases` has its own See All and the stricter 60-day release window. Country changes hide stale results while the existing server refresh completes. Authentication, wishlist, profiles, detail pages and Where to Watch were not changed.
-
-## Remaining TMDB limitation and future activity
-
-TMDB has global short-window trending, not JustWatch-style country activity charts or actual provider playback numbers. Origin + regional availability + recent metadata are proxies. This remains an explicitly labeled estimate, not proof of what Indian/Japanese/etc. users watched. Provider coverage and TMDB vote coverage can lag.
-
-The pure scorer accepts an optional typed CountryActivitySignal map. It validates region, age (0–7 days), and a bounded recentScore. A later server adapter can aggregate real searches, title views, wishlists and provider clicks by country and time. Production supplies none now. Durable historical popularity snapshots would need a real storage adapter; they are not simulated with process memory or invented events.
-
-Primary references: [TMDB movie trends](https://developer.themoviedb.org/reference/trending-movies), [TMDB TV trends](https://developer.themoviedb.org/reference/trending-tv), [Movie Discover](https://developer.themoviedb.org/reference/discover-movie), [TV Discover](https://developer.themoviedb.org/reference/discover-tv), [Popularity versus trending](https://developer.themoviedb.org/docs/popularity-and-trending).
+References: [Movie Discover](https://developer.themoviedb.org/reference/discover-movie), [TV Discover](https://developer.themoviedb.org/reference/discover-tv), [Global trends](https://developer.themoviedb.org/reference/trending-movies), [Append to response](https://developer.themoviedb.org/docs/append-to-response).
 
 ## Verification
 
-Live TMDB audit, September 24, 2026 (data changes over time):
+Live TMDB audit on September 24, 2026; these counts will change with live data:
 
-| Country | Home count | 2026 releases | Older returning series | Local on home | Movies / TV | Daily or weekly evidence | Full trending count |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| India | 24 | 20 | 4 | 5 | 11 / 13 | 14 | 43 |
-| USA | 24 | 20 | 4 | 20 | 12 / 12 | 22 | 58 |
-| UK | 24 | 20 | 4 | 7 | 10 / 14 | 17 | 46 |
-| Japan | 24 | 20 | 4 | 1 | 9 / 15 | 13 | 42 |
-| South Korea | 24 | 19 (+1 late-2025) | 4 | 4 | 8 / 16 | 11 | 41 |
+| Country | Home local / international | Home 2026 releases | Home movies / TV | See All local / international | Total |
+|---|---:|---:|---:|---:|---:|
+| India | 16 / 8 | 23 | 13 / 11 | 36 / 9 | 45 |
+| United States | 16 / 8 | 20 | 11 / 13 | 200 / 50 | 250 |
+| United Kingdom | 16 / 8 | 20 | 9 / 15 | 55 / 13 | 68 |
+| Japan | 16 / 8 | 20 | 5 / 19 | 104 / 26 | 130 |
+| South Korea | 16 / 8 | 21 (+1 late-2025) | 5 / 19 | 36 / 9 | 45 |
 
-No stale old movie appeared in these home selections. Country fingerprints differ. Both media types, live provider samples, latest-release date boundaries, media/year/origin filters and pagination are checked. The audit verifies home equals See All page one for both surfaces and that pagination introduces no additional catalog queries. Sanitized evidence: `docs/country-discovery-live-audit.json`.
+All five country fingerprints differ. Real provider samples, both media types, current eligibility, origin filters, year/newest filters, default home/See All equality, chronological latest pages, no duplicate/omitted pagination items, and no additional API queries during pagination pass. Sanitized evidence is in `country-discovery-live-audit.json`.
 
-- Regression tests: 35 passing (ranking, feed precedence, weak local rejection, date rollover, late-2025, returning-series ceiling, origin filter, real availability, caching contracts, unchanged global ordering and finite pagination).
-- `npm run lint`: passes, zero errors; one pre-existing `next/no-img-element` warning in `components/wishlist-page.tsx`.
-- `npm run build`: passes; includes the new `/country/releases` route.
-- Browser checks: five-country selection produced five distinct 24-card lists. Verified origin filter, Movies/TV filters, page two, Latest See All, title navigation and reported Where to Watch providers. Desktop and 390px mobile layout inspected; no horizontal overflow or browser-console errors observed. Temporary preview server/tab stopped after verification. Google sign-in and wishlist mutations were not exercised; their implementations were unchanged. Final build passed after removing a verified generated .next cache subfolder blocked by OneDrive.
+- Regression tests: **41 pass**, including full 250-capacity fixtures, every requested country mix, sparse supply, correct movie origin on truncated/failed sources, and unchanged global order.
+- `npm run lint`: **passes**, 0 errors; one pre-existing `next/no-img-element` warning in `components/wishlist-page.tsx`.
+- `npm run build`: **passes** with all existing routes.
+- Browser verification: country switching changed visible See All counts for all five countries; India home displayed 16/8 and 24 cards; refreshed default home/See All membership matched; India page two contained the remaining 21 cards; Movies/TV and Newest controls worked; USA showed 250 results across 11 pages. Desktop layout inspected and no browser warning/error logs were recorded. Google sign-in and wishlist mutations were not exercised. The temporary preview was stopped.

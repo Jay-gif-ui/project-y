@@ -49,6 +49,11 @@ function summary(items,localIds){
     assert.equal(new Set(items.map(key)).size,items.length,'Duplicate across pages');
     assert.equal(items.length,first.total,'Incorrect total');
     const homeSummary=summary(home.items,new Set(home.localIds)),allSummary=summary(items,localIds);
+    assert.equal(homeSummary.local,Math.min(16,first.localTotal),'Home local allocation');
+    assert.equal(homeSummary.count-homeSummary.local,Math.min(8,first.internationalTotal),'Home international allocation');
+    assert.equal(allSummary.local,first.localTotal,'Local total mismatch');
+    assert.ok(first.localTotal<=200&&first.internationalTotal<=50&&first.total<=250,'Country caps exceeded');
+    assert.ok(first.internationalTotal<=Math.max(8,Math.floor(first.localTotal/4)),'Sparse See All became international-heavy');
     console.log(JSON.stringify({region,home:homeSummary,browse:allSummary,pages:first.totalPages}));
     const country={region,home:homeSummary,browse:allSummary,pages:first.totalPages,providerSamples:[],items:[]};
     report.countries.push(country);
@@ -66,16 +71,23 @@ function summary(items,localIds){
     assert.ok(homeSummary.movies&&homeSummary.tv&&allSummary.movies&&allSummary.tv,'Both types required');
     const resurfacing=item=>item.releaseDate<dates.recentStart&&!airingIds.has(key(item));
     assert.ok(items.filter(resurfacing).length<=Math.floor(allSummary.count/10),'Old catalog dominance');
-    const firstOld=items.findIndex(resurfacing);
-    if(firstOld>=0)assert.ok(items.slice(firstOld).every(resurfacing),'Older title preceded recent');
+    for(const local of [true,false]) {
+      const bucket=items.filter(item=>localIds.has(key(item))===local),firstOld=bucket.findIndex(resurfacing);
+      if(firstOld>=0)assert.ok(bucket.slice(firstOld).every(resurfacing),'Older title preceded recent within origin bucket');
+    }
     for(const item of items){
       const age=(Date.parse(dates.today)-Date.parse(item.releaseDate))/86400000;
       assert.ok(item.discoverySignal,'Missing current-evidence label');
-      if(age>90)assert.ok(trendIds.has(key(item))||item.discoverySignal==='daily-trend'||airingIds.has(key(item)),`No current evidence: ${key(item)}`);
+      if(age>180)assert.ok(trendIds.has(key(item))||item.discoverySignal==='daily-trend'||airingIds.has(key(item)),`No current evidence: ${key(item)}`);
+      if(item.discoverySignal==='recent-release')assert.ok(age<=180&&item.voteCount>=5&&item.rating>=6&&item.popularity>=3,'Unsupported recent release');
     }
     fingerprints.add(home.items.map(key).join(','));
     const latest=check(await tmdb.getCountryDiscovery(region,{surface:'browse',view:'releases'},{movie,tv},now),region);
-    assert.deepEqual(home.latest.map(key),latest.items.map(key),'Latest home and See All diverged');
+    assert.ok(home.latest.length<=24,'Latest preview overflow');
+    const latestItems=[...latest.items];
+    for(let page=2;page<=latest.totalPages;page++)latestItems.push(...check(await tmdb.getCountryDiscovery(region,{surface:'browse',view:'releases',page},{movie,tv},now),region).items);
+    assert.ok(home.latest.every(item=>latestItems.some(other=>key(item)===key(other))),'Latest preview outside eligible selection');
+    assert.deepEqual(latestItems.map(item=>item.releaseDate),latestItems.map(item=>item.releaseDate).sort().reverse(),'Latest cross-page chronology');
     assert.ok(latest.items.length&&latest.items.every(item=>item.releaseDate>=dates.freshStart&&item.discoverySignal==='recent-release'),'Latest includes stale titles');
     assert.deepEqual(latest.items.map(item=>item.releaseDate),latest.items.map(item=>item.releaseDate).sort().reverse(),'Latest is not chronological');
     country.latest={count:latest.total,home:home.latest.length};

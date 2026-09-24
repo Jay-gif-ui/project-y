@@ -22,7 +22,7 @@ export default async function Home() {
   ]);
   return <><Navbar /><main>
     <Hero />
-    <CountryDiscovery initialRegion={country.code} movies={available.data?.items ?? []} latest={available.data?.latest ?? []} error={Boolean(available.error)} partial={available.partial ?? false} />
+    <CountryDiscovery initialRegion={country.code} movies={available.data?.items ?? []} latest={available.data?.latest ?? []} localCount={available.data?.localIds.length ?? 0} error={Boolean(available.error)} partial={available.partial ?? false} />
     <section id="discover" className="movie-section shell" aria-labelledby="global-title">
       <div className="section-heading"><div>
         <p className="eyebrow">03 · Worldwide this week</p>

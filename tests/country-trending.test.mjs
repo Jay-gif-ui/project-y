@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import loadTypescript from './load-typescript.mjs';
 const load = loadTypescript();
-const { rankCountryDiscovery, selectCountryPicks, selectLatestReleases, countryTrendingDates, countryTrendingParams, countryPopularity } = load('lib/country-trending.ts');
+const { rankCountryDiscovery, selectCountryPicks, selectCountryMix, countryPageSlice, selectLatestReleases, countryTrendingDates, countryTrendingParams, countryPopularity, COUNTRY_POOL_PAGES } = load('lib/country-trending.ts');
 const { ENABLED_COUNTRIES } = load('lib/countries.ts');
 const now = new Date('2026-09-24T12:00:00Z');
 const media = (id, date = '2026-09-01', extra = {}) => ({ id, mediaType:'movie', title:`Test fixture ${id}`, releaseDate:date, popularity:40, voteCount:100, rating:7, genreIds:[28], overview:'', ...extra });
@@ -133,7 +133,7 @@ test('home and See All page one match; pagination only slices eligible results w
     if(url.pathname.includes('/trending/'))return Response.json({results:[]});
     const type=url.pathname.endsWith('/tv')?'tv':'movie';
     const local=url.searchParams.has('with_origin_country'), page=Number(url.searchParams.get('page'));
-    return Response.json({total_pages:2,results:Array.from({length:20},(_,i)=>raw((local?100:500)+page*20+i,type))});
+    return Response.json({total_pages:2,results:Array.from({length:20},(_,i)=>raw((local?100:500)+page*20+i,type,undefined,type==='tv'?{origin_country:[local?'IN':'US']} : {}))});
   });
   const home=await tmdb.getCountryDiscovery('IN',{surface:'home'},emptyTrends,now);
   const browse=await tmdb.getCountryDiscovery('IN',{surface:'browse'},emptyTrends,now);
@@ -141,11 +141,15 @@ test('home and See All page one match; pagination only slices eligible results w
   const keys=r=>Array.from(r.data.items,item=>`${item.mediaType}:${item.id}`);
   assert.deepEqual(keys(home),keys(browse));
   assert.equal(home.data.items.length,24);
-  assert.equal(home.data.total,80);
+  assert.equal(home.data.total,100);
+  assert.equal(home.data.localIds.length,16);
+  assert.equal(home.data.localTotal,80);
+  assert.equal(home.data.internationalTotal,20);
   assert.ok(home.data.items.some(item=>item.mediaType==='movie')&&home.data.items.some(item=>item.mediaType==='tv'));
   assert.ok(keys(second).every(key=>!keys(home).includes(key)));
-  assert.equal(calls.length,30); // Eight Discover + two daily feeds; weekly promises shared.
-  assert.ok(calls.every(call=>(!call.params.page||Number(call.params.page)===1)&&call.options.next.revalidate===1800));
+  assert.equal(calls.length,48); // Four bounded pools/type + daily; weekly shared.
+  assert.ok(calls.some(call=>call.params.page==='2'));
+  assert.ok(calls.every(call=>call.options.next.revalidate===1800));
 });
 
 test('media/year/sort filters keep current eligibility; invalid page values clamp',async()=>{
@@ -158,11 +162,11 @@ test('media/year/sort filters keep current eligibility; invalid page values clam
 });
 
 test('weekly trend additions have bounded real provider checks and empty availability cannot become a fallback',async()=>{
-  const {tmdb,calls}=api(async url=>url.pathname.endsWith('/watch/providers')?Response.json({results:{IN:{flatrate:url.pathname.includes('/1/')?[{provider_id:9,provider_name:'Test provider'}]:[]}}}):Response.json({results:[]}));
+  const {tmdb,calls}=api(async url=>url.searchParams.get('append_to_response')==='watch/providers'?Response.json({origin_country:['IN'],'watch/providers':{results:{IN:{flatrate:url.pathname.endsWith('/1')?[{provider_id:9,provider_name:'Test provider'}]:[]}}}}):Response.json({results:[]}));
   const trends={movie:Promise.resolve({data:Array.from({length:20},(_,i)=>media(i+1))}),tv:Promise.resolve({data:[]})};
   const result=await tmdb.getCountryDiscovery('IN',{filter:'movie'},trends,now);
   assert.deepEqual(Array.from(result.data.items,item=>item.id),[1]);
-  assert.equal(calls.filter(call=>call.path.endsWith('/watch/providers')).length,4);
+  assert.equal(calls.filter(call=>call.params.append_to_response==='watch/providers').length,4);
 });
 
 test('all five selected country values change local queries/results; missing services are explicit',async()=>{
@@ -221,13 +225,98 @@ test('equally evidenced 2026 titles outrank late-2025 titles and new sort never 
   assert.deepEqual(ids(selectCountryPicks(ranked,120,'newest')),['movie:1','movie:2']);
 });
 
-test('latest view uses only 60-day releases and does not extend trending eligibility', async()=>{
+test('latest view keeps its 60-day window while the requested mixed view admits supported six-month releases', async()=>{
   const {tmdb}=api(async url=>Response.json({results:url.pathname.includes('/trending/')?[]:[raw(1,'movie','2026-09-23',{popularity:15,vote_count:7}),raw(2,'movie','2026-06-01'),raw(3,'movie','2016-01-01')]}));
   const trend=await tmdb.getCountryDiscovery('IN',{filter:'movie'},emptyTrends,now);
   const latest=await tmdb.getCountryDiscovery('IN',{filter:'movie',view:'releases'},emptyTrends,now);
-  assert.equal(trend.data.items.length,0);
+  assert.deepEqual(Array.from(trend.data.items,item=>item.id),[1,2]);
   assert.deepEqual(Array.from(latest.data.items,item=>item.id),[1]);
   assert.deepEqual(Array.from(trend.data.latest,item=>item.id),[1]);
+});
+
+test('all countries get exact 16/8 home and 200/50 browse when eligible supply exists', () => {
+  for(const region of ['IN','US','GB','JP','KR']) {
+    const candidates=Array.from({length:360},(_,i)=>candidate(media(i+1,`2026-09-${String(1+i%24).padStart(2,'0')}`,{mediaType:i%2?'movie':'tv'}),{local:i<260}));
+    const picks=rankCountryDiscovery(candidates,[],region,now);
+    const selection=selectCountryMix(picks);
+    assert.equal(selection.home.length,24);
+    assert.equal(selection.home.filter(pick=>pick.local).length,16);
+    assert.equal(selection.all.length,250);
+    assert.equal(selection.localTotal,200);
+    assert.equal(selection.internationalTotal,50);
+    assert.deepEqual(ids(selection.home),ids(countryPageSlice(selection).items));
+    const pages=Array.from({length:11},(_,i)=>countryPageSlice(selection,i+1).items).flat();
+    assert.equal(new Set(ids(pages)).size,250);
+    assert.deepEqual(ids(pages),ids(selection.all));
+    assert.ok(selection.home.some(pick=>pick.media.mediaType==='tv')&&selection.home.some(pick=>pick.media.mediaType==='movie'));
+    const newest=selectCountryMix(picks,{sort:'newest'});
+    assert.deepEqual(ids(newest.all).sort(),ids(selection.all).sort());
+    assert.deepEqual(Array.from(newest.all,pick=>pick.media.releaseDate),Array.from(newest.all,pick=>pick.media.releaseDate).sort().reverse());
+  }
+});
+
+test('short local supply never backfills with international titles, and sparse pagination loses nothing', () => {
+  const picks=rankCountryDiscovery(Array.from({length:65},(_,i)=>candidate(media(i+1),{local:i<5})),[],'IN',now);
+  const selection=selectCountryMix(picks);
+  assert.equal(selection.home.length,13);
+  assert.equal(selection.home.filter(pick=>pick.local).length,5);
+  assert.equal(selection.all.length,13);
+  const pages=Array.from({length:countryPageSlice(selection).totalPages},(_,i)=>countryPageSlice(selection,i+1).items).flat();
+  assert.deepEqual(ids(pages),ids(selection.all));
+  assert.equal(new Set(ids(pages)).size,13);
+});
+
+test('short See All lists stay local-led with an international allowance proportional to available local supply', () => {
+  const picks=rankCountryDiscovery(Array.from({length:140},(_,i)=>candidate(media(i+1),{local:i<40})),[],'IN',now);
+  const selection=selectCountryMix(picks);
+  assert.equal(selection.localTotal,40);
+  assert.equal(selection.internationalTotal,10);
+  assert.equal(selection.home.filter(pick=>pick.local).length,16);
+  const pages=Array.from({length:countryPageSlice(selection).totalPages},(_,i)=>countryPageSlice(selection,i+1).items).flat();
+  assert.equal(new Set(ids(pages)).size,50);
+  assert.deepEqual(ids(pages),ids(selection.all));
+});
+
+test('supported recent releases are labeled honestly; a date, nationality or old popularity alone cannot qualify', () => {
+  const recent=media(1,'2026-05-01',{popularity:4,voteCount:7});
+  const candidates=[candidate(recent),candidate(media(2,'2016-01-01',{popularity:1e8})),candidate(media(3,'2026-09-20',{voteCount:0,popularity:1e8})),candidate(media(4,'2026-09-20',{popularity:1}))];
+  const picks=rankCountryDiscovery(candidates,[],'IN',now,{includeRecentReleases:true});
+  assert.deepEqual(ids(picks),['movie:1']);
+  assert.equal(picks[0].media.discoverySignal,'recent-release');
+  assert.equal(rankCountryDiscovery(candidates,[],'IN',now).length,0);
+  assert.equal(rankCountryDiscovery([candidate(recent,{local:undefined})],[recent],'IN',now).length,0);
+});
+
+test('Discover pagination can supply 250 and never exceeds the bounded page budgets', async()=>{
+  const {tmdb,calls}=api(async url=>{
+    if(url.pathname.includes('/trending/'))return Response.json({results:[]});
+    if(url.searchParams.has('append_to_response'))return Response.json({origin_country:['US'],'watch/providers':{results:{}}});
+    const local=url.searchParams.has('with_origin_country'),page=Number(url.searchParams.get('page'));
+    const type=url.pathname.endsWith('/tv')?'tv':'movie';
+    return Response.json({total_pages:500,results:Array.from({length:20},(_,i)=>raw((local?100:5000)+page*20+i,type,undefined,{origin_country:[local?'IN':'US']}))});
+  });
+  const result=await tmdb.getCountryDiscovery('IN',{surface:'browse'},emptyTrends,now);
+  assert.equal(result.data.total,250);
+  assert.equal(result.data.localTotal,200);
+  assert.equal(result.data.internationalTotal,50);
+  assert.equal(result.data.localIds.length,16);
+  assert.equal(calls.length,2*(Object.values(COUNTRY_POOL_PAGES).reduce((a,b)=>a+b,0)+1));
+});
+
+test('missing movie origin is not international when local query is truncated or fails mid-pagination', async()=>{
+  for(const fails of [false,true]) {
+    const {tmdb}=api(async url=>{
+      if(url.pathname.includes('/trending/'))return Response.json({results:[]});
+      if(url.searchParams.has('append_to_response'))return Response.json({origin_country:['IN'],'watch/providers':{results:{IN:{rent:[{provider_id:1,provider_name:'Test'}]}}}});
+      const local=url.searchParams.has('with_origin_country'),page=Number(url.searchParams.get('page'));
+      if(local&&page>1&&fails)return Response.json({},{status:401});
+      return Response.json({total_pages:local?500:1,results:[raw(local?page:999,'movie')]});
+    });
+    const result=await tmdb.getCountryDiscovery('IN',{filter:'movie'},emptyTrends,now);
+    assert.equal(result.data.internationalTotal,0);
+    assert.ok(result.data.localIds.includes('movie:999'),'Real detail origin was not used');
+    assert.equal(result.partial,fails);
+  }
 });
 
 test('returning series with current episodes never crowd current releases off the homepage', () => {

@@ -3,7 +3,7 @@ import Image from "next/image"; import { useRouter } from "next/navigation"; imp
 const signalLabels = {
   "daily-trend": "TMDB today", "weekly-trend": "TMDB this week",
   "recent-airing": "Recent episodes", "recent-interest": "Recent release · Audience interest",
-  "recent-release": "New release", "ifynex-activity": "iFynex activity",
+  "recent-release": "Recent release", "ifynex-activity": "iFynex activity",
 };
 export function MovieCard({ movie, index, showRank = false }: { movie: Media; index: number; showRank?: boolean }) {
   const router = useRouter();

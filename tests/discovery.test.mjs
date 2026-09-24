@@ -87,9 +87,10 @@ const raw=(id,type,date='2026-08-01')=>({id,title:`Movie fixture ${id}`,name:`TV
 
 test('homepage reuses shared trends and returns a substantial bounded mixed selection',async()=>{
   const {tmdb,calls}=api(async url=>{
+    if(url.pathname.includes('/trending/'))return Response.json({results:[]});
     const type=url.pathname.endsWith('/tv')?'tv':'movie';
     const offset=url.searchParams.has('with_origin_country')?100:0;
-    return Response.json({results:Array.from({length:20},(_,i)=>raw(offset+i+1,type))});
+    return Response.json({results:Array.from({length:20},(_,i)=>({...raw(offset+i+1,type),...(type==='tv'?{origin_country:[offset?'US':'IN']}: {})}))});
   });
   const result=await tmdb.getPopularAvailableInRegion('US',{movie:Promise.resolve({data:[]}),tv:Promise.resolve({data:[]})},now);
   assert.equal(calls.length,10);

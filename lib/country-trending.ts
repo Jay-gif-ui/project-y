@@ -17,6 +17,12 @@ export type CountryPick = {
 const DAY = 86_400_000;
 export const COUNTRY_HOME_LIMIT = 24;
 export const COUNTRY_PAGE_SIZE = 24;
+export const COUNTRY_HOME_LOCAL = 16;
+export const COUNTRY_HOME_INTERNATIONAL = 8;
+export const COUNTRY_BROWSE_LOCAL = 200;
+export const COUNTRY_BROWSE_INTERNATIONAL = 50;
+export const COUNTRY_BROWSE_LIMIT = COUNTRY_BROWSE_LOCAL + COUNTRY_BROWSE_INTERNATIONAL;
+export const COUNTRY_POOL_PAGES = { local: 10, international: 4, activity: 2, "international-activity": 1 } as const;
 export const COUNTRY_TREND_PROBE_LIMIT = 4;
 export const mediaKey = (media: Media) => `${media.mediaType}:${media.id}`;
 export function countryTrendingDates(now = new Date()) {
@@ -58,18 +64,24 @@ function availableCandidates(candidates: CountryCandidate[], region: string) {
   for (const candidate of candidates) {
     if (!candidate.available) continue;
     const key = mediaKey(candidate.media), previous = unique.get(key);
-    unique.set(key, { ...candidate, local: Boolean(candidate.local || previous?.local || candidate.media.originCountries?.includes(region)), recentlyAired: candidate.recentlyAired || previous?.recentlyAired });
+    const origin = candidate.media.originCountries;
+    // Unknown movie origin is not automatically international. A verified local
+    // response wins over a negative inference or a co-production's other country.
+    const local = candidate.local === true || previous?.local === true || origin?.includes(region) ? true
+      : candidate.local === false || previous?.local === false || origin?.length ? false : undefined;
+    unique.set(key, { ...candidate, local, recentlyAired: candidate.recentlyAired || previous?.recentlyAired });
   }
   return [...unique.values()];
 }
 // Positive floor means even the end of an actual trending feed carries evidence.
 const trendRanks = (items: Media[]) => new Map(items.map((media, index) => [mediaKey(media), 0.25 + 0.75 * (items.length - index) / items.length]));
 
-export function rankCountryDiscovery(candidates: CountryCandidate[], trending: Media[], region: string, now = new Date(), options: { daily?: Media[]; activity?: ReadonlyMap<string, CountryActivitySignal> } = {}): CountryPick[] {
+export function rankCountryDiscovery(candidates: CountryCandidate[], trending: Media[], region: string, now = new Date(), options: { daily?: Media[]; activity?: ReadonlyMap<string, CountryActivitySignal>; includeRecentReleases?: boolean } = {}): CountryPick[] {
   const { today, recentStart } = countryTrendingDates(now);
   const weeks = trendRanks(trending), days = trendRanks(options.daily ?? []);
   const picks: CountryPick[] = [];
   for (const { media, local, recentlyAired } of availableCandidates(candidates, region)) {
+    if (local === undefined) continue;
     const age = releaseAge(media, today);
     if (age === null) continue;
     const votes = Number.isFinite(media.voteCount) ? Math.max(0, media.voteCount) : 0;
@@ -86,7 +98,10 @@ export function rankCountryDiscovery(candidates: CountryCandidate[], trending: M
     // Symmetric eligibility: nationality never relaxes the interest threshold.
     const recentInterest = age <= 90 && established && (media.popularity ?? 0) >= 20;
     const emergingInterest = age <= 45 && votes >= 5 && rating >= 0.6 && (media.popularity ?? 0) >= 20;
-    if (!daily && !weekly && !airing && !recentInterest && !emergingInterest && !(activity >= 0.5 && established)) continue;
+    // The requested broader "trending + latest" surface also admits supported
+    // recent releases. They are labeled as releases, never fabricated trends.
+    const recentRelease = options.includeRecentReleases && age <= 180 && votes >= 5 && rating >= 0.6 && (media.popularity ?? 0) >= 3;
+    if (!daily && !weekly && !airing && !recentInterest && !emergingInterest && !recentRelease && !(activity >= 0.5 && established)) continue;
     const older = media.releaseDate! < recentStart;
     if (older && !established) continue;
     const freshness = Math.max(Math.pow(0.5, age / 90), airing ? 0.8 : 0);
@@ -94,7 +109,7 @@ export function rankCountryDiscovery(candidates: CountryCandidate[], trending: M
     const score = 50 * Math.max(daily, 0.85 * weekly) + (daily && weekly ? 10 : 0)
       + 18 * freshness + 6 * event + 12 * popularity + 4 * rating * votes / (votes + 50)
       + (local ? 8 : 0) + 20 * activity;
-    const reason = daily ? "daily-trend" : weekly ? "weekly-trend" : activity >= 0.5 && established ? "ifynex-activity" : airing ? "recent-airing" : "recent-interest";
+    const reason = daily ? "daily-trend" : weekly ? "weekly-trend" : activity >= 0.5 && established ? "ifynex-activity" : airing ? "recent-airing" : recentInterest || emergingInterest ? "recent-interest" : "recent-release";
     picks.push({ media: { ...media, discoverySignal: reason }, local: Boolean(local), score, older, signals: { daily, weekly, airing, popularity, activity, reason } });
   }
   return sortCountryPicks(picks);
@@ -106,7 +121,7 @@ export function selectLatestReleases(candidates: CountryCandidate[], region: str
   const { today } = countryTrendingDates(now);
   return availableCandidates(candidates, region).flatMap(({ media, local }) => {
     const age = releaseAge(media, today);
-    if (age === null || age > 60 || media.voteCount < 5 || media.rating < 6 || (media.popularity ?? 0) < 10) return [];
+    if (local === undefined || age === null || age > 60 || !Number.isFinite(media.voteCount) || !Number.isFinite(media.rating) || media.voteCount < 5 || media.rating < 6 || (media.popularity ?? 0) < 10) return [];
     return [{ media: { ...media, discoverySignal: "recent-release" as const }, local: Boolean(local), score: 12 * countryPopularity(media) + (local ? 5 : 0), older: false,
       signals: { daily: 0, weekly: 0, airing: false, popularity: countryPopularity(media), activity: 0, reason: "recent-release" as const } }];
   }).sort((a, b) => b.media.releaseDate!.localeCompare(a.media.releaseDate!) || b.score - a.score || a.media.mediaType.localeCompare(b.media.mediaType) || a.media.id - b.media.id);
@@ -129,7 +144,7 @@ export function selectCountryPicks(picks: CountryPick[], limit = 120, sort: Coun
   // 20% of ANY leading selection. Four current releases must precede the first.
   // This is a ceiling, never a target or a reason to insert a weak series.
   const eligible = [...recent, ...returning].sort((a, b) => b.score - a.score || b.media.releaseDate!.localeCompare(a.media.releaseDate!) || a.media.mediaType.localeCompare(b.media.mediaType) || a.media.id - b.media.id);
-  // Soft media diversity only among similarly strong results. No country quota.
+  // Soft media diversity only among similarly strong results within a bucket.
   const mixed: CountryPick[] = [];
   let returningCount = 0;
   while (eligible.length && mixed.length < limit) {
@@ -145,4 +160,52 @@ export function selectCountryPicks(picks: CountryPick[], limit = 120, sort: Coun
   }
   const revivalLimit = Math.min(Math.floor(mixed.length / 9), Math.floor(limit / 10), limit - mixed.length);
   return [...mixed, ...ordered.filter(pick => pick.older && !pick.signals.airing).slice(0, revivalLimit)];
+}
+
+// Quotas are applied AFTER eligibility, separately to each origin bucket. Missing
+// local slots cannot be silently replaced by more international catalog titles.
+export function selectCountryMix(picks: CountryPick[], options: { sort?: CountrySort; view?: CountryView; origin?: "all" | "local" } = {}): { home: CountryPick[]; all: CountryPick[]; localTotal: number; internationalTotal: number } {
+  const unique = new Map<string, CountryPick>();
+  for (const pick of picks) {
+    const key = mediaKey(pick.media), previous = unique.get(key);
+    if (!previous || pick.local || !previous.local) unique.set(key, pick);
+  }
+  const latest = options.view === "releases", newest = latest || options.sort === "newest";
+  const order = (items: CountryPick[]) => newest ? [...items].sort((a, b) => b.media.releaseDate!.localeCompare(a.media.releaseDate!) || b.score - a.score || a.media.mediaType.localeCompare(b.media.mediaType) || a.media.id - b.media.id) : items;
+  const bucket = (local: boolean, cap: number) => {
+    const eligible = [...unique.values()].filter(pick => pick.local === local);
+    return order(latest ? order(eligible).slice(0, cap) : selectCountryPicks(eligible, cap));
+  };
+  const local = bucket(true, COUNTRY_BROWSE_LOCAL);
+  // Preserve a local-led full list when fewer than 200 local titles qualify.
+  // Keep room for the eight home picks; otherwise use the requested 4:1 ratio.
+  const internationalCap = Math.min(COUNTRY_BROWSE_INTERNATIONAL, Math.max(COUNTRY_HOME_INTERNATIONAL, Math.floor(local.length / 4)));
+  const international = options.origin === "local" ? [] : bucket(false, internationalCap);
+  if (options.origin === "local") return { home: local.slice(0, COUNTRY_HOME_LOCAL), all: local, localTotal: local.length, internationalTotal: 0 };
+  const homeLocal = local.slice(0, COUNTRY_HOME_LOCAL), homeInternational = international.slice(0, COUNTRY_HOME_INTERNATIONAL);
+  const weave = (locals: CountryPick[], others: CountryPick[], localRun: number) => {
+    const mixed: CountryPick[] = [];
+    for (let l = 0, i = 0; l < locals.length || i < others.length;) {
+      mixed.push(...locals.slice(l, l + localRun)); l += localRun;
+      if (i < others.length) mixed.push(others[i++]);
+    }
+    return mixed;
+  };
+  // Home: two local then one international. The remainder favors local content
+  // four-to-one until a bucket ends, while retaining the full 200/50 caps.
+  const home = newest ? order([...homeLocal, ...homeInternational]) : weave(homeLocal, homeInternational, 2);
+  // Newest sorts the same capped membership chronologically across ALL pages.
+  // Home keeps its 16/8 preview; the default current page matches that preview.
+  const all = newest ? order([...local, ...international]) : [...home, ...weave(local.slice(homeLocal.length), international.slice(homeInternational.length), 4)];
+  return { home, all, localTotal: local.length, internationalTotal: international.length };
+}
+
+export function countryPageSlice(selection: { home: CountryPick[]; all: CountryPick[] }, requestedPage = 1, origin: "all" | "local" = "all") {
+  // A sparse first page matches home exactly, rather than filling it past 8
+  // international picks. Following pages contain up to 24 remaining items.
+  const firstSize = origin === "local" ? Math.min(COUNTRY_PAGE_SIZE, selection.all.length) : selection.home.length;
+  const totalPages = 1 + Math.ceil(Math.max(0, selection.all.length - firstSize) / COUNTRY_PAGE_SIZE);
+  const page = Math.max(1, Math.min(totalPages, Number.isSafeInteger(requestedPage) ? requestedPage : 1));
+  const start = page === 1 ? 0 : firstSize + (page - 2) * COUNTRY_PAGE_SIZE;
+  return { page, totalPages, items: selection.all.slice(start, page === 1 ? firstSize : start + COUNTRY_PAGE_SIZE) };
 }
