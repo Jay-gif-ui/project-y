@@ -1,2 +1,19 @@
-import type { Media } from "@/lib/tmdb"; import { SearchForm } from "@/components/search-form";
-export function Hero({spotlight}:{spotlight?:Media}) { return <section className="hero" aria-labelledby="hero-title"><div className="hero-noise" /><div className="hero-orbit hero-orbit-one" /><div className="hero-orbit hero-orbit-two" /><div className="shell hero-content"><p className="eyebrow">A different way to discover</p><h1 id="hero-title">Your next favorite story<br /><em>is waiting.</em></h1><p className="hero-copy">Explore the films and series people can&apos;t stop thinking about. Curated for every mood, moment, and midnight scroll.</p><SearchForm/><div className="hero-meta"><span className="live-dot" /><span>Tonight&apos;s spotlight</span><span className="meta-rule" /><span>{spotlight ? `${spotlight.title} · ${spotlight.releaseDate?.slice(0,4) ?? "Now"}` : "Live picks from TMDB"}</span></div></div></section>; }
+import Link from "next/link";
+import { SearchForm } from "@/components/search-form";
+
+export function Hero() {
+  return <section className="hero discovery-hero" aria-labelledby="hero-title">
+    <div className="hero-noise" /><div className="hero-orbit hero-orbit-one" />
+    <div className="shell hero-content">
+      <div><p className="eyebrow">Your watchlist starts here</p>
+        <h1 id="hero-title">What’s worth watching <em>right now.</em></h1>
+        <p className="hero-copy">Current movies, new series and where to watch them in your country.</p>
+      </div>
+      <div className="discovery-hero-search"><SearchForm />
+        <nav className="discovery-shortcuts" aria-label="Explore current entertainment">
+          <Link href="#country-availability">Trending now</Link><Link href="#latest-releases">Latest releases</Link><Link href="#global-title">Global trends</Link>
+        </nav>
+      </div>
+    </div>
+  </section>;
+}

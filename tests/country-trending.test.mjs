@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import loadTypescript from './load-typescript.mjs';
 const load = loadTypescript();
-const { rankCountryDiscovery, selectCountryPicks, countryTrendingDates, countryTrendingParams, countryPopularity } = load('lib/country-trending.ts');
+const { rankCountryDiscovery, selectCountryPicks, selectLatestReleases, countryTrendingDates, countryTrendingParams, countryPopularity } = load('lib/country-trending.ts');
 const { ENABLED_COUNTRIES } = load('lib/countries.ts');
 const now = new Date('2026-09-24T12:00:00Z');
 const media = (id, date = '2026-09-01', extra = {}) => ({ id, mediaType:'movie', title:`Test fixture ${id}`, releaseDate:date, popularity:40, voteCount:100, rating:7, genreIds:[28], overview:'', ...extra });
@@ -11,11 +11,11 @@ const ids = picks => Array.from(picks, pick => `${pick.media.mediaType}:${pick.m
 
 test('all country queries use availability, exact local origin, dynamic dates, and bounded movie activity', () => {
   for (const country of ENABLED_COUNTRIES) for (const type of ['movie','tv']) {
-    for (const pool of ['local','international','activity']) {
+    for (const pool of ['local','international','activity','international-activity']) {
       const p = countryTrendingParams(type,country.code,now,pool);
       assert.equal(p.watch_region,country.code);
       assert.equal(p.with_watch_monetization_types,'flatrate|free|ads|rent|buy');
-      assert.equal(p.with_origin_country,pool==='international'?undefined:country.code);
+      assert.equal(p.with_origin_country,pool.startsWith('international')?undefined:country.code);
       assert.equal(p[type==='movie'?'primary_release_date.lte':'first_air_date.lte'],'2026-09-24');
       if (type==='movie') assert.ok(p['primary_release_date.gte']);
       if (type==='tv'&&pool==='activity') {
@@ -33,11 +33,11 @@ test('old catalog popularity, ratings, votes and origin cannot qualify a title',
   assert.equal(rankCountryDiscovery(stale,[],'IN',now).length,0);
 });
 
-test('2026 freshness dominates and late-2025 carryovers need genuine current evidence', () => {
+test('late-2025 actual trends can outrank merely fresh releases; older catalog stays behind', () => {
   const fresh = media(1), carryover = media(2,'2025-11-01'), old = media(3,'2016-01-01',{popularity:1e12});
   const result = rankCountryDiscovery([fresh,carryover,old].map(item=>candidate(item)),[carryover,old],'IN',now);
-  assert.deepEqual(ids(result),['movie:1','movie:2','movie:3']);
-  assert.equal(result[1].signals.reason,'weekly-trend');
+  assert.deepEqual(ids(result),['movie:2','movie:1','movie:3']);
+  assert.equal(result[0].signals.reason,'weekly-trend');
   assert.equal(rankCountryDiscovery([candidate(carryover)],[],'IN',now).length,0);
 });
 
@@ -48,7 +48,7 @@ test('recent-airing evidence requires credible interest and is restricted to TV'
   assert.equal(rankCountryDiscovery([candidate({...oldTV,mediaType:'movie'},{recentlyAired:true})],[],'JP',now).length,0);
 });
 
-test('same strong local preference applies to every country, without weak-title quotas', () => {
+test('small local preference applies to every country, without weak-title quotas', () => {
   for (const country of ENABLED_COUNTRIES) {
     const local=media(1,undefined,{originCountries:[country.code]}), other=media(2,undefined,{popularity:100});
     const result=rankCountryDiscovery([candidate(local,{local:false}),candidate(other,{local:false})],[],country.code,now);
@@ -83,7 +83,7 @@ test('bounded absolute popularity is stable under catalog outliers and the score
   const item=media(1,'2026-09-24');
   const first=rankCountryDiscovery([candidate(item)],[],'IN',now)[0];
   const more=rankCountryDiscovery([candidate(item),candidate(media(2,'2016-01-01',{popularity:1e100}))],[],'IN',now)[0];
-  const expected=40+20+12*countryPopularity(item)+8*0.7*100/150+32;
+  const expected=18+6+12*countryPopularity(item)+4*0.7*100/150+8;
   assert.ok(Math.abs(first.score-expected)<1e-10);
   assert.equal(more.score,first.score);
 });
@@ -130,6 +130,7 @@ const emptyTrends={movie:Promise.resolve({data:[]}),tv:Promise.resolve({data:[]}
 
 test('home and See All page one match; pagination only slices eligible results without more catalog requests',async()=>{
   const {tmdb,calls}=api(async url=>{
+    if(url.pathname.includes('/trending/'))return Response.json({results:[]});
     const type=url.pathname.endsWith('/tv')?'tv':'movie';
     const local=url.searchParams.has('with_origin_country'), page=Number(url.searchParams.get('page'));
     return Response.json({total_pages:2,results:Array.from({length:20},(_,i)=>raw((local?100:500)+page*20+i,type))});
@@ -143,8 +144,8 @@ test('home and See All page one match; pagination only slices eligible results w
   assert.equal(home.data.total,80);
   assert.ok(home.data.items.some(item=>item.mediaType==='movie')&&home.data.items.some(item=>item.mediaType==='tv'));
   assert.ok(keys(second).every(key=>!keys(home).includes(key)));
-  assert.equal(calls.length,24); // Eight bounded queries per uncached invocation; Next caches identical URLs.
-  assert.ok(calls.every(call=>Number(call.params.page)<=2&&call.options.next.revalidate===1800));
+  assert.equal(calls.length,30); // Eight Discover + two daily feeds; weekly promises shared.
+  assert.ok(calls.every(call=>(!call.params.page||Number(call.params.page)===1)&&call.options.next.revalidate===1800));
 });
 
 test('media/year/sort filters keep current eligibility; invalid page values clamp',async()=>{
@@ -177,4 +178,77 @@ test('all five selected country values change local queries/results; missing ser
   assert.equal((await failed.tmdb.getCountryDiscovery('IN',{filter:'movie'},emptyTrends,now)).error,'unauthorized');
   const partial=api(async url=>url.searchParams.has('with_origin_country')?Response.json({results:[raw(1,'movie')]}):Response.json({},{status:401}));
   assert.equal((await partial.tmdb.getCountryDiscovery('IN',{filter:'movie'},emptyTrends,now)).partial,true);
+});
+
+test('weak local freshness never masquerades as trending; latest is independently eligible', () => {
+  const weak=media(1,'2026-09-23',{popularity:15,voteCount:7});
+  const stub=media(2,'2026-09-24',{popularity:5,voteCount:0,rating:0});
+  const current=media(3,'2026-09-01',{originCountries:['US']});
+  const candidates=[candidate(weak),candidate(stub),candidate(current,{local:false})];
+  const ranked=rankCountryDiscovery(candidates,[],'IN',now,{daily:[current]});
+  assert.deepEqual(ids(ranked),['movie:3']);
+  assert.equal(ranked[0].media.discoverySignal,'daily-trend');
+  assert.deepEqual(ids(selectLatestReleases(candidates,'IN',now)),['movie:1','movie:3']);
+});
+
+test('daily and weekly confirmation lead origin and freshness; score uses real feed positions', () => {
+  const local=media(1,'2026-09-24'), global=media(2,'2026-09-01');
+  const candidates=[candidate(local),candidate(global,{local:false})];
+  const both=rankCountryDiscovery(candidates,[global],'IN',now,{daily:[global]});
+  assert.equal(both[0].media.id,2);
+  assert.ok(both[0].score>both[1].score+30);
+  const daily=rankCountryDiscovery(candidates,[],'IN',now,{daily:[global]});
+  assert.equal(both[0].score-daily[0].score,10);
+  const same=[candidate(global),candidate({...global,id:3},{local:false})];
+  const equal=rankCountryDiscovery(same,[],'IN',now);
+  assert.equal(equal[0].score-equal[1].score,8);
+});
+
+test('recent episodes keep an established returning series current, not a new premiere', () => {
+  const returning=media(1,'2016-01-01',{mediaType:'tv'});
+  const candidates=[candidate(returning,{recentlyAired:true})];
+  const picks=rankCountryDiscovery(candidates,[],'JP',now);
+  assert.equal(picks[0].older,true);
+  assert.equal(picks[0].media.discoverySignal,'recent-airing');
+  assert.equal(selectLatestReleases(candidates,'JP',now).length,0);
+  assert.equal(rankCountryDiscovery([candidate({...returning,voteCount:10},{recentlyAired:true})],[],'JP',now).length,0);
+});
+
+test('equally evidenced 2026 titles outrank late-2025 titles and new sort never admits old catalog', () => {
+  const current=media(1), late=media(2,'2025-12-01'), catalog=media(3,'2017-01-01',{popularity:999999});
+  const ranked=rankCountryDiscovery([current,late,catalog].map(item=>candidate(item)),[current,late],'IN',now);
+  assert.deepEqual(ids(ranked),['movie:1','movie:2']);
+  assert.deepEqual(ids(selectCountryPicks(ranked,120,'newest')),['movie:1','movie:2']);
+});
+
+test('latest view uses only 60-day releases and does not extend trending eligibility', async()=>{
+  const {tmdb}=api(async url=>Response.json({results:url.pathname.includes('/trending/')?[]:[raw(1,'movie','2026-09-23',{popularity:15,vote_count:7}),raw(2,'movie','2026-06-01'),raw(3,'movie','2016-01-01')]}));
+  const trend=await tmdb.getCountryDiscovery('IN',{filter:'movie'},emptyTrends,now);
+  const latest=await tmdb.getCountryDiscovery('IN',{filter:'movie',view:'releases'},emptyTrends,now);
+  assert.equal(trend.data.items.length,0);
+  assert.deepEqual(Array.from(latest.data.items,item=>item.id),[1]);
+  assert.deepEqual(Array.from(trend.data.latest,item=>item.id),[1]);
+});
+
+test('returning series with current episodes never crowd current releases off the homepage', () => {
+  const fresh=Array.from({length:35},(_,i)=>candidate(media(i+1)));
+  const returning=Array.from({length:30},(_,i)=>candidate(media(i+101,'2016-01-01',{mediaType:'tv',popularity:500}),{recentlyAired:true}));
+  const feed=returning.map(item=>item.media);
+  const picked=selectCountryPicks(rankCountryDiscovery([...fresh,...returning],feed,'IN',now,{daily:feed}));
+  for(let count=1;count<=picked.length;count++) assert.ok(picked.slice(0,count).filter(pick=>pick.signals.airing).length<=Math.floor(count/5));
+  assert.ok(picked.slice(0,24).filter(pick=>pick.media.releaseDate.startsWith('2026')).length>=20);
+  assert.ok(picked.slice(0,24).some(pick=>pick.signals.airing));
+});
+
+test('local-origin filter narrows the qualified selection without relaxing eligibility', async()=>{
+  const {tmdb}=api(async url=>{
+    if(url.pathname.includes('/trending/'))return Response.json({results:[]});
+    const local=url.searchParams.has('with_origin_country');
+    return Response.json({results:[raw(local?1:2,'movie'),raw(local?3:4,'movie',undefined,{popularity:1,vote_count:0})]});
+  });
+  for(const view of ['trending','releases']) {
+    const result=await tmdb.getCountryDiscovery('IN',{filter:'movie',view,origin:'local'},emptyTrends,now);
+    assert.deepEqual(Array.from(result.data.items,item=>item.id),[1]);
+    assert.deepEqual(Array.from(result.data.localIds),['movie:1']);
+  }
 });

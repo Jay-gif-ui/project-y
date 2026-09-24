@@ -92,11 +92,11 @@ test('homepage reuses shared trends and returns a substantial bounded mixed sele
     return Response.json({results:Array.from({length:20},(_,i)=>raw(offset+i+1,type))});
   });
   const result=await tmdb.getPopularAvailableInRegion('US',{movie:Promise.resolve({data:[]}),tv:Promise.resolve({data:[]})},now);
-  assert.equal(calls.length,6);
+  assert.equal(calls.length,10);
   assert.equal(result.data.length,24);
   assert.ok(result.data.some(item=>item.mediaType==='tv') && result.data.some(item=>item.mediaType==='movie'));
   assert.equal(new Set(result.data.map(item=>`${item.mediaType}:${item.id}`)).size,24);
-  for(const call of calls){assert.equal(call.params.watch_region,'US');assert.equal(call.options.next.revalidate,1800);assert.equal(call.options.cache,'force-cache');}
+  for(const call of calls){if(call.path.includes('/discover/'))assert.equal(call.params.watch_region,'US');assert.equal(call.options.next.revalidate,1800);assert.equal(call.options.cache,'force-cache');}
 });
 
 test('global trending preserves upstream order, includes genuine older trends, and ignores region',async()=>{

@@ -59,19 +59,29 @@ function summary(items,localIds){
         const response=await promise;response.body.results?.forEach(item=>airingIds.add(`tv:${item.id}`));
       }
     }
-    country.items=items.map(item=>({id:item.id,type:item.mediaType,title:item.title,date:item.releaseDate,local:localIds.has(key(item)),weeklyTrend:trendIds.has(key(item)),recentlyAired:airingIds.has(key(item)),popularity:item.popularity,votes:item.voteCount,rating:item.rating}));
+    country.items=items.map(item=>({id:item.id,type:item.mediaType,title:item.title,date:item.releaseDate,signal:item.discoverySignal,local:localIds.has(key(item)),weeklyTrend:trendIds.has(key(item)),recentlyAired:airingIds.has(key(item)),popularity:item.popularity,votes:item.voteCount,rating:item.rating}));
+    country.home.trendEvidence=home.items.filter(item=>['daily-trend','weekly-trend'].includes(item.discoverySignal)).length;
     assert.ok(homeSummary.currentYear>homeSummary.count/2,'Homepage current-year majority missing');
-    assert.ok(homeSummary.local>homeSummary.count/2,`${region} homepage local majority missing`);
-    assert.ok(allSummary.local>allSummary.count/2,`${region} browse local majority missing`);
+    assert.ok(allSummary.local>0,`${region} has no qualifying local content`);
     assert.ok(homeSummary.movies&&homeSummary.tv&&allSummary.movies&&allSummary.tv,'Both types required');
-    assert.ok(allSummary.older<=Math.floor(allSummary.count/10),'Old catalog dominance');
-    const firstOld=items.findIndex(item=>item.releaseDate<dates.recentStart);
-    if(firstOld>=0)assert.ok(items.slice(firstOld).every(item=>item.releaseDate<dates.recentStart),'Older title preceded recent');
+    const resurfacing=item=>item.releaseDate<dates.recentStart&&!airingIds.has(key(item));
+    assert.ok(items.filter(resurfacing).length<=Math.floor(allSummary.count/10),'Old catalog dominance');
+    const firstOld=items.findIndex(resurfacing);
+    if(firstOld>=0)assert.ok(items.slice(firstOld).every(resurfacing),'Older title preceded recent');
     for(const item of items){
       const age=(Date.parse(dates.today)-Date.parse(item.releaseDate))/86400000;
-      if(age>180)assert.ok(trendIds.has(key(item))||airingIds.has(key(item)),`No current evidence: ${key(item)}`);
+      assert.ok(item.discoverySignal,'Missing current-evidence label');
+      if(age>90)assert.ok(trendIds.has(key(item))||item.discoverySignal==='daily-trend'||airingIds.has(key(item)),`No current evidence: ${key(item)}`);
     }
     fingerprints.add(home.items.map(key).join(','));
+    const latest=check(await tmdb.getCountryDiscovery(region,{surface:'browse',view:'releases'},{movie,tv},now),region);
+    assert.deepEqual(home.latest.map(key),latest.items.map(key),'Latest home and See All diverged');
+    assert.ok(latest.items.length&&latest.items.every(item=>item.releaseDate>=dates.freshStart&&item.discoverySignal==='recent-release'),'Latest includes stale titles');
+    assert.deepEqual(latest.items.map(item=>item.releaseDate),latest.items.map(item=>item.releaseDate).sort().reverse(),'Latest is not chronological');
+    country.latest={count:latest.total,home:home.latest.length};
+    const localOnly=check(await tmdb.getCountryDiscovery(region,{surface:'browse',origin:'local'},{movie,tv},now),region);
+    assert.ok(localOnly.items.length&&localOnly.items.every(item=>localOnly.localIds.includes(key(item))),'Origin filter leaked international titles');
+    country.localOnly=localOnly.total;
     const samples=[home.items.find(item=>item.mediaType==='movie'),home.items.find(item=>item.mediaType==='tv'),home.items.find(item=>!home.localIds.includes(key(item)))].filter(Boolean);
     for(const item of samples){
       const providers=await tmdb.getWatchProviders(item.mediaType,item.id,region);assert.ok(providers.data,'Provider lookup failed');

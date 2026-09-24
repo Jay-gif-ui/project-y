@@ -707,3 +707,29 @@ gap:1.5rem;
 .country-trending-page .movie-card { align-self:start; }
 .country-trending-controls { margin-top:2rem; }
 .trending-pagination { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:2rem; margin-top:2rem; color:var(--muted); font-size:.85rem; }
+
+/* Put current country picks within reach of the first screen. */
+.discovery-hero { min-height:0; }
+.discovery-hero .hero-content { display:grid; grid-template-columns:1.2fr 1fr; align-items:center; gap:3rem; padding-top:9rem; padding-bottom:2.5rem; }
+.discovery-hero h1 { max-width:620px; font-size:clamp(2.2rem,4.5vw,4.2rem); line-height:1.05; }
+.discovery-hero .hero-copy { margin:1rem 0 0; max-width:560px; font-size:.92rem; }
+.discovery-shortcuts { display:flex; flex-wrap:wrap; gap:.6rem 1.1rem; margin-top:1rem; font-size:.78rem; color:#dca377; }
+.discovery-shortcuts a { padding:.25rem 0; }
+.discovery-shortcuts a[aria-current="page"] { color:#fff; border-bottom:1px solid #e1a273; }
+.discovery-shortcuts a:focus-visible,.discovery-method summary:focus-visible { outline:2px solid #e1a273; outline-offset:4px; }
+.country-home-section { padding-top:2rem; }
+.discovery-method { max-width:760px; margin:.8rem 0 0; color:var(--muted); font-size:.76rem; line-height:1.6; }
+.discovery-method summary { width:fit-content; cursor:pointer; color:#dca377; }
+.discovery-method p { margin:.6rem 0 0; }
+.discovery-badge { position:absolute; left:.55rem; right:.55rem; bottom:.65rem; width:fit-content; max-width:calc(100% - 1.1rem); padding:.35rem .5rem; background:rgba(14,13,17,.92); border:1px solid rgba(225,162,115,.35); border-radius:3px; color:#f5dbc7; font-size:.63rem; line-height:1.35; text-align:left; }
+@media(max-width:900px) {
+ .discovery-hero .hero-content { grid-template-columns:1fr; gap:1.4rem; padding-top:7rem; padding-bottom:1.5rem; }
+ .discovery-hero .hero-copy { margin:.8rem 0 0; }
+ .discovery-hero .search-bar { width:100%; }
+}
+@media(max-width:700px) {
+ .discovery-hero h1 { font-size:2.5rem; }
+ .country-home-section { padding-top:1.7rem; }
+ .discovery-badge { font-size:.62rem; }
+}
+.country-origin-link { display:inline-block; margin-top:.8rem; color:#dca377; font-size:.78rem; }

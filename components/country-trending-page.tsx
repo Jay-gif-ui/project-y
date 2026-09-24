@@ -5,34 +5,38 @@ import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useCountry } from "@/components/country-provider";
 import { MovieGrid } from "@/components/movie-grid";
-import type { CountryMediaFilter, CountryPeriod, CountrySort } from "@/lib/country-trending";
+import type { CountryMediaFilter, CountryPeriod, CountrySort, CountryView } from "@/lib/country-trending";
 import type { Media } from "@/lib/media";
 
-export function CountryTrendingPage({ initialRegion, filter, sort, period, page, totalPages, total, movies, partial, error, year }: { initialRegion: string; filter: CountryMediaFilter; sort: CountrySort; period: CountryPeriod; page: number; totalPages: number; total: number; movies: Media[]; partial: boolean; error: boolean; year: number }) {
+export function CountryTrendingPage({ initialRegion, filter, sort, period, page, totalPages, total, movies, partial, error, year, view = "trending", origin = "all" }: { initialRegion: string; filter: CountryMediaFilter; sort: CountrySort; period: CountryPeriod; page: number; totalPages: number; total: number; movies: Media[]; partial: boolean; error: boolean; year: number; view?: CountryView; origin?: "all" | "local" }) {
   const { country, refreshing } = useCountry();
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const updating = refreshing || pending || country.code !== initialRegion;
-  function navigate(next: { filter?: CountryMediaFilter; sort?: CountrySort; period?: CountryPeriod; page?: number }) {
+  const releases = view === "releases";
+  function navigate(next: { filter?: CountryMediaFilter; sort?: CountrySort; period?: CountryPeriod; page?: number; origin?: "all" | "local" }) {
     const params = new URLSearchParams();
     const nextFilter = next.filter ?? filter, nextSort = next.sort ?? sort, nextPeriod = next.period ?? period;
     if (nextFilter !== "all") params.set("type", nextFilter);
-    if (nextSort !== "current") params.set("sort", nextSort);
+    if (!releases && nextSort !== "current") params.set("sort", nextSort);
     if (nextPeriod !== "current") params.set("period", nextPeriod);
+    if ((next.origin ?? origin) === "local") params.set("origin", "local");
     if (next.page && next.page > 1) params.set("page", String(next.page));
-    startTransition(() => router.replace(`/country/trending${params.size ? `?${params}` : ""}`, { scroll: false }));
+    startTransition(() => router.replace(`/country/${view}${params.size ? `?${params}` : ""}`, { scroll: false }));
   }
   return <main className="shell search-page country-trending-page" aria-labelledby="country-page-title" aria-busy={updating}>
     <Link className="back-link" href="/">← Back to discovery</Link>
-    <p className="eyebrow">Local entertainment · Current discovery</p>
-    <h1 id="country-page-title">Trending in {country.name} {country.flag}</h1>
-    <p className="section-description">Current interest in local stories and selected international titles. Recent {year} releases lead; {year - 1} releases and returning series need ongoing relevance.</p>
-    <p className="discovery-note">A country-focused estimate using weekly trends, release and airing activity, audience interest and reported watch availability. TMDB does not provide country viewing charts.</p>
+    <p className="eyebrow">{releases ? "Fresh to discover" : "What’s getting attention"}</p>
+    <h1 id="country-page-title">{releases ? "Latest releases" : "Trending"} in {country.name} {country.flag}</h1>
+    <p className="section-description">{releases ? "Movies and series that premiered in the last 60 days, with reported watch options in your country. Newest first." : "Daily trends, breakout releases and returning series with current interest and watch options in your country."}</p>
+    <p className="discovery-note">{releases ? "Release dates are movie releases and series premieres, not the date a service added a title." : "An estimate using daily and weekly TMDB trends, recent release and episode activity, and audience interest. Country origin is a small preference. TMDB does not provide country viewing charts."}</p>
+    <nav className="discovery-shortcuts" aria-label="Country discovery"><Link href="/country/trending" aria-current={!releases ? "page" : undefined}>Trending now</Link><Link href="/country/releases" aria-current={releases ? "page" : undefined}>Latest releases</Link></nav>
     <div className="genre-controls country-trending-controls">
       <div className="media-toggle" role="group" aria-label="Country discovery media type">
         {(["all", "movie", "tv"] as const).map(value => <button key={value} type="button" aria-pressed={filter === value} onClick={() => navigate({ filter: value })} disabled={updating}>{value === "all" ? "All" : value === "movie" ? "Movies" : "TV Shows"}</button>)}
       </div>
-      <label className="discovery-filter">Sort <select aria-label="Sort current trending" value={sort} disabled={updating} onChange={event => navigate({ sort: event.target.value as CountrySort })}><option value="current">Current relevance</option><option value="newest">Newest releases</option></select></label>
+      <label className="discovery-filter">Origin <select aria-label="Country of origin" value={origin} disabled={updating} onChange={event => navigate({ origin: event.target.value === "local" ? "local" : "all" })}><option value="all">Local + international</option><option value="local">From {country.name}</option></select></label>
+      {!releases ? <label className="discovery-filter">Sort <select aria-label="Sort current trending" value={sort} disabled={updating} onChange={event => navigate({ sort: event.target.value as CountrySort })}><option value="current">Trending now</option><option value="newest">Newest among trending</option></select></label> : null}
       <label className="discovery-filter">Releases <select aria-label="Trending release window" value={period} disabled={updating} onChange={event => navigate({ period: event.target.value as CountryPeriod })}><option value="current">All current picks</option><option value="year">{year} releases</option></select></label>
     </div>
     {updating ? <p className="section-status" role="status">Updating current picks for {country.name}…</p>

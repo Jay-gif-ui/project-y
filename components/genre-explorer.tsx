@@ -38,7 +38,7 @@ export function GenreExplorer({ genres, year }: { genres: Record<MediaType, Genr
   const selected = genres[type].find(genre => genre.id === genreId);
   return <section id="genres" className="movie-section shell" aria-labelledby="genres-title">
     <div className="section-heading"><div>
-      <p className="eyebrow">03 · Follow your taste</p>
+      <p className="eyebrow">04 · Follow your taste</p>
       <h2 id="genres-title">Explore by genre</h2>
       <p className="section-description">Find your next movie or series to watch in {country.name}. Recent releases lead the selection.</p>
     </div></div>
