@@ -705,3 +705,5 @@ gap:1.5rem;
 .country-media-toggle { width:fit-content; margin-top:2rem; }
 .country-media-toggle button:disabled { cursor:wait; opacity:.65; }
 .country-trending-page .movie-card { align-self:start; }
+.country-trending-controls { margin-top:2rem; }
+.trending-pagination { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:2rem; margin-top:2rem; color:var(--muted); font-size:.85rem; }

@@ -13,8 +13,8 @@ export function CountryDiscovery({ initialRegion, movies, error, partial, year }
     <div className="section-heading"><div>
       <p className="eyebrow">02 · Local stories, current favorites</p>
       <h2 id="country-title">Trending in {country.name} {country.flag}</h2>
-      <p className="section-description">A focused movie + TV selection led by local entertainment, {year} releases and standout international stories.</p>
-      <p className="discovery-note">Ranked for current discovery using origin, release freshness, audience signals and reported watch availability. Not an official country viewing chart.</p>
+      <p className="section-description">What’s relevant now: local movies and TV, recent {year} releases and international titles with current interest.</p>
+      <p className="discovery-note">A country-focused estimate using weekly trends, recent releases and airing activity, with reported watch availability. Not a country viewing chart.</p>
     </div><Link className="see-all" href="/country/trending" prefetch={false} aria-label={`See all current picks for ${country.name}`}>See all <ArrowIcon /></Link></div>
     {updating ? <p className="section-status" role="status">Updating picks for {country.name}…</p>
       : error ? <p className="section-status" role="status">We couldn’t load watchable titles for {country.name}. Please try again shortly.</p>

@@ -1,6 +1,7 @@
 import "server-only";
 import { isEnabledCountryCode } from "@/lib/countries";
-import { combineDiscovery, discoveryDates, discoveryParams, rankCountryDiscovery, rankDiscovery, type CountryMediaFilter, type CountrySurface, type DiscoveryCandidate, type DiscoveryPeriod, type Genre } from "@/lib/discovery";
+import { discoveryParams, rankDiscovery, type DiscoveryCandidate, type DiscoveryPeriod, type Genre } from "@/lib/discovery";
+import { COUNTRY_HOME_LIMIT, COUNTRY_PAGE_SIZE, COUNTRY_TREND_PROBE_LIMIT, countryTrendingDates, countryTrendingParams, mediaKey, rankCountryDiscovery, selectCountryPicks, type CountryCandidate, type CountryMediaFilter, type CountryPeriod, type CountrySort, type CountrySurface } from "@/lib/country-trending";
 import { type Media, type MediaType, type Provider, type WatchProviders } from "@/lib/media";
 
 export { imageUrl, type Media, type MediaType, type Provider, type WatchProviders } from "@/lib/media";
@@ -46,46 +47,57 @@ export async function getGenres(type: MediaType): Promise<TmdbResult<Genre[]>> {
   return { data: result.data.genres.filter(genre => Number.isSafeInteger(genre.id) && genre.id > 0 && typeof genre.name === "string") };
 }
 
-export type CountryDiscoveryData = { items: Media[]; localIds: string[] };
+export type CountryDiscoveryData = { items: Media[]; localIds: string[]; total: number; page: number; totalPages: number };
 
-export async function getCountryDiscovery(region: string, options: { surface?: CountrySurface; filter?: CountryMediaFilter } = {}, trends?: { movie: Promise<TmdbResult<Media[]>>; tv: Promise<TmdbResult<Media[]>> }, now = new Date()): Promise<TmdbResult<CountryDiscoveryData>> {
+export async function getCountryDiscovery(region: string, options: { surface?: CountrySurface; filter?: CountryMediaFilter; sort?: CountrySort; period?: CountryPeriod; page?: number } = {}, trends?: { movie: Promise<TmdbResult<Media[]>>; tv: Promise<TmdbResult<Media[]>> }, now = new Date()): Promise<TmdbResult<CountryDiscoveryData>> {
   const normalizedRegion = region.toUpperCase();
   if (!isEnabledCountryCode(normalizedRegion)) return { error: "not-found" };
   const surface = options.surface ?? "home";
   const filter = options.filter ?? "all";
   const types: MediaType[] = filter === "all" ? ["movie", "tv"] : [filter];
-  const totalLimit = surface === "home" ? 12 : 36;
-  const limitPerType = totalLimit / types.length;
+  const { today, year } = countryTrendingDates(now);
   const pools = await Promise.all(types.map(async type => {
-    const params = { countryFocused: true };
     const [localRecent, internationalRecent, localActivity, trending] = await Promise.all([
-      requestMedia(`/discover/${type}`, type, discoveryParams(type, normalizedRegion, now, { ...params, local: true })),
-      requestMedia(`/discover/${type}`, type, discoveryParams(type, normalizedRegion, now, params)),
-      requestMedia(`/discover/${type}`, type, discoveryParams(type, normalizedRegion, now, { ...params, local: true, activity: true })),
+      requestMedia(`/discover/${type}`, type, countryTrendingParams(type, normalizedRegion, now, "local")),
+      requestMedia(`/discover/${type}`, type, countryTrendingParams(type, normalizedRegion, now, "international")),
+      requestMedia(`/discover/${type}`, type, countryTrendingParams(type, normalizedRegion, now, "activity")),
       trends?.[type] ?? getCollection(type, "trending"),
     ]);
-    // Browse expands local candidates only. Never request page 2 in an empty/small market.
-    const moreLocal = surface === "browse" && (localRecent.totalPages ?? 1) > 1
-      ? await requestMedia(`/discover/${type}`, type, discoveryParams(type, normalizedRegion, now, { ...params, local: true, page: 2 }))
+    // Home and browse use exactly the same bounded pool and scoring policy.
+    const moreLocal = (localRecent.totalPages ?? 1) > 1
+      ? await requestMedia(`/discover/${type}`, type, countryTrendingParams(type, normalizedRegion, now, "local", 2))
       : { data: [] } as TmdbResult<Media[]>;
     const results = [localRecent, internationalRecent, localActivity, moreLocal, trending];
     // A failed local service must not turn this into a global-only fallback chart.
-    const candidates: DiscoveryCandidate[] = localRecent.error && localActivity.error ? [] : [
-      ...(localRecent.data ?? []).map(media => ({ media, local: true })),
-      ...(moreLocal.data ?? []).map(media => ({ media, local: true })),
-      ...(localActivity.data ?? []).map(media => ({ media, local: true, recentlyAired: type === "tv" })),
-      ...(internationalRecent.data ?? []).map(media => ({ media })),
+    if (localRecent.error && localActivity.error) return { picks: [], results };
+    const candidates: CountryCandidate[] = [
+      ...(localRecent.data ?? []).map(media => ({ media, available: true, local: true })),
+      ...(moreLocal.data ?? []).map(media => ({ media, available: true, local: true })),
+      ...(localActivity.data ?? []).map(media => ({ media, available: true, local: true, recentlyAired: type === "tv" })),
+      ...(internationalRecent.data ?? []).map(media => ({ media, available: true })),
     ];
-    return { type, picks: rankCountryDiscovery(candidates, trending.data ?? [], normalizedRegion, now, { surface, limit: limitPerType }), results };
+    // Genuine weekly trends can resurface at any age. Only a bounded set absent
+    // from Discover needs provider checks; never assume regional availability.
+    const seen = new Set(candidates.map(candidate => mediaKey(candidate.media)));
+    const missing = (trending.data ?? []).filter(media => !seen.has(mediaKey(media)) && media.releaseDate && media.releaseDate <= today).slice(0, COUNTRY_TREND_PROBE_LIMIT);
+    const verified = await Promise.all(missing.map(async media => {
+      const providers = await getWatchProviders(type, media.id, normalizedRegion);
+      const available = providers.data && ["flatrate", "free", "ads", "rent", "buy"].some(kind => providers.data![kind as keyof Omit<WatchProviders, "link">].length > 0);
+      return { media, available: Boolean(available), error: providers.error };
+    }));
+    candidates.push(...verified.map(({ media, available }) => ({ media, available })));
+    for (const item of verified) if (item.error) results.push({ error: item.error });
+    return { picks: rankCountryDiscovery(candidates, trending.data ?? [], normalizedRegion, now), results };
   }));
-  const movies = pools.find(pool => pool.type === "movie")?.picks ?? [];
-  const tv = pools.find(pool => pool.type === "tv")?.picks ?? [];
-  const combined = combineDiscovery(movies.map(pick => pick.media), tv.map(pick => pick.media), totalLimit);
-  const recentStart = `${discoveryDates(now).year - 1}-07-01`;
-  const items = [...combined.filter(media => media.releaseDate! >= recentStart), ...combined.filter(media => media.releaseDate! < recentStart)];
+  const ranked = selectCountryPicks(pools.flatMap(pool => pool.picks).filter(pick => options.period !== "year" || pick.media.releaseDate!.startsWith(String(year))), 120, options.sort);
+  const pageSize = surface === "home" ? COUNTRY_HOME_LIMIT : COUNTRY_PAGE_SIZE;
+  const totalPages = Math.max(1, Math.ceil(ranked.length / pageSize));
+  const requestedPage = Number.isSafeInteger(options.page) ? options.page! : 1;
+  const page = surface === "home" ? 1 : Math.max(1, Math.min(totalPages, requestedPage));
+  const visible = ranked.slice((page - 1) * pageSize, page * pageSize);
   const error = pools.flatMap(pool => pool.results).find(result => result.error)?.error;
-  if (!items.length && error) return { error };
-  return { data: { items, localIds: [...movies, ...tv].filter(pick => pick.local).map(pick => `${pick.media.mediaType}:${pick.media.id}`) }, partial: Boolean(error) };
+  if (!ranked.length && error) return { error };
+  return { data: { items: visible.map(pick => pick.media), localIds: visible.filter(pick => pick.local).map(pick => mediaKey(pick.media)), total: ranked.length, page, totalPages }, partial: Boolean(error) };
 }
 
 export async function getPopularAvailableInRegion(region: string, trends: { movie: Promise<TmdbResult<Media[]>>; tv: Promise<TmdbResult<Media[]>> }, now = new Date()): Promise<TmdbResult<Media[]>> {
