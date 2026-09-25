@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import loadTypescript from './load-typescript.mjs';
 
 const load = loadTypescript();
-const { normalizeWatchProviders, getProviderOffers } = load('lib/watch-providers.ts');
+const { normalizeWatchProviders, getProviderOffers, providerAction, providerClickDetail } = load('lib/watch-providers.ts');
 // Fixtures stay in tests; production only reads TMDB responses.
 const provider = (id, name = `Test provider ${id}`) => ({ provider_id: id, provider_name: name, logo_path: '/test.png' });
 const link = region => `https://www.themoviedb.org/movie/1/watch?locale=${region}`;
@@ -36,7 +36,7 @@ test('one provider row retains subscription, free, ad-supported, rental and purc
   assert.equal(data.flatrate.length, 2);
   const offers = getProviderOffers(data);
   assert.deepEqual(Array.from(offers, item => item.id), [1, 2]);
-  assert.deepEqual(plain(offers[0].types), ['flatrate', 'free', 'ads', 'rent', 'buy']);
+  assert.deepEqual(plain(offers[0].types), ['flatrate', 'rent', 'buy', 'free', 'ads']);
   assert.deepEqual(plain(offers[1].types), ['flatrate']);
 });
 
@@ -81,4 +81,31 @@ test('movie and TV provider calls use existing cached server API and propagate f
     assert.equal(result.error, expected);
     assert.equal(result.data, undefined);
   }
+});
+
+test('generic regional TMDB link never creates a provider Watch/Rent/Buy action', () => {
+  const data = normalizeWatchProviders(payload, 'IN');
+  assert.equal(data.link, link('IN'));
+  for (const type of ['flatrate', 'rent', 'buy']) for (const item of data[type]) {
+    assert.equal(item.watchUrl, undefined);
+    assert.equal(providerAction(item, type), undefined);
+  }
+});
+
+test('only an explicit safe per-provider destination enables an action; no URL is constructed', () => {
+  const destination = 'https://provider.example/verified-title?id=123';
+  const data = normalizeWatchProviders({ results: { IN: { link: link('IN'), rent: [{ ...provider(2, 'Test service'), link: destination }] } } }, 'IN');
+  assert.equal(data.rent[0].watchUrl, destination);
+  assert.deepEqual(plain(providerAction(data.rent[0], 'rent')), { href: destination, label: 'Rent on Test service' });
+  assert.equal(providerAction(data.rent[0], 'buy').label, 'Buy on Test service');
+  assert.equal(providerAction(data.rent[0], 'flatrate').label, 'Watch on Test service');
+  for (const invalid of [link('IN'), 'https://www.justwatch.com/in/movie/title', 'javascript:alert(1)', 'http://provider.example/title', 'https://user:secret@provider.example/title']) {
+    const item = normalizeWatchProviders({ results: { IN: { flatrate: [{ ...provider(1), link: invalid }] } } }, 'IN').flatrate[0];
+    assert.equal(providerAction(item, 'flatrate'), undefined);
+  }
+});
+
+test('future click analytics carries title, country, provider, action and timestamp without rewriting links', () => {
+  const detail = providerClickDetail({ titleId: 550, mediaType: 'movie', country: 'IN', provider: { id: 8, name: 'Test service' }, actionType: 'flatrate' }, '2026-09-25T18:00:00.000Z');
+  assert.deepEqual(plain(detail), { titleId: 550, mediaType: 'movie', country: 'IN', providerId: 8, providerName: 'Test service', actionType: 'flatrate', timestamp: '2026-09-25T18:00:00.000Z' });
 });

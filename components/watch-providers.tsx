@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { imageUrl, type MediaType, type WatchProviders as ProviderData } from "@/lib/media";
-import { getProviderOffers, OFFER_TYPES, type OfferType } from "@/lib/watch-providers";
+import { OFFER_TYPES, providerAction, providerClickDetail, PROVIDER_CLICK_EVENT, type OfferType } from "@/lib/watch-providers";
+import type { Provider } from "@/lib/media";
 import type { Country } from "@/lib/countries";
 import { CountrySelector } from "@/components/country-selector";
 import { useCountry } from "@/components/country-provider";
@@ -16,15 +17,6 @@ type Props = {
   initialError?: boolean;
 };
 type Availability = { providers?: ProviderData; loading: boolean; error?: boolean };
-const filters = [
-  { key: "all", label: "All options" },
-  { key: "flatrate", label: "Subscription" },
-  { key: "rent", label: "Rent" },
-  { key: "buy", label: "Buy" },
-  { key: "free", label: "Free / ads" },
-] as const;
-type Filter = (typeof filters)[number]["key"];
-const matchesFilter = (type: OfferType, filter: Filter) => filter === "all" || type === filter || (filter === "free" && type === "ads");
 
 export function WatchProviders(props: Props) {
   const { country } = useCountry();
@@ -33,7 +25,6 @@ export function WatchProviders(props: Props) {
 }
 
 function CountryAvailability({ mediaType, titleId, initialProviders, initialRegion, initialError, country }: Props & { country: Country }) {
-  const [filter, setFilter] = useState<Filter>("all");
   const [retry, setRetry] = useState(0);
   const [availability, setAvailability] = useState<Availability>(() => country.code === initialRegion
     ? { providers: initialProviders, loading: false, error: initialError }
@@ -60,36 +51,41 @@ function CountryAvailability({ mediaType, titleId, initialProviders, initialRegi
   }, [country.code, country.tmdbRegion, initialRegion, initialProviders, initialError, mediaType, titleId, retry]);
 
   const { providers, loading, error } = availability;
-  const offers = providers ? getProviderOffers(providers) : [];
-  const visible = offers.filter(offer => offer.types.some(type => matchesFilter(type, filter)));
+  const groups = OFFER_TYPES.map(type => ({ ...type, providers: providers?.[type.key] ?? [] })).filter(group => group.providers.length);
+  const hasMissingLinks = groups.some(group => group.providers.some(provider => !providerAction(provider, group.key)));
+  function trackProviderClick(provider: Provider, actionType: OfferType) {
+    // Local integration hook only: no analytics requests, cookies or affiliate rewriting.
+    window.dispatchEvent(new CustomEvent(PROVIDER_CLICK_EVENT, {
+      detail: providerClickDetail({ titleId, mediaType, country: country.code, provider, actionType }),
+    }));
+  }
   return <section className="detail-section watch-section" id="where-to-watch" aria-labelledby="watch-title" aria-busy={loading}>
     <div className="detail-section-heading">
-      <div><p className="eyebrow">Streaming, rental & purchase</p><h2 id="watch-title">Where to watch</h2></div>
+      <div><p className="eyebrow">Streaming, rental & purchase</p><h2 id="watch-title">Where to Watch in {country.name} <span className="watch-country-flag">{country.flag}</span></h2></div>
       <CountrySelector />
     </div>
-    <p className="watch-country">Available options in {country.flag} <strong>{country.name}</strong></p>
     {loading ? <p className="availability-status" role="status">Checking availability in {country.name}…</p>
       : error ? <div className="availability-status" role="alert"><p>We couldn’t load availability for {country.name}. Please try again.</p><button type="button" className="secondary-link" onClick={() => setRetry(value => value + 1)}>Try again</button></div>
-      : offers.length ? <>
-        <div className="watch-filters" role="group" aria-label="Filter watch options">
-          {filters.map(item => <button key={item.key} type="button" aria-pressed={filter === item.key} onClick={() => setFilter(item.key)}>{item.label}</button>)}
-        </div>
-        <div aria-live="polite" aria-atomic="true" className="sr-only">{visible.length} {visible.length === 1 ? "provider" : "providers"} in {country.name}</div>
-        {visible.length ? <ul className="watch-offers">
-          {visible.map(offer => {
-            const types = offer.types.filter(type => matchesFilter(type, filter));
-            const action = types.some(type => ["flatrate", "free", "ads"].includes(type)) ? "Watch options" : types.includes("rent") && types.includes("buy") ? "Rent / Buy" : types.includes("rent") ? "Rent" : "Buy";
-            return <li className="watch-offer" key={offer.id}>
+      : groups.length ? <>
+        <div className="watch-category-list">{groups.map(group => <section className="watch-category" key={group.key} aria-labelledby={`watch-${group.key}`}>
+          <h3 id={`watch-${group.key}`}>{group.label}</h3>
+          <ul className="watch-offers">{group.providers.map(provider => {
+            const action = providerAction(provider, group.key);
+            const content = <>
               <div className="watch-provider-identity">
-                {offer.logoPath ? <Image src={imageUrl(offer.logoPath, "w92")!} alt="" width={44} height={44} /> : <span className="provider-initial" aria-hidden="true">{offer.name.slice(0, 1)}</span>}
-                <div><h3>{offer.name}</h3><p>{OFFER_TYPES.filter(type => types.includes(type.key)).map(type => type.label).join(" · ")}</p></div>
+                {provider.logoPath ? <Image src={imageUrl(provider.logoPath, "w92")!} alt="" width={44} height={44} /> : <span className="provider-initial" aria-hidden="true">{provider.name.slice(0, 1)}</span>}
+                <div><h4>{provider.name}</h4><p>{group.key === "flatrate" ? "Subscription" : group.label}</p></div>
               </div>
-              {providers?.link ? <a className="watch-action" href={providers.link} target="_blank" rel="noopener noreferrer" aria-label={`${action} for ${offer.name} on TMDB (opens in a new tab)`} aria-describedby="watch-destination">{action} <span aria-hidden="true">↗</span></a> : <span className="watch-link-unavailable">Link unavailable</span>}
-            </li>;
-          })}
-        </ul> : <p className="availability-status">No {filters.find(item => item.key === filter)?.label.toLowerCase()} options are reported for this title in {country.name}. Try another filter.</p>}
-        {providers?.link ? <p className="watch-note" id="watch-destination">Actions open this title’s TMDB watch page for {country.name}, where you can choose a provider. Confirm current availability and pricing there.</p> : null}
-      </> : <div className="availability-status"><p>No streaming, rental or purchase options are currently reported for this title in {country.name}.</p><p>Availability can change. Try another country or check back later.</p></div>}
-    <p className="watch-attribution">Availability data from <a href="https://www.justwatch.com/" target="_blank" rel="noopener noreferrer">JustWatch</a> via <a href="https://www.themoviedb.org/" target="_blank" rel="noopener noreferrer">TMDB</a>.</p>
+              {action ? <span className="watch-action">{action.label} <span aria-hidden="true">↗</span></span> : <span className="watch-link-unavailable">Direct link unavailable</span>}
+            </>;
+            return <li className="watch-offer" key={provider.id}>{action
+              ? <a className="watch-offer-content" href={action.href} target="_blank" rel="noopener noreferrer" aria-label={`${action.label} (opens in a new tab)`} onClick={() => trackProviderClick(provider, group.key)} onAuxClick={event => { if (event.button === 1) trackProviderClick(provider, group.key); }}>{content}</a>
+              : <div className="watch-offer-content">{content}</div>}</li>;
+          })}</ul>
+        </section>)}</div>
+        {hasMissingLinks ? <p className="watch-note">These services report availability, but direct provider links have not been supplied.{providers?.link ? " You can check the availability reference below." : ""}</p> : null}
+      </> : <div className="availability-status"><p>No legal streaming options found in {country.name}.</p><p>TMDB currently reports no streaming, rental or purchase offers for this title. Check back later.</p></div>}
+    {!loading && !error && providers?.link ? <details className="watch-reference"><summary>Availability reference</summary><a href={providers.link} target="_blank" rel="noopener noreferrer">Check this title’s availability on TMDB ↗</a><p>Reference only — TMDB is not a streaming service.</p></details> : null}
+    <p className="watch-attribution">Availability data: JustWatch via TMDB.</p>
   </section>;
 }
