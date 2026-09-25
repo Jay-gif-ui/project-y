@@ -1,101 +1,61 @@
-# Country discovery and local/international allocation — 24 September 2026
+# Country discovery
 
-The latest request replaces the former soft country preference with an explicit local-led mix. Production has no hardcoded titles or invented activity/provider data. Changes are local and have not been deployed by this task.
+## Homepage order
 
-## Selection and limits
+The existing hero stays in place. Content sections are: (1) Latest Releases in the selected country, (2) Trending in that country, (3) Global Trending 🌎 (separate movie and TV rows), (4) the existing genre explorer. India uses the same visual components and country preference architecture.
 
-- Country homepage: up to **16 local + 8 international** movies/TV, interleaved two local then one international. No numbered country chart is shown, because placement includes this editorial allocation.
-- See All: up to **200 local + 50 international = 250** qualified titles. The default first page matches the homepage; remaining picks favor local content four-to-one while preserving rank within each origin bucket. Missing slots never admit stale or unqualified titles.
-- If fewer than 200 local picks qualify, the international cap is `min(50, max(8, floor(localCount / 4)))`. This preserves the eight homepage picks while keeping larger, shorter lists locally focused. If either bucket lacks supply, actual counts are smaller. The UI reports those actual counts.
-- Default page one contains the same up-to-24 cards as home. Later pages contain up to 24 remaining items. Sparse first pages do not cause skipped or duplicated titles. Full 250-title lists have 11 pages.
-- All / Movies / TV, From Country, current-year, and current/newest filters act on eligible candidates before allocation. Newest preserves the capped membership and sorts it chronologically across every page. Its first page can differ from the default home preview. Latest releases has its own 60-day window and chronological See All.
-- Both media types share the score scale and use `mediaType:id` identity. Within an origin bucket, after three cards of one type an alternate type can move up if within 10 score points and in the same freshness group.
+## Release discovery
 
-## Endpoints and origin verification
+`data/discovery-config.ts` owns the rolling UTC calendar windows: the last 14 days through today, and tomorrow through the next 7 days. Bounds are inclusive. No permanently dated release list is shipped.
 
-Global rows still use `/trending/movie/week` and `/trending/tv/week` in TMDB's returned order. Country ranking also uses `/trending/movie/day` and `/trending/tv/day`.
+`lib/releases.ts` builds date-filtered queries and orders verified release events. `lib/tmdb-releases.ts` retrieves candidates through the existing cached TMDB adapter. `lib/release-metadata.ts` extracts the actual evidence:
 
-Per type, four paginated `/discover/movie` or `/discover/tv` pools supply candidates:
+- Movies: selected-country release dates, types 2/3 (theatrical) and 4 (digital). Regional schedules take precedence over a global premiere. A recent primary premiere with actual regional watch offers is a fallback only when no regional theatrical/digital records exist.
+- TV: first air date, last episode and next episode. Shows require either selected-country origin or real watch offers in that country. TMDB does not provide a dependable country-specific TV launch calendar; episode dates are reported air dates, not promises of local streaming availability.
+- Rating, vote count and popularity are not release eligibility gates. Discover queries are date constrained; bounded digital/episode/upcoming samples use popularity to find relevant candidates, then real event dates alone determine release status and chronology.
+- Released events sort newest first, then upcoming events soonest first, with regional dates winning date ties. A show with both recent and future episodes appears once in All and can appear with its future episode in Upcoming.
+- Future dates are labeled `Coming Sep 25` etc. No country release heading shares another country's unfiltered catalog. Dates missing from TMDB are not guessed.
 
-| Pool | Window / activity | Maximum pages |
-|---|---|---:|
-| Selected-country origin | Released/premiered within 180 days | 10 |
-| All origins | Released/premiered within 180 days | 4 |
-| Selected-country activity | Movies released within 60 days, newest first; TV aired within 28 days | 2 |
-| All-origin activity | Same activity windows | 1 |
+`/country/releases` supports Movies/TV, Recently Released/Upcoming, origin, year and 24-item pagination. It never calls the trending ranking algorithm. The homepage displays page one, so a full recent-release page may defer upcoming events to See All → Upcoming.
 
-All Discover queries require `watch_region` plus `with_watch_monetization_types=flatrate|free|ads|rent|buy`, nonfuture premiere/release, at least 5 votes and rating 6. Local queries use `with_origin_country`. Pagination stops at the source's end; this is bounded current discovery, not arbitrary catalog pagination.
+## India trending
 
-Selected country comes from the existing CountryProvider/cookie/profile architecture. A matching origin-filtered result proves local relevance. Actual origin/production metadata also establishes origin; a co-production may be local in multiple countries. Language and title names never determine nationality.
+Edit **only `data/india-trending.ts`** to refresh the India Top 10, approximately every 48 hours:
 
-TMDB movie Discover results may omit origin metadata. An all-origin movie can be classified as nonlocal by absence from the identical local recent query ONLY after that query is fully exhausted successfully. The movie activity window is a subset of that query. Truncated or failed local coverage never proves nonlocality. Unknown-origin items are omitted unless verified.
+1. Verify the exact TMDB title, year and media type.
+2. Replace/reorder the ten `{ id, type, label }` entries. Array order is the editorial rank. `label` is an editor note; displayed titles/posters/ratings come from TMDB.
+3. Update `updatedAt`. This records the editorial review date; it is not a release date or a measured trending timestamp.
+4. Run lint/build and publish through your normal code release process. Editing this source configuration requires a rebuild/redeploy on a hosted instance; no UI or algorithm change is needed.
 
-Up to four otherwise-uncovered daily/weekly candidates or unknown-origin candidates per type use `/{type}/{id}?append_to_response=watch/providers`. This supplies real origin and regional offers in one request. A title without reported regional offers is excluded. Existing Where to Watch/provider-link helpers are unchanged.
+The initial list follows the user's first ten candidates. Bigg Boss is the Hindi series (2006); Chumbak is the 2026 Indian series; Welcome To The Jungle is the 2026 film. See `india-candidate-audit.md` for all supplied candidates and ambiguous/unresolved names.
 
-Maximum cold budget: 34 Discover page requests + 4 global feeds + 8 bounded detail/offer probes = **46**, excluding retries. Home additionally loads two genre endpoints. Actual requests stop early for small pools. The five-country audit used 119 unique requests in total, including filtered views, all pagination and provider samples. Pagination/filter navigation reused cached URLs without fetching a new catalog. Existing server-only fetch caching/revalidation remains 30 minutes (genres 24 hours); the key stays server-side.
+`lib/india-trending.ts` preserves editorial priority, merges qualified current global feeds and deduplicates by `(mediaType, TMDB ID)` (movie and TV IDs have separate namespaces). The server adapter verifies local offers, local origin for editorial picks, or a real regional theatrical/digital release. Future/invalid titles are skipped, including an overseas premiere with a wholly upcoming India schedule. An old editorially selected title may trend without being a latest release.
 
-## Current eligibility and exact score
+Daily and weekly feeds are interleaved before the bounded verification budget so neither source crowds out the other. India uses no generic popular catalog filler. See All uses the same membership/order as home, with media/origin/year filters, current/newest sorting and existing pagination. Newest deliberately reorders the qualified selection; it never expands it.
 
-Require a valid ID and nonfuture date, classified origin, and real regional availability. Reject ratings below 5.5 when there are at least 10 votes. At least one of these signals is required:
+## Global and other countries
 
-1. Membership in the actual global daily or weekly trend feed.
-2. Release within 90 days with at least 20 votes, rating 6 and popularity 20.
-3. Emerging release within 45 days with at least 5 votes, rating 6 and popularity 20.
-4. Recent TV episode evidence within 28 days with at least 100 votes, rating 6.5 and popularity 30.
-5. For the requested combined trending/latest surface: release within 180 days, at least 5 votes, rating 6 and popularity 3. These supported releases carry a **Recent release** badge, never a fabricated trending badge. This criterion is symmetric for both origins.
-6. A future verified country-matched iFynex activity signal >= 0.5, with at least 20 votes and rating 6. Production does not supply this signal.
+The global rows still call `/trending/movie/week` and `/trending/tv/week`, preserving returned order. The India list never replaces these feeds. The global section can contain TMDB's own anticipated titles; those are not inserted into country Trending merely because they are upcoming.
 
-Titles before July 1 of the previous year additionally need 20 votes and rating 6. High popularity, accumulated votes or local origin alone never qualify an old catalog title.
+USA, UK, Japan, South Korea and all other enabled countries keep automatic `country-trending.ts` discovery: actual daily/weekly trends, evidenced recent audience interest, and qualifying active series, with regional watch offers. The former release-only six-month admission has been removed: a recent date alone is no longer trending evidence. Existing local/international allocation, sorting and pagination remain. No manual India configuration is used for these countries.
 
-```text
-S = 50 * max(D, 0.85 * W) + 10 * B
-  + 18 * R + 6 * E + 12 * P + 4 * Q + 8 * L + 20 * I
+The country selector, cookie/local-storage preference, genre explorer and title details retain their existing architecture. Where to Watch received one loading-state correction: when refreshed server props catch up to a country change, the pending client loader is cleared. Subscription, rent, buy, free/ad-supported groups and TMDB-provided destination links remain country specific.
 
-D,W = 0 when absent; otherwise 0.25 + 0.75 * (N - index) / N
-      in that media type's daily/weekly feed, index starting at zero.
-B = 1 when present in both feeds, otherwise 0.
-P = clamp(ln(1 + max(0,popularity)) / ln(101), 0, 1).
-Q = clamp(rating / 10, 0, 1) * votes / (votes + 50).
-R = max(2^(-ageDays / 90), 0.8 for qualifying recent TV airing else 0).
-E = 1 for qualifying recent TV airing;
-    otherwise 2^(-ageDays / 30) within 90 days, else 0.
-L = 1 for selected-country origin, otherwise 0.
-I = validated recent country activity, currently zero.
-```
+## Performance and limits
 
-Scoring orders titles within their local/international buckets; allocation sets the requested composition. Local score bonus cannot admit a weak title. Feed agreement is evidence, not a measured growth rate.
+TMDB fetches retain server `force-cache` with 30-minute revalidation. The metadata URL is shared across release/India discovery; concurrent detail requests are also deduplicated in flight. Title IDs never require a runtime search.
 
-Qualified older returning series can compete on score, capped at 20% of each bucket's leading selection (four current releases precede the first). Other older genuine revivals are appended after current picks, capped by `min(floor(selectedCount/9), floor(bucketLimit/10), remainingSpace)`. No old slots are reserved. Newest sorting changes display order, not eligibility or membership.
+Release work is bounded to one page per source (four movie sources, four TV sources) and at most 20 detail checks per type. India trending checks at most ten manual IDs plus ten current feed candidates per type. Those budgets are configurable. Warm filters/pagination reuse cached source responses. A cold request has more work, and these are intentionally bounded discovery selections, not exhaustive release catalogs. The audit reports the actual request totals.
 
-Dates roll with server UTC, not a hardcoded 2026. On September 24, 2026, 180-day retrieval starts March 28; latest releases start July 26; episode activity starts August 27. A late-2025 release still qualifies with current daily/weekly or appropriate episode evidence. Latest releases remain a separate 60-day surface requiring 5 votes, rating 6 and popularity 10. Movie releases/series premieres are not provider-addition or new-season timestamps.
+TMDB data can be incomplete or inaccurate, and offers do not reveal the date a streaming service added a title. Empty results stay empty; upstream outages are surfaced with partial/error states rather than fabricated fallback content. Cross-section repeats are retained when a title separately qualifies as fresh and trending.
 
-## Why the previous results were wrong
+## Validation
 
-The original movie activity query used `sort_by=popularity.desc` with an upper date but no lower date, letting old popular catalog movies enter the candidate pool. Later revisions fixed that unbounded query. The previous soft 8-point origin preference then allowed international trend-feed picks to dominate the homepage: the prior live audit had only five local India cards. The requested hard allocation now happens after eligibility, rather than trying to solve composition by inflating a nationality score.
+- `node --test tests/discovery.test.mjs tests/country-trending.test.mjs tests/releases-india.test.mjs`
+- `node --env-file=.env.local tests/live-country-discovery.mjs` (live credential required; writes `docs/country-discovery-live-audit.json`, never credentials).
+- `npm run lint` and `npm run build`.
+- Actual local browser: homepage order, all five country changes, release/media filters, trending See All and pagination, and Where to Watch country changes.
 
-## Remaining limitation and future iFynex activity
+This machine's system DNS resolves TMDB's main hostname to an unreachable address. Local verification uses a process-only Cloudflare DNS resolver with the original HTTPS hostname and certificate checks intact, as in the previous audit. Production code and OS DNS settings were not changed. Default local commands still require working access to TMDB.
 
-TMDB does not expose JustWatch-style country-level user viewing charts. This selection estimates current relevance using global feeds, recent releases/episodes, origin, popularity/votes and reported country offers. It cannot truthfully claim actual Indian/US/etc. viewing ranks, guarantee 200 current local titles in every country, or infer unreported streaming availability.
-
-The pure ranker retains a typed CountryActivitySignal adapter: region, asOf and normalized recentScore. It rejects other-country, future and older-than-seven-day activity. A later server adapter can aggregate real searches, detail views, wishlists and provider clicks. No fake activity or process-memory momentum has been added. Auth, Google sign-in, country preference storage, wishlist and detail/provider flows were not changed.
-
-References: [Movie Discover](https://developer.themoviedb.org/reference/discover-movie), [TV Discover](https://developer.themoviedb.org/reference/discover-tv), [Global trends](https://developer.themoviedb.org/reference/trending-movies), [Append to response](https://developer.themoviedb.org/docs/append-to-response).
-
-## Verification
-
-Live TMDB audit on September 24, 2026; these counts will change with live data:
-
-| Country | Home local / international | Home 2026 releases | Home movies / TV | See All local / international | Total |
-|---|---:|---:|---:|---:|---:|
-| India | 16 / 8 | 23 | 13 / 11 | 36 / 9 | 45 |
-| United States | 16 / 8 | 20 | 11 / 13 | 200 / 50 | 250 |
-| United Kingdom | 16 / 8 | 20 | 9 / 15 | 55 / 13 | 68 |
-| Japan | 16 / 8 | 20 | 5 / 19 | 104 / 26 | 130 |
-| South Korea | 16 / 8 | 21 (+1 late-2025) | 5 / 19 | 36 / 9 | 45 |
-
-All five country fingerprints differ. Real provider samples, both media types, current eligibility, origin filters, year/newest filters, default home/See All equality, chronological latest pages, no duplicate/omitted pagination items, and no additional API queries during pagination pass. Sanitized evidence is in `country-discovery-live-audit.json`.
-
-- Regression tests: **41 pass**, including full 250-capacity fixtures, every requested country mix, sparse supply, correct movie origin on truncated/failed sources, and unchanged global order.
-- `npm run lint`: **passes**, 0 errors; one pre-existing `next/no-img-element` warning in `components/wishlist-page.tsx`.
-- `npm run build`: **passes** with all existing routes.
-- Browser verification: country switching changed visible See All counts for all five countries; India home displayed 16/8 and 24 cards; refreshed default home/See All membership matched; India page two contained the remaining 21 cards; Movies/TV and Newest controls worked; USA showed 250 results across 11 pages. Desktop layout inspected and no browser warning/error logs were recorded. Google sign-in and wishlist mutations were not exercised. The temporary preview was stopped.
+TMDB reference: https://developer.themoviedb.org/reference/discover-movie and https://developer.themoviedb.org/docs/region-support.

@@ -1,117 +1,80 @@
-// Real API audit. Credentials stay in the server process and are stripped from reports.
+// Opt-in real TMDB audit. No fixture responses, secrets or provider URLs are invented.
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import loadTypescript from './load-typescript.mjs';
-const cached=new Map(),queries=[];
-const realFetch=globalThis.fetch;
+const realFetch=globalThis.fetch, cache=new Map(), queries=[];
 async function auditedFetch(url,options){
   const address=String(url);
-  if(!cached.has(address))cached.set(address,(async()=>{
-    try{
-      const response=await realFetch(url,options),body=await response.json(),parsed=new URL(address);
-      queries.push({path:parsed.pathname,params:Object.fromEntries([...parsed.searchParams].filter(([key])=>key!=='api_key')),status:response.status,count:body.results?.length});
-      if(!response.ok)cached.delete(address);
-      return{body,status:response.status};
-    }catch(error){cached.delete(address);throw error;}
+  if(!cache.has(address))cache.set(address,(async()=>{
+    try{const r=await realFetch(url,options),body=await r.json(),parsed=new URL(address);
+      queries.push({path:parsed.pathname,params:Object.fromEntries([...parsed.searchParams].filter(([key])=>key!=='api_key')),status:r.status});
+      if(!r.ok)cache.delete(address);return {body,status:r.status};
+    }catch(error){cache.delete(address);throw error;}
   })());
-  const result=await cached.get(address);
-  return Response.json(result.body,{status:result.status});
+  const result=await cache.get(address);return Response.json(result.body,{status:result.status});
 }
-const load=loadTypescript({fetch:auditedFetch}),tmdb=load('lib/tmdb.ts');
-const {countryTrendingDates}=load('lib/country-trending.ts');
-const now=new Date(),dates=countryTrendingDates(now),key=media=>`${media.mediaType}:${media.id}`;
-const report={auditedAt:now.toISOString(),window:dates,countries:[],queries};
-function check(result,region){
-  assert.ok(result.data,`${region} failed: ${result.error}`);
-  assert.ok(!result.partial,`${region} returned partial data`);
-  assert.ok(result.data.items.every(item=>item.releaseDate<=dates.today),'Future release');
-  return result.data;
-}
-function summary(items,localIds){
-  return{count:items.length,local:items.filter(item=>localIds.has(key(item))).length,currentYear:items.filter(item=>item.releaseDate.startsWith(String(dates.year))).length,latePreviousYear:items.filter(item=>item.releaseDate>=dates.recentStart&&item.releaseDate<`${dates.year}-01-01`).length,older:items.filter(item=>item.releaseDate<dates.recentStart).length,movies:items.filter(item=>item.mediaType==='movie').length,tv:items.filter(item=>item.mediaType==='tv').length};
-}
-(async()=>{
-  assert.ok(process.env.TMDB_API_KEY,'A server TMDB credential is required');
-  const movie=tmdb.getCollection('movie','trending'),tv=tmdb.getCollection('tv','trending');
-  const [movieTrend,tvTrend]=await Promise.all([movie,tv]);
-  assert.ok(movieTrend.data?.length&&tvTrend.data?.length,'Global trending unavailable');
-  const trendIds=new Set([...movieTrend.data,...tvTrend.data].map(key)),fingerprints=new Set();
+const load=loadTypescript({fetch:auditedFetch}),tmdb=load('lib/tmdb.ts'),releases=load('lib/tmdb-releases.ts');
+const {INDIA_TRENDING}=load('data/india-trending.ts'),{releaseDates,compareReleases}=load('lib/releases.ts');
+const now=new Date(),dates=releaseDates(now),key=x=>`${x.mediaType}:${x.id}`;
+const report={auditedAt:now.toISOString(),network:process.env.DISCOVERY_AUDIT_DNS||'system DNS',dates,countries:[],queries};
+const output=process.env.DISCOVERY_AUDIT_OUTPUT||'docs/country-discovery-live-audit.json';
+const save=()=>fs.writeFileSync(output,JSON.stringify(report,null,2)+'\n');
+function check(result,label){assert.ok(result.data,`${label}: ${result.error}`);assert.ok(!result.partial,`${label}: partial`);return result.data;}
+async function allPages(fetchPage){const first=check(await fetchPage(1),'page 1'),items=[...first.items];for(let page=2;page<=first.totalPages;page++)items.push(...check(await fetchPage(page),`page ${page}`).items);assert.equal(items.length,first.total);assert.equal(new Set(items.map(key)).size,items.length);return {first,items};}
+try{
+  assert.ok(process.env.TMDB_API_KEY,'TMDB credential required');
+  const movie=tmdb.getCollection('movie','trending'),tv=tmdb.getCollection('tv','trending'),trends={movie,tv};
+  const globalMovies=await movie,globalTV=await tv;
+  assert.ok(globalMovies.data?.length&&globalTV.data?.length,'Global feed missing');
+  report.global={movies:globalMovies.data.map(key),tv:globalTV.data.map(key)};
+  const fingerprints=new Set(),releaseFingerprints=new Set();
   for(const region of ['IN','US','GB','JP','KR']){
-    const home=check(await tmdb.getCountryDiscovery(region,{surface:'home'},{movie,tv},now),region);
-    const first=check(await tmdb.getCountryDiscovery(region,{surface:'browse'},{movie,tv},now),region);
-    assert.deepEqual(home.items.map(key),first.items.map(key),'Home and See All diverged');
-    const items=[...first.items],localIds=new Set(first.localIds),requestsBeforePages=queries.length;
-    for(let page=2;page<=first.totalPages;page++){
-      const next=check(await tmdb.getCountryDiscovery(region,{surface:'browse',page},{movie,tv},now),region);
-      items.push(...next.items);next.localIds.forEach(id=>localIds.add(id));
-    }
-    assert.equal(queries.length,requestsBeforePages,'Pagination fetched new catalog pages');
-    assert.equal(new Set(items.map(key)).size,items.length,'Duplicate across pages');
-    assert.equal(items.length,first.total,'Incorrect total');
-    const homeSummary=summary(home.items,new Set(home.localIds)),allSummary=summary(items,localIds);
-    assert.equal(homeSummary.local,Math.min(16,first.localTotal),'Home local allocation');
-    assert.equal(homeSummary.count-homeSummary.local,Math.min(8,first.internationalTotal),'Home international allocation');
-    assert.equal(allSummary.local,first.localTotal,'Local total mismatch');
-    assert.ok(first.localTotal<=200&&first.internationalTotal<=50&&first.total<=250,'Country caps exceeded');
-    assert.ok(first.internationalTotal<=Math.max(8,Math.floor(first.localTotal/4)),'Sparse See All became international-heavy');
-    console.log(JSON.stringify({region,home:homeSummary,browse:allSummary,pages:first.totalPages}));
-    const country={region,home:homeSummary,browse:allSummary,pages:first.totalPages,providerSamples:[],items:[]};
-    report.countries.push(country);
-    const airingIds=new Set();
-    for(const [url,promise]of cached){
-      const parsed=new URL(url);
-      if(parsed.pathname==='/3/discover/tv'&&parsed.searchParams.get('watch_region')===region&&parsed.searchParams.get('air_date.gte')===dates.activityStart){
-        const response=await promise;response.body.results?.forEach(item=>airingIds.add(`tv:${item.id}`));
-      }
-    }
-    country.items=items.map(item=>({id:item.id,type:item.mediaType,title:item.title,date:item.releaseDate,signal:item.discoverySignal,local:localIds.has(key(item)),weeklyTrend:trendIds.has(key(item)),recentlyAired:airingIds.has(key(item)),popularity:item.popularity,votes:item.voteCount,rating:item.rating}));
-    country.home.trendEvidence=home.items.filter(item=>['daily-trend','weekly-trend'].includes(item.discoverySignal)).length;
-    assert.ok(homeSummary.currentYear>homeSummary.count/2,'Homepage current-year majority missing');
-    assert.ok(allSummary.local>0,`${region} has no qualifying local content`);
-    assert.ok(homeSummary.movies&&homeSummary.tv&&allSummary.movies&&allSummary.tv,'Both types required');
-    const resurfacing=item=>item.releaseDate<dates.recentStart&&!airingIds.has(key(item));
-    assert.ok(items.filter(resurfacing).length<=Math.floor(allSummary.count/10),'Old catalog dominance');
-    for(const local of [true,false]) {
-      const bucket=items.filter(item=>localIds.has(key(item))===local),firstOld=bucket.findIndex(resurfacing);
-      if(firstOld>=0)assert.ok(bucket.slice(firstOld).every(resurfacing),'Older title preceded recent within origin bucket');
-    }
-    for(const item of items){
-      const age=(Date.parse(dates.today)-Date.parse(item.releaseDate))/86400000;
-      assert.ok(item.discoverySignal,'Missing current-evidence label');
-      if(age>180)assert.ok(trendIds.has(key(item))||item.discoverySignal==='daily-trend'||airingIds.has(key(item)),`No current evidence: ${key(item)}`);
-      if(item.discoverySignal==='recent-release')assert.ok(age<=180&&item.voteCount>=5&&item.rating>=6&&item.popularity>=3,'Unsupported recent release');
-    }
-    fingerprints.add(home.items.map(key).join(','));
-    const latest=check(await tmdb.getCountryDiscovery(region,{surface:'browse',view:'releases'},{movie,tv},now),region);
-    assert.ok(home.latest.length<=24,'Latest preview overflow');
-    const latestItems=[...latest.items];
-    for(let page=2;page<=latest.totalPages;page++)latestItems.push(...check(await tmdb.getCountryDiscovery(region,{surface:'browse',view:'releases',page},{movie,tv},now),region).items);
-    assert.ok(home.latest.every(item=>latestItems.some(other=>key(item)===key(other))),'Latest preview outside eligible selection');
-    assert.deepEqual(latestItems.map(item=>item.releaseDate),latestItems.map(item=>item.releaseDate).sort().reverse(),'Latest cross-page chronology');
-    assert.ok(latest.items.length&&latest.items.every(item=>item.releaseDate>=dates.freshStart&&item.discoverySignal==='recent-release'),'Latest includes stale titles');
-    assert.deepEqual(latest.items.map(item=>item.releaseDate),latest.items.map(item=>item.releaseDate).sort().reverse(),'Latest is not chronological');
-    country.latest={count:latest.total,home:home.latest.length};
-    const localOnly=check(await tmdb.getCountryDiscovery(region,{surface:'browse',origin:'local'},{movie,tv},now),region);
-    assert.ok(localOnly.items.length&&localOnly.items.every(item=>localOnly.localIds.includes(key(item))),'Origin filter leaked international titles');
-    country.localOnly=localOnly.total;
-    const samples=[home.items.find(item=>item.mediaType==='movie'),home.items.find(item=>item.mediaType==='tv'),home.items.find(item=>!home.localIds.includes(key(item)))].filter(Boolean);
-    for(const item of samples){
-      const providers=await tmdb.getWatchProviders(item.mediaType,item.id,region);assert.ok(providers.data,'Provider lookup failed');
-      const names=['flatrate','free','ads','rent','buy'].flatMap(kind=>providers.data[kind].map(provider=>provider.name));
-      assert.ok(names.length,`No reported provider for ${key(item)} in ${region}`);
-      country.providerSamples.push({id:item.id,type:item.mediaType,providers:[...new Set(names)]});
-    }
+    const started=queries.length;
+    const home=check(await tmdb.getCountryDiscovery(region,{surface:'home'},trends,now),region);
+    const {first,items}=await allPages(page=>tmdb.getCountryDiscovery(region,{surface:'browse',page},trends,now));
+    assert.deepEqual(Array.from(home.items,key),Array.from(first.items,key),'Home/See All mismatch');
+    assert.ok(items.every(x=>x.releaseDate<=dates.today),'Future title in trending');
+    assert.ok(items.every(x=>x.discoverySignal!=='recent-release'),'Release-only title in trending');
+    if(region==='IN')assert.deepEqual(Array.from(items.slice(0,10),key),Array.from(INDIA_TRENDING.titles,x=>`${x.type}:${x.id}`),'Top 10 order');
+    else assert.ok(items.every(x=>x.discoverySignal!=='india-curated'),'India curation leaked');
     for(const type of ['movie','tv']){
-      const filtered=check(await tmdb.getCountryDiscovery(region,{surface:'browse',filter:type,sort:'newest',period:'year'},{movie,tv},now),region);
-      assert.ok(filtered.items.length&&filtered.items.every(item=>item.mediaType===type&&item.releaseDate.startsWith(String(dates.year))),'Media/year filter failed');
-      assert.deepEqual(filtered.items.map(item=>item.releaseDate),filtered.items.map(item=>item.releaseDate).sort().reverse(),'Newest sort failed');
+      const filtered=check(await tmdb.getCountryDiscovery(region,{surface:'browse',filter:type,sort:'newest'},trends,now),region+type);
+      assert.ok(filtered.items.every(x=>x.mediaType===type));
+      assert.deepEqual(Array.from(filtered.items,x=>x.releaseDate),Array.from(filtered.items,x=>x.releaseDate).sort().reverse());
     }
+    const local=check(await tmdb.getCountryDiscovery(region,{surface:'browse',origin:'local'},trends,now),'local');
+    assert.ok(local.items.every(x=>local.localIds.includes(key(x))));
+    const before=queries.length;
+    await tmdb.getCountryDiscovery(region,{surface:'browse'},trends,now);
+    assert.equal(queries.length,before,'Warm trending reused no cache');
+    const {first:releaseFirst,items:latest}=await allPages(page=>releases.getCountryReleases(region,{page},now));
+    assert.ok(latest.length,region+' release selection empty');
+    assert.ok(latest.every(x=>x.releaseEvent.date>=dates.recentStart&&x.releaseEvent.date<=dates.upcomingEnd));
+    assert.deepEqual(latest.map(key),[...latest].sort(compareReleases).map(key));
+    for(const type of ['movie','tv'])for(const status of ['released','upcoming']){
+      const filtered=check(await releases.getCountryReleases(region,{filter:type,status},now),region+type+status);
+      assert.ok(filtered.items.every(x=>x.mediaType===type&&x.releaseEvent.status===status));
+      assert.ok(filtered.items.every(x=>status==='upcoming'?x.releaseEvent.date>dates.today:x.releaseEvent.date<=dates.today));
+    }
+    const releaseLocal=check(await releases.getCountryReleases(region,{origin:'local'},now),'local releases');
+    assert.ok(releaseLocal.items.every(x=>x.originCountries?.includes(region)));
+    const warm=queries.length;await releases.getCountryReleases(region,{},now);assert.equal(queries.length,warm);
+    fingerprints.add(home.items.map(key).join(','));releaseFingerprints.add(latest.map(key).join(','));
+    const entry={region,trendingTotal:items.length,home:home.items.map(x=>({key:key(x),title:x.title,signal:x.discoverySignal})),releaseTotal:releaseFirst.total,releases:latest.map(x=>({key:key(x),title:x.title,...x.releaseEvent})),providerSamples:[],uniqueRequests:queries.length-started};
+    // Compare all provider groups to TMDB's actual payload for the same title in each region.
+    for(const type of ['movie','tv']){
+      const id=type==='movie'?664413:108978;
+      const result=await tmdb.getWatchProviders(type,id,region);assert.ok(result.data);
+      const url=new URL(`https://api.themoviedb.org/3/${type}/${id}/watch/providers`);url.searchParams.set('api_key',process.env.TMDB_API_KEY.trim());url.searchParams.set('include_adult','false');
+      const payload=await(await auditedFetch(url)).json(),source=payload.results?.[region]??{};
+      for(const group of ['flatrate','rent','buy','free','ads'])assert.deepEqual(Array.from(result.data[group],x=>x.id),(source[group]??[]).map(x=>x.provider_id));
+      assert.equal(result.data.link,source.link);
+      entry.providerSamples.push({type,id,groups:Object.fromEntries(['flatrate','rent','buy','free','ads'].map(group=>[group,result.data[group].map(x=>x.name)]))});
+    }
+    report.countries.push(entry);save();
+    console.log(JSON.stringify({region,trending:items.length,releases:latest.length,upcoming:latest.filter(x=>x.releaseEvent.status==='upcoming').length,uniqueRequests:entry.uniqueRequests}));
   }
-  assert.equal(fingerprints.size,5,'Country change did not change results');
-  assert.ok(report.countries.some(country=>country.home.local<country.home.count),'No international title survived');
-  fs.writeFileSync(process.env.DISCOVERY_AUDIT_OUTPUT||'docs/country-discovery-live-audit.json',JSON.stringify(report,null,2)+'\n');
-  console.log(`Live current-trending audit passed; ${queries.length} unique requests across all five countries, filters and provider samples.`);
-})().catch(error=>{
-  fs.writeFileSync(process.env.DISCOVERY_AUDIT_OUTPUT||'docs/country-discovery-live-audit.json',JSON.stringify({...report,failure:error.message},null,2)+'\n');
-  console.error(`Live current-trending audit failed: ${error.message}`);process.exitCode=1;
-});
+  assert.equal(fingerprints.size,5);assert.equal(releaseFingerprints.size,5);
+  assert.ok(report.countries[0].home.some(x=>x.signal==='daily-trend'||x.signal==='weekly-trend'));
+  report.result='passed';save();console.log('Live discovery, filters, pagination, caching and provider checks passed.');
+}catch(error){report.result='failed';report.failure=error.message;save();console.error(error.message);process.exitCode=1;}

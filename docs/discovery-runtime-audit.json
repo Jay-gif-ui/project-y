@@ -1,0 +1,160 @@
+{
+  "mode": "production",
+  "at": "2026-09-25T17:10:57.399Z",
+  "checks": [
+    {
+      "country": "IN",
+      "status": 200,
+      "order": true,
+      "countryContent": true,
+      "ms": 352
+    },
+    {
+      "country": "US",
+      "status": 200,
+      "order": true,
+      "countryContent": true,
+      "ms": 112
+    },
+    {
+      "country": "GB",
+      "status": 200,
+      "order": true,
+      "countryContent": true,
+      "ms": 74
+    },
+    {
+      "country": "JP",
+      "status": 200,
+      "order": true,
+      "countryContent": true,
+      "ms": 87
+    },
+    {
+      "country": "KR",
+      "status": 200,
+      "order": true,
+      "countryContent": true,
+      "ms": 69
+    },
+    {
+      "route": "/country/releases?status=upcoming&type=movie",
+      "status": 200
+    },
+    {
+      "route": "/country/releases?status=released&type=tv",
+      "status": 200
+    },
+    {
+      "route": "/country/trending?page=2",
+      "status": 200
+    },
+    {
+      "route": "/tv/108978",
+      "status": 200
+    },
+    {
+      "country": "IN",
+      "providerGroups": {
+        "flatrate": [
+          "Amazon Prime Video",
+          "Amazon Prime Video with Ads"
+        ],
+        "rent": [],
+        "buy": [],
+        "free": [],
+        "ads": []
+      }
+    },
+    {
+      "country": "US",
+      "providerGroups": {
+        "flatrate": [
+          "Amazon Prime Video",
+          "Amazon Prime Video with Ads"
+        ],
+        "rent": [],
+        "buy": [
+          "Amazon Video",
+          "Apple TV Store",
+          "Google Play Movies",
+          "Fandango At Home"
+        ],
+        "free": [],
+        "ads": [
+          "Amazon Prime Video Free with Ads",
+          "Amazon MX Player"
+        ]
+      }
+    },
+    {
+      "country": "GB",
+      "providerGroups": {
+        "flatrate": [
+          "Amazon Prime Video",
+          "Amazon Prime Video with Ads"
+        ],
+        "rent": [],
+        "buy": [
+          "Apple TV Store",
+          "Amazon Video",
+          "Sky Store"
+        ],
+        "free": [],
+        "ads": []
+      }
+    },
+    {
+      "country": "JP",
+      "providerGroups": {
+        "flatrate": [
+          "Amazon Prime Video",
+          "Amazon Prime Video with Ads"
+        ],
+        "rent": [],
+        "buy": [],
+        "free": [],
+        "ads": []
+      }
+    },
+    {
+      "country": "KR",
+      "providerGroups": {
+        "flatrate": [
+          "Amazon Prime Video"
+        ],
+        "rent": [],
+        "buy": [],
+        "free": [],
+        "ads": []
+      }
+    }
+  ],
+  "result": "passed",
+  "browser": {
+    "development": {
+      "homepageOrder": true,
+      "countrySwitches": [
+        "IN",
+        "US",
+        "GB",
+        "JP",
+        "KR"
+      ],
+      "indiaTop10Order": true,
+      "trendingPagination": true,
+      "movieTVFilters": true,
+      "releasedUpcomingFilters": true,
+      "newestSort": true,
+      "upcomingDateLabels": true,
+      "providerCountryRefresh": true,
+      "consoleErrors": 0
+    },
+    "production": {
+      "homepageOrder": true,
+      "providerCountryRefresh": true,
+      "consoleErrors": 0
+    },
+    "providerFix": "Clear loading/error when the refreshed server region matches the selected country, including when it supersedes an in-flight client request."
+  }
+}

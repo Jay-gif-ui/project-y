@@ -7,6 +7,7 @@ import { CountryDiscovery } from "@/components/country-discovery";
 import { GenreExplorer } from "@/components/genre-explorer";
 import { getCollection, getGenres, getCountryDiscovery } from "@/lib/tmdb";
 import { COUNTRY_PREFERENCE_COOKIE, getCountry } from "@/lib/countries";
+import { getCountryReleases } from "@/lib/tmdb-releases";
 import { discoveryDates } from "@/lib/discovery";
 
 export default async function Home() {
@@ -15,18 +16,19 @@ export default async function Home() {
   const now = new Date();
   const moviePromise = getCollection("movie", "trending");
   const tvPromise = getCollection("tv", "trending");
-  const [movies, tv, available, movieGenres, tvGenres] = await Promise.all([
+  const [movies, tv, available, releases, movieGenres, tvGenres] = await Promise.all([
     moviePromise, tvPromise,
     getCountryDiscovery(country.tmdbRegion, { surface: "home" }, { movie: moviePromise, tv: tvPromise }, now),
+    getCountryReleases(country.tmdbRegion, {}, now),
     getGenres("movie"), getGenres("tv"),
   ]);
   return <><Navbar /><main>
     <Hero />
-    <CountryDiscovery initialRegion={country.code} movies={available.data?.items ?? []} latest={available.data?.latest ?? []} localCount={available.data?.localIds.length ?? 0} error={Boolean(available.error)} partial={available.partial ?? false} />
+    <CountryDiscovery initialRegion={country.code} movies={available.data?.items ?? []} latest={releases.data?.items ?? []} releaseError={Boolean(releases.error)} releasePartial={releases.partial ?? false} localCount={available.data?.localIds.length ?? 0} error={Boolean(available.error)} partial={available.partial ?? false} />
     <section id="discover" className="movie-section shell" aria-labelledby="global-title">
       <div className="section-heading"><div>
         <p className="eyebrow">03 · Worldwide this week</p>
-        <h2 id="global-title">Global trending</h2>
+        <h2 id="global-title">Global Trending 🌎</h2>
         <p className="section-description">Movies and TV shows trending worldwide this week, in TMDB’s original order.</p>
       </div></div>
       <div id="movies" className="discovery-row">

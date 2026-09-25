@@ -76,7 +76,7 @@ function availableCandidates(candidates: CountryCandidate[], region: string) {
 // Positive floor means even the end of an actual trending feed carries evidence.
 const trendRanks = (items: Media[]) => new Map(items.map((media, index) => [mediaKey(media), 0.25 + 0.75 * (items.length - index) / items.length]));
 
-export function rankCountryDiscovery(candidates: CountryCandidate[], trending: Media[], region: string, now = new Date(), options: { daily?: Media[]; activity?: ReadonlyMap<string, CountryActivitySignal>; includeRecentReleases?: boolean } = {}): CountryPick[] {
+export function rankCountryDiscovery(candidates: CountryCandidate[], trending: Media[], region: string, now = new Date(), options: { daily?: Media[]; activity?: ReadonlyMap<string, CountryActivitySignal> } = {}): CountryPick[] {
   const { today, recentStart } = countryTrendingDates(now);
   const weeks = trendRanks(trending), days = trendRanks(options.daily ?? []);
   const picks: CountryPick[] = [];
@@ -98,10 +98,7 @@ export function rankCountryDiscovery(candidates: CountryCandidate[], trending: M
     // Symmetric eligibility: nationality never relaxes the interest threshold.
     const recentInterest = age <= 90 && established && (media.popularity ?? 0) >= 20;
     const emergingInterest = age <= 45 && votes >= 5 && rating >= 0.6 && (media.popularity ?? 0) >= 20;
-    // The requested broader "trending + latest" surface also admits supported
-    // recent releases. They are labeled as releases, never fabricated trends.
-    const recentRelease = options.includeRecentReleases && age <= 180 && votes >= 5 && rating >= 0.6 && (media.popularity ?? 0) >= 3;
-    if (!daily && !weekly && !airing && !recentInterest && !emergingInterest && !recentRelease && !(activity >= 0.5 && established)) continue;
+    if (!daily && !weekly && !airing && !recentInterest && !emergingInterest && !(activity >= 0.5 && established)) continue;
     const older = media.releaseDate! < recentStart;
     if (older && !established) continue;
     const freshness = Math.max(Math.pow(0.5, age / 90), airing ? 0.8 : 0);
@@ -109,22 +106,10 @@ export function rankCountryDiscovery(candidates: CountryCandidate[], trending: M
     const score = 50 * Math.max(daily, 0.85 * weekly) + (daily && weekly ? 10 : 0)
       + 18 * freshness + 6 * event + 12 * popularity + 4 * rating * votes / (votes + 50)
       + (local ? 8 : 0) + 20 * activity;
-    const reason = daily ? "daily-trend" : weekly ? "weekly-trend" : activity >= 0.5 && established ? "ifynex-activity" : airing ? "recent-airing" : recentInterest || emergingInterest ? "recent-interest" : "recent-release";
+    const reason = daily ? "daily-trend" : weekly ? "weekly-trend" : activity >= 0.5 && established ? "ifynex-activity" : airing ? "recent-airing" : "recent-interest";
     picks.push({ media: { ...media, discoverySignal: reason }, local: Boolean(local), score, older, signals: { daily, weekly, airing, popularity, activity, reason } });
   }
   return sortCountryPicks(picks);
-}
-
-// Latest is a separate surface: a date is not evidence that a title is trending.
-// This is release/premiere freshness, NOT a provider's catalog-addition timestamp.
-export function selectLatestReleases(candidates: CountryCandidate[], region: string, now = new Date()): CountryPick[] {
-  const { today } = countryTrendingDates(now);
-  return availableCandidates(candidates, region).flatMap(({ media, local }) => {
-    const age = releaseAge(media, today);
-    if (local === undefined || age === null || age > 60 || !Number.isFinite(media.voteCount) || !Number.isFinite(media.rating) || media.voteCount < 5 || media.rating < 6 || (media.popularity ?? 0) < 10) return [];
-    return [{ media: { ...media, discoverySignal: "recent-release" as const }, local: Boolean(local), score: 12 * countryPopularity(media) + (local ? 5 : 0), older: false,
-      signals: { daily: 0, weekly: 0, airing: false, popularity: countryPopularity(media), activity: 0, reason: "recent-release" as const } }];
-  }).sort((a, b) => b.media.releaseDate!.localeCompare(a.media.releaseDate!) || b.score - a.score || a.media.mediaType.localeCompare(b.media.mediaType) || a.media.id - b.media.id);
 }
 
 export function sortCountryPicks(picks: CountryPick[], sort: CountrySort = "current"): CountryPick[] {
@@ -164,17 +149,17 @@ export function selectCountryPicks(picks: CountryPick[], limit = 120, sort: Coun
 
 // Quotas are applied AFTER eligibility, separately to each origin bucket. Missing
 // local slots cannot be silently replaced by more international catalog titles.
-export function selectCountryMix(picks: CountryPick[], options: { sort?: CountrySort; view?: CountryView; origin?: "all" | "local" } = {}): { home: CountryPick[]; all: CountryPick[]; localTotal: number; internationalTotal: number } {
+export function selectCountryMix(picks: CountryPick[], options: { sort?: CountrySort; origin?: "all" | "local" } = {}): { home: CountryPick[]; all: CountryPick[]; localTotal: number; internationalTotal: number } {
   const unique = new Map<string, CountryPick>();
   for (const pick of picks) {
     const key = mediaKey(pick.media), previous = unique.get(key);
     if (!previous || pick.local || !previous.local) unique.set(key, pick);
   }
-  const latest = options.view === "releases", newest = latest || options.sort === "newest";
+  const newest = options.sort === "newest";
   const order = (items: CountryPick[]) => newest ? [...items].sort((a, b) => b.media.releaseDate!.localeCompare(a.media.releaseDate!) || b.score - a.score || a.media.mediaType.localeCompare(b.media.mediaType) || a.media.id - b.media.id) : items;
   const bucket = (local: boolean, cap: number) => {
     const eligible = [...unique.values()].filter(pick => pick.local === local);
-    return order(latest ? order(eligible).slice(0, cap) : selectCountryPicks(eligible, cap));
+    return order(selectCountryPicks(eligible, cap));
   };
   const local = bucket(true, COUNTRY_BROWSE_LOCAL);
   // Preserve a local-led full list when fewer than 200 local titles qualify.

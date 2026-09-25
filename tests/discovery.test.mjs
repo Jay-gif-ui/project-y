@@ -110,10 +110,10 @@ test('global trending preserves upstream order, includes genuine older trends, a
 
 test('partial failures are explicit; empty availability is not replaced by unverified global titles',async()=>{
   const {tmdb}=api(async url=>url.pathname.endsWith('/tv')?Response.json({}, {status:401}):Response.json({results:[]}));
-  const result=await tmdb.getPopularAvailableInRegion('IN',{movie:Promise.resolve({data:[media(99)]}),tv:Promise.resolve({data:[]})},now);
+  const result=await tmdb.getPopularAvailableInRegion('US',{movie:Promise.resolve({data:[media(99)]}),tv:Promise.resolve({data:[]})},now);
   assert.equal(result.error,'unauthorized');
   const empty=api(async()=>Response.json({results:[]}));
-  const none=await empty.tmdb.getPopularAvailableInRegion('IN',{movie:Promise.resolve({data:[media(99)]}),tv:Promise.resolve({data:[]})},now);
+  const none=await empty.tmdb.getPopularAvailableInRegion('US',{movie:Promise.resolve({data:[media(99)]}),tv:Promise.resolve({data:[]})},now);
   assert.equal(none.data.length,0);
   assert.equal(none.error,undefined);
 });
