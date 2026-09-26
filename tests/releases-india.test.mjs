@@ -13,6 +13,31 @@ const ids=items=>Array.from(items,item=>`${item.mediaType}:${item.id}`);
 const offer={flatrate:[{provider_id:8,provider_name:'Fixture provider'}]};
 const raw=(id,type='movie',region='IN')=>({id,...(type==='movie'?{title:`Fixture ${id}`}:{name:`Fixture ${id}`}),release_date:'2026-09-25',first_air_date:'2026-09-25',origin_country:[region],vote_count:0,vote_average:0,popularity:0,'watch/providers':{results:{[region]:offer}}});
 
+test('provider listings never stand in for a verified regional movie date',()=>{
+  const item=media(1,'2026-09-24');
+  for(const data of [{},{'watch/providers':{results:{IN:offer}}},{release_dates:{results:[{iso_3166_1:'US',release_dates:[{type:3,release_date:'2026-09-24'}]}]}}]) {
+    assert.equal(selectReleaseItems([releaseCandidate(item,data,'IN')],now).length,0);
+  }
+});
+
+test('verified theatre and digital releases survive missing OTT offers without inventing availability',()=>{
+  for(const type of [3,4]) {
+    const data={release_dates:{results:[{iso_3166_1:'IN',release_dates:[{type,release_date:'2026-09-24T00:00:00Z'}]}]},'watch/providers':{results:{}}};
+    const [item]=selectReleaseItems([releaseCandidate(media(1),data,'IN')],now);
+    assert.equal(item.releaseEvent.status,'released');
+    assert.equal(item.releaseAvailability,'not-found');
+    delete data['watch/providers'];
+    assert.equal(selectReleaseItems([releaseCandidate(media(1),data,'IN')],now)[0].releaseAvailability,'unknown');
+  }
+});
+
+test('regional schedules win even outside the window and contradictory TV episodes are rejected',()=>{
+  const input={media:media(1),events:[{date:'2026-10-20',kind:'theatrical',regional:true},{date:'2026-09-24',kind:'premiere',regional:false}]};
+  assert.equal(selectReleaseItems([input],now).length,0);
+  const tv=media(2,'2026-10-20',{mediaType:'tv'});
+  assert.equal(selectReleaseItems([releaseCandidate(tv,{last_episode_to_air:{air_date:'2026-09-24'}},'IN')],now).length,0);
+});
+
 test('rolling release boundaries, UTC rollover, invalid dates, newest then upcoming soon',()=>{
   assert.equal(releaseDates(now).recentStart,'2026-09-11');
   assert.equal(releaseDates(now).upcomingEnd,'2026-10-02');

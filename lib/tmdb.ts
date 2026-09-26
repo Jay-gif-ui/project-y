@@ -45,6 +45,32 @@ export async function getCollection(type: MediaType, collection: "popular" | "to
   return requestMedia(path, type, { language: "en-US", ...(type === "movie" && collection === "popular" && isEnabledCountryCode(normalizedRegion) ? { region: normalizedRegion } : {}) });
 }
 
+export type GlobalTrendingData = { items: Media[]; page: number; totalPages: number };
+export async function getGlobalTrending(filter: "all" | MediaType = "all", requestedPage = 1): Promise<TmdbResult<GlobalTrendingData>> {
+  const type = filter === "movie" || filter === "tv" ? filter : "all";
+  // TMDB exposes at most 500 pages. Filtering must not replace its weekly order
+  // with popularity or a concatenation of the separate movie and TV charts.
+  const page = Math.min(500, Math.max(1, Number.isSafeInteger(requestedPage) ? requestedPage : 1));
+  const result = await request<RawCollection>(`/trending/${type}/week`, { language: "en-US", page: String(page) });
+  if (!result.data) return { error: result.error };
+  if (!Array.isArray(result.data.results)) return { error: "upstream" };
+  const totalPages = Math.min(500, Math.max(1, Number.isSafeInteger(result.data.total_pages) ? result.data.total_pages! : 1));
+  if (page > totalPages) return getGlobalTrending(type, totalPages);
+  const seen = new Set<string>();
+  const items = result.data.results.flatMap(raw => {
+    if (!raw || raw.adult === true || !Number.isSafeInteger(raw.id) || Number(raw.id) < 1) return [];
+    const mediaType = type === "all" ? raw.media_type : type;
+    if (mediaType !== "movie" && mediaType !== "tv") return [];
+    const name = mediaType === "movie" ? raw.title : raw.name;
+    if (typeof name !== "string" || !name.trim()) return [];
+    const media = toMedia(raw, mediaType), identity = mediaKey(media);
+    if (seen.has(identity)) return [];
+    seen.add(identity);
+    return [media];
+  });
+  return { data: { items, page, totalPages } };
+}
+
 export async function getGenres(type: MediaType): Promise<TmdbResult<Genre[]>> {
   const result = await request<{ genres?: Genre[] }>(`/genre/${type}/list`, { language: "en-US" }, 86400);
   if (!result.data) return { error: result.error };

@@ -76,15 +76,15 @@ function CountryAvailability({ mediaType, titleId, initialProviders, initialRegi
                 {provider.logoPath ? <Image src={imageUrl(provider.logoPath, "w92")!} alt="" width={44} height={44} /> : <span className="provider-initial" aria-hidden="true">{provider.name.slice(0, 1)}</span>}
                 <div><h4>{provider.name}</h4><p>{group.key === "flatrate" ? "Subscription" : group.label}</p></div>
               </div>
-              {action ? <span className="watch-action">{action.label} <span aria-hidden="true">↗</span></span> : <span className="watch-link-unavailable">Direct link unavailable</span>}
+              {action ? <span className="watch-action">{action.label} <span aria-hidden="true">↗</span></span> : <span className="watch-link-unavailable">Provider link unavailable</span>}
             </>;
             return <li className="watch-offer" key={provider.id}>{action
               ? <a className="watch-offer-content" href={action.href} target="_blank" rel="noopener noreferrer" aria-label={`${action.label} (opens in a new tab)`} onClick={() => trackProviderClick(provider, group.key)} onAuxClick={event => { if (event.button === 1) trackProviderClick(provider, group.key); }}>{content}</a>
               : <div className="watch-offer-content">{content}</div>}</li>;
           })}</ul>
         </section>)}</div>
-        {hasMissingLinks ? <p className="watch-note">These services report availability, but direct provider links have not been supplied.{providers?.link ? " You can check the availability reference below." : ""}</p> : null}
-      </> : <div className="availability-status"><p>No legal streaming options found in {country.name}.</p><p>TMDB currently reports no streaming, rental or purchase offers for this title. Check back later.</p></div>}
+        {hasMissingLinks ? <p className="watch-note">TMDB reports availability on these services, but has not supplied a provider destination for every offer. Offers without a destination cannot be opened.{providers?.link ? " You can check the availability reference below." : ""}</p> : null}
+      </> : <div className="availability-status"><p>Streaming availability not found in {country.name}.</p><p>TMDB currently reports no streaming, rental or purchase offers for this title. A theatrical release may still be available; missing streaming data does not mean the title is unreleased.</p></div>}
     {!loading && !error && providers?.link ? <details className="watch-reference"><summary>Availability reference</summary><a href={providers.link} target="_blank" rel="noopener noreferrer">Check this title’s availability on TMDB ↗</a><p>Reference only — TMDB is not a streaming service.</p></details> : null}
     <p className="watch-attribution">Availability data: JustWatch via TMDB.</p>
   </section>;

@@ -46,13 +46,21 @@ export function providerList(raw: unknown): Provider[] {
     if (!item || typeof item !== "object") continue;
     const id = item.provider_id;
     const name = typeof item.provider_name === "string" ? item.provider_name.trim() : "";
-    if (!Number.isSafeInteger(id) || id < 1 || !name || providers.has(id)) continue;
+    if (!Number.isSafeInteger(id) || id < 1 || !name) continue;
+    // Some offers carry a generic provider destination instead of a title link.
+    // Preserve the exact supplied value, including when a later duplicate has it.
+    const watchUrl = validDestination(item.link) ?? validDestination(item.url);
+    const previous = providers.get(id);
+    if (previous) {
+      if (!previous.watchUrl && watchUrl) previous.watchUrl = watchUrl;
+      continue;
+    }
     providers.set(id, {
       id, name,
       logoPath: typeof item.logo_path === "string" && item.logo_path.startsWith("/") ? item.logo_path : undefined,
       // Only an explicit URL on this provider's offer can become a provider CTA.
       // Current TMDB responses omit it. Never substitute results[country].link.
-      watchUrl: validDestination(item.link),
+      watchUrl,
     });
   }
   return [...providers.values()];

@@ -16,6 +16,22 @@ const payload = { results: {
 } };
 const plain = value => JSON.parse(JSON.stringify(value));
 
+test('Netflix, Prime Video and Apple TV use exact supplied destinations, including generic URLs and duplicates', () => {
+  const fixtures = [
+    { ...provider(8, 'Netflix'), link: 'https://www.netflix.com/browse' },
+    { ...provider(119, 'Amazon Prime Video'), url: 'https://www.primevideo.com/' },
+    { ...provider(2, 'Apple TV'), link: 'https://tv.apple.com/' },
+  ];
+  const data = normalizeWatchProviders({ results: { IN: { flatrate: fixtures.flatMap(item => [provider(item.provider_id, item.provider_name), item]) } } }, 'IN');
+  for (const [index, item] of data.flatrate.entries()) {
+    assert.equal(providerAction(item, 'flatrate').href, fixtures[index].link ?? fixtures[index].url);
+    assert.equal(providerAction(item, 'flatrate').label, `Watch on ${fixtures[index].provider_name}`);
+  }
+  // These are supplied-link fixtures, not proof that live TMDB supplies these URLs.
+  const missing = normalizeWatchProviders({ results: { IN: { flatrate: fixtures.map(item => provider(item.provider_id, item.provider_name)) } } }, 'IN');
+  assert.ok(missing.flatrate.every(item => providerAction(item, 'flatrate') === undefined));
+});
+
 test('country selection keeps actual regional offers and the exact returned watch destination', () => {
   for (const region of ['IN', 'US', 'GB', 'JP', 'KR']) {
     const data = normalizeWatchProviders(payload, region.toLowerCase());

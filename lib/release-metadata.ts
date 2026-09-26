@@ -1,37 +1,42 @@
 import type { Media } from "@/lib/media";
 import { validReleaseDate, type ReleaseCandidate, type ReleaseEvent } from "@/lib/releases";
+import { normalizeWatchProviders, OFFER_TYPES } from "@/lib/watch-providers";
 
 type Raw = Record<string, unknown>;
 const records = (value: unknown): Raw[] => Array.isArray(value) ? value.filter((item): item is Raw => Boolean(item) && typeof item === "object") : [];
 export function hasRegionalOffers(raw: Raw, region: string) {
-  const providers = raw["watch/providers"] as { results?: Record<string, Raw> } | undefined;
-  const offers = providers?.results?.[region];
-  return Boolean(offers && ["flatrate", "rent", "buy", "free", "ads"].some(kind => records(offers[kind]).some(item => Number.isSafeInteger(item.provider_id) && Number(item.provider_id) > 0)));
+  return regionalAvailability(raw, region) === true;
+}
+function regionalAvailability(raw: Raw, region: string): boolean | undefined {
+  const response = raw["watch/providers"];
+  if (!response || typeof response !== "object") return undefined;
+  const offers = normalizeWatchProviders(response as Raw, region);
+  return offers ? OFFER_TYPES.some(({ key }) => offers[key].length > 0) : undefined;
 }
 export function regionalMovieEvents(raw: Raw, region: string): ReleaseEvent[] {
   const releases = raw.release_dates as { results?: unknown } | undefined;
   return records(releases?.results).filter(item => item.iso_3166_1 === region).flatMap(item => records(item.release_dates)).flatMap(item => {
     const date = typeof item.release_date === "string" ? item.release_date.slice(0, 10) : "";
-    return validReleaseDate(date) && [2, 3, 4].includes(Number(item.type)) ? [{ date, kind: item.type === 4 ? "digital" as const : "theatrical" as const, regional: true }] : [];
+    return validReleaseDate(date) && Number.isFinite(Date.parse(String(item.release_date))) && [2, 3, 4].includes(Number(item.type)) ? [{ date, kind: Number(item.type) === 4 ? "digital" as const : "theatrical" as const, regional: true }] : [];
   });
 }
 export function releaseCandidate(media: Media, raw: Raw, region: string): ReleaseCandidate {
-  const available = hasRegionalOffers(raw, region), local = Boolean(media.originCountries?.includes(region));
+  const available = regionalAvailability(raw, region), local = Boolean(media.originCountries?.includes(region));
   if (media.mediaType === "movie") {
     const events = regionalMovieEvents(raw, region);
-    // Do not replace an explicit regional schedule with an earlier world premiere.
-    if (!events.length && available && validReleaseDate(media.releaseDate)) events.push({ date: media.releaseDate, kind: "premiere", regional: false });
-    return { media, events };
+    // A provider listing confirms an offer, never the local release date. Without
+    // a regional theatrical/digital record the date cannot be confidently verified.
+    return { media, events, available };
   }
-  if (!available && !local) return { media, events: [] };
+  if (!available && !local) return { media, events: [], available };
   // TMDB has no country-specific TV episode schedule: these are reported air dates,
   // qualified by country origin or current offers, not invented platform launch dates.
   const events: ReleaseEvent[] = validReleaseDate(media.releaseDate) ? [{ date: media.releaseDate, kind: "premiere", regional: false }] : [];
   for (const name of ["last_episode_to_air", "next_episode_to_air"]) {
     const episode = raw[name] as Raw | null | undefined;
-    if (validReleaseDate(episode?.air_date)) events.push({ date: episode.air_date, kind: "episode", regional: false });
+    if (validReleaseDate(episode?.air_date) && (!validReleaseDate(media.releaseDate) || episode.air_date >= media.releaseDate)) events.push({ date: episode.air_date, kind: "episode", regional: false });
   }
-  return { media, events };
+  return { media, events, available };
 }
 export function relevantReleasedTitle(media: Media, raw: Raw, region: string, today: string, manual = false) {
   if (!validReleaseDate(media.releaseDate) || media.releaseDate > today) return false;

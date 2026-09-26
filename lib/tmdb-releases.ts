@@ -12,7 +12,7 @@ export async function getCountryReleases(region: string, options: { filter?: Cou
   if (!isEnabledCountryCode(region)) return { error: "not-found" };
   const types: MediaType[] = options.filter && options.filter !== "all" ? [options.filter] : ["movie", "tv"];
   const pools = await Promise.all(types.map(async type => {
-    const sources = type === "movie" ? ["recent", "upcoming", "digital", "available"] : ["local-premieres", "available-premieres", "local-episodes", "available-episodes"];
+    const sources = type === "movie" ? ["recent", "upcoming", "digital"] : ["local-premieres", "available-premieres", "local-episodes", "available-episodes"];
     const results = await Promise.all(sources.map(async source => {
       const data: Media[] = [];
       for (let page = 1; page <= DISCOVERY_CONFIG.releasePagesPerSource; page++) {

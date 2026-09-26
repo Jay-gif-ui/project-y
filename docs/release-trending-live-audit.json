@@ -1,0 +1,1782 @@
+{
+  "auditedAt": "2026-09-26T17:21:00.060Z",
+  "dates": {
+    "today": "2026-09-26",
+    "recentStart": "2026-09-12",
+    "upcomingEnd": "2026-10-03",
+    "tomorrow": "2026-09-27"
+  },
+  "network": "Process-only Cloudflare DNS; HTTPS hostname and certificate checks unchanged",
+  "failures": [],
+  "countries": [
+    {
+      "region": "IN",
+      "total": 29,
+      "partial": true,
+      "upcomingTotal": 13,
+      "upcomingPartial": true,
+      "samples": [
+        {
+          "id": 1779177,
+          "type": "movie",
+          "title": "Captain Dynamite",
+          "event": {
+            "date": "2026-09-26",
+            "kind": "digital",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 6060,
+          "type": "tv",
+          "title": "Kyunki... Saas Bhi Kabhi Bahu Thi...",
+          "event": {
+            "date": "2026-09-26",
+            "kind": "episode",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 85518,
+          "type": "tv",
+          "title": "Khatron Ke Khiladi",
+          "event": {
+            "date": "2026-09-26",
+            "kind": "episode",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 116479,
+          "type": "tv",
+          "title": "Anupamaa",
+          "event": {
+            "date": "2026-09-26",
+            "kind": "episode",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 203769,
+          "type": "tv",
+          "title": "Pushpa Impossible",
+          "event": {
+            "date": "2026-09-26",
+            "kind": "episode",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 1492640,
+          "type": "movie",
+          "title": "UNABOMBER",
+          "event": {
+            "date": "2026-09-25",
+            "kind": "digital",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 1747950,
+          "type": "movie",
+          "title": "Tujhya Aai La",
+          "event": {
+            "date": "2026-09-25",
+            "kind": "theatrical",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1773328,
+          "type": "movie",
+          "title": "Cold Call",
+          "event": {
+            "date": "2026-09-25",
+            "kind": "theatrical",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1775019,
+          "type": "movie",
+          "title": "Oviyam",
+          "event": {
+            "date": "2026-09-25",
+            "kind": "digital",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 247718,
+          "type": "tv",
+          "title": "MobLand",
+          "event": {
+            "date": "2026-09-25",
+            "kind": "episode",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 331932,
+          "type": "tv",
+          "title": "Ali Baba Aur 40 Bhoot",
+          "event": {
+            "date": "2026-09-25",
+            "kind": "episode",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 333483,
+          "type": "tv",
+          "title": "Hunkkaar: The Roar",
+          "event": {
+            "date": "2026-09-25",
+            "kind": "premiere",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 1032863,
+          "type": "movie",
+          "title": "The Love Hypothesis",
+          "event": {
+            "date": "2026-09-23",
+            "kind": "digital",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 113962,
+          "type": "tv",
+          "title": "Lioness",
+          "event": {
+            "date": "2026-09-20",
+            "kind": "episode",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 1441228,
+          "type": "movie",
+          "title": "Irumudi",
+          "event": {
+            "date": "2026-09-18",
+            "kind": "digital",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 1451944,
+          "type": "movie",
+          "title": "Lust Stories 3",
+          "event": {
+            "date": "2026-09-18",
+            "kind": "digital",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 275102,
+          "type": "tv",
+          "title": "The Scandal",
+          "event": {
+            "date": "2026-09-18",
+            "kind": "premiere",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 108978,
+          "type": "tv",
+          "title": "Reacher",
+          "event": {
+            "date": "2026-09-16",
+            "kind": "episode",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 456,
+          "type": "tv",
+          "title": "The Simpsons",
+          "event": {
+            "date": "2026-09-27",
+            "kind": "episode",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 334326,
+          "type": "tv",
+          "title": "Shayad Yahi Hai Pyaar",
+          "event": {
+            "date": "2026-09-28",
+            "kind": "premiere",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1515692,
+          "type": "movie",
+          "title": "Baththa",
+          "event": {
+            "date": "2026-10-01",
+            "kind": "theatrical",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1240889,
+          "type": "movie",
+          "title": "Teenage Sex and Death at Camp Miasma",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "digital",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1248832,
+          "type": "movie",
+          "title": "Digger",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "theatrical",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1269325,
+          "type": "movie",
+          "title": "Drishyam: The Conclusion",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "theatrical",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "offers-reported"
+        }
+      ],
+      "upcomingSamples": [
+        {
+          "id": 456,
+          "type": "tv",
+          "title": "The Simpsons",
+          "event": {
+            "date": "2026-09-27",
+            "kind": "episode",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 334326,
+          "type": "tv",
+          "title": "Shayad Yahi Hai Pyaar",
+          "event": {
+            "date": "2026-09-28",
+            "kind": "premiere",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1515692,
+          "type": "movie",
+          "title": "Baththa",
+          "event": {
+            "date": "2026-10-01",
+            "kind": "theatrical",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1240889,
+          "type": "movie",
+          "title": "Teenage Sex and Death at Camp Miasma",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "digital",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1248832,
+          "type": "movie",
+          "title": "Digger",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "theatrical",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1269325,
+          "type": "movie",
+          "title": "Drishyam: The Conclusion",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "theatrical",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 1596303,
+          "type": "movie",
+          "title": "The Last First: Winter K2",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "digital",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1640396,
+          "type": "movie",
+          "title": "Prem Keetanu",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "theatrical",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1703067,
+          "type": "movie",
+          "title": "Bail",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "theatrical",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 247718,
+          "type": "tv",
+          "title": "MobLand",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "episode",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 292117,
+          "type": "tv",
+          "title": "Teen Kauwe",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "premiere",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 302882,
+          "type": "tv",
+          "title": "#Love",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "premiere",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 331932,
+          "type": "tv",
+          "title": "Ali Baba Aur 40 Bhoot",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "episode",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "offers-reported"
+        }
+      ]
+    },
+    {
+      "region": "US",
+      "total": 34,
+      "partial": true,
+      "upcomingTotal": 17,
+      "upcomingPartial": true,
+      "samples": [
+        {
+          "id": 1083381,
+          "type": "movie",
+          "title": "Backrooms",
+          "event": {
+            "date": "2026-09-25",
+            "kind": "digital",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 1492640,
+          "type": "movie",
+          "title": "UNABOMBER",
+          "event": {
+            "date": "2026-09-25",
+            "kind": "digital",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 2224,
+          "type": "tv",
+          "title": "The Daily Show",
+          "event": {
+            "date": "2026-09-24",
+            "kind": "episode",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 22980,
+          "type": "tv",
+          "title": "Watch What Happens Live with Andy Cohen",
+          "event": {
+            "date": "2026-09-24",
+            "kind": "episode",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 59941,
+          "type": "tv",
+          "title": "The Tonight Show Starring Jimmy Fallon",
+          "event": {
+            "date": "2026-09-24",
+            "kind": "episode",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 305357,
+          "type": "tv",
+          "title": "A Different World",
+          "event": {
+            "date": "2026-09-24",
+            "kind": "premiere",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 310290,
+          "type": "tv",
+          "title": "My Sad Dead",
+          "event": {
+            "date": "2026-09-24",
+            "kind": "premiere",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 331979,
+          "type": "tv",
+          "title": "Delusion",
+          "event": {
+            "date": "2026-09-24",
+            "kind": "premiere",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 332118,
+          "type": "tv",
+          "title": "Team Moms: Baseball",
+          "event": {
+            "date": "2026-09-24",
+            "kind": "premiere",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 1032863,
+          "type": "movie",
+          "title": "The Love Hypothesis",
+          "event": {
+            "date": "2026-09-23",
+            "kind": "digital",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 1084244,
+          "type": "movie",
+          "title": "Toy Story 5",
+          "event": {
+            "date": "2026-09-23",
+            "kind": "digital",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 286940,
+          "type": "tv",
+          "title": "Wonka's The Golden Ticket",
+          "event": {
+            "date": "2026-09-23",
+            "kind": "premiere",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 308963,
+          "type": "tv",
+          "title": "Habeas Corpus",
+          "event": {
+            "date": "2026-09-23",
+            "kind": "premiere",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 1477712,
+          "type": "movie",
+          "title": "Ice Cream Man",
+          "event": {
+            "date": "2026-09-22",
+            "kind": "digital",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 312557,
+          "type": "tv",
+          "title": "Minerva Academy",
+          "event": {
+            "date": "2026-09-22",
+            "kind": "premiere",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 333547,
+          "type": "tv",
+          "title": "House Shock",
+          "event": {
+            "date": "2026-09-22",
+            "kind": "premiere",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 113962,
+          "type": "tv",
+          "title": "Lioness",
+          "event": {
+            "date": "2026-09-20",
+            "kind": "episode",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 1240889,
+          "type": "movie",
+          "title": "Teenage Sex and Death at Camp Miasma",
+          "event": {
+            "date": "2026-09-18",
+            "kind": "digital",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 275102,
+          "type": "tv",
+          "title": "The Scandal",
+          "event": {
+            "date": "2026-09-18",
+            "kind": "premiere",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 108978,
+          "type": "tv",
+          "title": "Reacher",
+          "event": {
+            "date": "2026-09-16",
+            "kind": "episode",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 1101383,
+          "type": "movie",
+          "title": "The End of Oak Street",
+          "event": {
+            "date": "2026-09-15",
+            "kind": "digital",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 1751701,
+          "type": "movie",
+          "title": "After Impact",
+          "event": {
+            "date": "2026-09-15",
+            "kind": "digital",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 1433,
+          "type": "tv",
+          "title": "American Dad!",
+          "event": {
+            "date": "2026-09-13",
+            "kind": "episode",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 456,
+          "type": "tv",
+          "title": "The Simpsons",
+          "event": {
+            "date": "2026-09-27",
+            "kind": "episode",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "offers-reported"
+        }
+      ],
+      "upcomingSamples": [
+        {
+          "id": 456,
+          "type": "tv",
+          "title": "The Simpsons",
+          "event": {
+            "date": "2026-09-27",
+            "kind": "episode",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 22980,
+          "type": "tv",
+          "title": "Watch What Happens Live with Andy Cohen",
+          "event": {
+            "date": "2026-09-27",
+            "kind": "episode",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 59941,
+          "type": "tv",
+          "title": "The Tonight Show Starring Jimmy Fallon",
+          "event": {
+            "date": "2026-09-27",
+            "kind": "episode",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 1311031,
+          "type": "movie",
+          "title": "Demon Slayer: Kimetsu no Yaiba Infinity Castle",
+          "event": {
+            "date": "2026-09-28",
+            "kind": "digital",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 2224,
+          "type": "tv",
+          "title": "The Daily Show",
+          "event": {
+            "date": "2026-09-28",
+            "kind": "episode",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 969681,
+          "type": "movie",
+          "title": "Spider-Man: Brand New Day",
+          "event": {
+            "date": "2026-09-29",
+            "kind": "digital",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1185806,
+          "type": "movie",
+          "title": "PAW Patrol: The Dino Movie",
+          "event": {
+            "date": "2026-09-29",
+            "kind": "digital",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1204680,
+          "type": "movie",
+          "title": "Coyote vs. Acme",
+          "event": {
+            "date": "2026-09-29",
+            "kind": "digital",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 333547,
+          "type": "tv",
+          "title": "House Shock",
+          "event": {
+            "date": "2026-09-29",
+            "kind": "episode",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 286940,
+          "type": "tv",
+          "title": "Wonka's The Golden Ticket",
+          "event": {
+            "date": "2026-09-30",
+            "kind": "episode",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 933260,
+          "type": "movie",
+          "title": "The Substance",
+          "event": {
+            "date": "2026-10-01",
+            "kind": "digital",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 1307118,
+          "type": "movie",
+          "title": "Soulm8te",
+          "event": {
+            "date": "2026-10-01",
+            "kind": "digital",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 1212763,
+          "type": "movie",
+          "title": "Evil Dead Burn",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "digital",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 1240889,
+          "type": "movie",
+          "title": "Teenage Sex and Death at Camp Miasma",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "digital",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 1248832,
+          "type": "movie",
+          "title": "Digger",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "theatrical",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1283515,
+          "type": "movie",
+          "title": "Verity",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "theatrical",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1393326,
+          "type": "movie",
+          "title": "Ghost in the Cell",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "theatrical",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        }
+      ]
+    },
+    {
+      "region": "GB",
+      "total": 38,
+      "partial": true,
+      "upcomingTotal": 19,
+      "upcomingPartial": true,
+      "samples": [
+        {
+          "id": 1573018,
+          "type": "movie",
+          "title": "In The Shadow of a High Rise Flat",
+          "event": {
+            "date": "2026-09-26",
+            "kind": "theatrical",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1767198,
+          "type": "movie",
+          "title": "Vegas Vic",
+          "event": {
+            "date": "2026-09-26",
+            "kind": "digital",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1492640,
+          "type": "movie",
+          "title": "UNABOMBER",
+          "event": {
+            "date": "2026-09-25",
+            "kind": "digital",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 1776434,
+          "type": "movie",
+          "title": "I Want You To Pause This",
+          "event": {
+            "date": "2026-09-25",
+            "kind": "digital",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1776586,
+          "type": "movie",
+          "title": "The Other",
+          "event": {
+            "date": "2026-09-25",
+            "kind": "digital",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1776938,
+          "type": "movie",
+          "title": "Tutt Paini English Ne",
+          "event": {
+            "date": "2026-09-25",
+            "kind": "theatrical",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1776954,
+          "type": "movie",
+          "title": "Mitrata",
+          "event": {
+            "date": "2026-09-25",
+            "kind": "theatrical",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1776971,
+          "type": "movie",
+          "title": "Lutt Mubarak",
+          "event": {
+            "date": "2026-09-25",
+            "kind": "theatrical",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 291,
+          "type": "tv",
+          "title": "Coronation Street",
+          "event": {
+            "date": "2026-09-25",
+            "kind": "episode",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1220,
+          "type": "tv",
+          "title": "The Graham Norton Show",
+          "event": {
+            "date": "2026-09-25",
+            "kind": "episode",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 247718,
+          "type": "tv",
+          "title": "MobLand",
+          "event": {
+            "date": "2026-09-25",
+            "kind": "episode",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 1871,
+          "type": "tv",
+          "title": "EastEnders",
+          "event": {
+            "date": "2026-09-24",
+            "kind": "episode",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 22980,
+          "type": "tv",
+          "title": "Watch What Happens Live with Andy Cohen",
+          "event": {
+            "date": "2026-09-24",
+            "kind": "episode",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 305357,
+          "type": "tv",
+          "title": "A Different World",
+          "event": {
+            "date": "2026-09-24",
+            "kind": "premiere",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 310290,
+          "type": "tv",
+          "title": "My Sad Dead",
+          "event": {
+            "date": "2026-09-24",
+            "kind": "premiere",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 331979,
+          "type": "tv",
+          "title": "Delusion",
+          "event": {
+            "date": "2026-09-24",
+            "kind": "premiere",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 332118,
+          "type": "tv",
+          "title": "Team Moms: Baseball",
+          "event": {
+            "date": "2026-09-24",
+            "kind": "premiere",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 1032863,
+          "type": "movie",
+          "title": "The Love Hypothesis",
+          "event": {
+            "date": "2026-09-23",
+            "kind": "digital",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 95480,
+          "type": "tv",
+          "title": "Slow Horses",
+          "event": {
+            "date": "2026-09-23",
+            "kind": "episode",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 113962,
+          "type": "tv",
+          "title": "Lioness",
+          "event": {
+            "date": "2026-09-20",
+            "kind": "episode",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 1228834,
+          "type": "movie",
+          "title": "The Fix",
+          "event": {
+            "date": "2026-09-18",
+            "kind": "digital",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 1451944,
+          "type": "movie",
+          "title": "Lust Stories 3",
+          "event": {
+            "date": "2026-09-18",
+            "kind": "digital",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 1514863,
+          "type": "movie",
+          "title": "Best of the Best",
+          "event": {
+            "date": "2026-09-18",
+            "kind": "digital",
+            "regional": true,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 275102,
+          "type": "tv",
+          "title": "The Scandal",
+          "event": {
+            "date": "2026-09-18",
+            "kind": "premiere",
+            "regional": false,
+            "status": "released"
+          },
+          "availability": "offers-reported"
+        }
+      ],
+      "upcomingSamples": [
+        {
+          "id": 456,
+          "type": "tv",
+          "title": "The Simpsons",
+          "event": {
+            "date": "2026-09-27",
+            "kind": "episode",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 22980,
+          "type": "tv",
+          "title": "Watch What Happens Live with Andy Cohen",
+          "event": {
+            "date": "2026-09-27",
+            "kind": "episode",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 291,
+          "type": "tv",
+          "title": "Coronation Street",
+          "event": {
+            "date": "2026-09-28",
+            "kind": "episode",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1871,
+          "type": "tv",
+          "title": "EastEnders",
+          "event": {
+            "date": "2026-09-28",
+            "kind": "episode",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 328264,
+          "type": "tv",
+          "title": "Michael Palin in the Philippines",
+          "event": {
+            "date": "2026-09-28",
+            "kind": "premiere",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 333016,
+          "type": "tv",
+          "title": "Outside",
+          "event": {
+            "date": "2026-09-28",
+            "kind": "premiere",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 335717,
+          "type": "tv",
+          "title": "Jamie's 20 Minute Meals",
+          "event": {
+            "date": "2026-09-28",
+            "kind": "premiere",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 95480,
+          "type": "tv",
+          "title": "Slow Horses",
+          "event": {
+            "date": "2026-09-30",
+            "kind": "episode",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 335591,
+          "type": "tv",
+          "title": "Break Clause",
+          "event": {
+            "date": "2026-10-01",
+            "kind": "premiere",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 445466,
+          "type": "movie",
+          "title": "Idiots",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "digital",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1240889,
+          "type": "movie",
+          "title": "Teenage Sex and Death at Camp Miasma",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "digital",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1248832,
+          "type": "movie",
+          "title": "Digger",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "theatrical",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1283515,
+          "type": "movie",
+          "title": "Verity",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "theatrical",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1397485,
+          "type": "movie",
+          "title": "Girls Like Girls",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "theatrical",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1433583,
+          "type": "movie",
+          "title": "The Weight",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "theatrical",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1596303,
+          "type": "movie",
+          "title": "The Last First: Winter K2",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "digital",
+            "regional": true,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        },
+        {
+          "id": 1220,
+          "type": "tv",
+          "title": "The Graham Norton Show",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "episode",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 247718,
+          "type": "tv",
+          "title": "MobLand",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "episode",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "offers-reported"
+        },
+        {
+          "id": 284558,
+          "type": "tv",
+          "title": "Kill Jackie",
+          "event": {
+            "date": "2026-10-02",
+            "kind": "premiere",
+            "regional": false,
+            "status": "upcoming"
+          },
+          "availability": "not-found"
+        }
+      ]
+    }
+  ],
+  "global": [
+    {
+      "type": "all",
+      "page": 1,
+      "totalPages": 500,
+      "items": [
+        "movie:1423191",
+        "movie:1492640",
+        "tv:299939",
+        "tv:247718",
+        "movie:1032863",
+        "tv:95350",
+        "tv:1413",
+        "tv:108978",
+        "movie:1339713",
+        "movie:1263337",
+        "movie:1101383",
+        "movie:969681",
+        "movie:1607127",
+        "movie:1084244",
+        "movie:1368337",
+        "tv:113962",
+        "movie:1375441",
+        "movie:1248832",
+        "movie:1465063",
+        "movie:1083381"
+      ],
+      "upstreamOrderMatches": true
+    },
+    {
+      "type": "all",
+      "page": 2,
+      "totalPages": 500,
+      "items": [
+        "movie:1083381",
+        "movie:1240889",
+        "tv:275102",
+        "tv:30984",
+        "movie:1003596",
+        "tv:287620",
+        "tv:95480",
+        "tv:37854",
+        "tv:103516",
+        "tv:196322",
+        "tv:97546",
+        "movie:1108427",
+        "tv:282326",
+        "tv:2190",
+        "tv:45790",
+        "tv:94664",
+        "movie:445466",
+        "movie:1477712",
+        "tv:82684",
+        "tv:125988"
+      ],
+      "upstreamOrderMatches": true
+    },
+    {
+      "type": "movie",
+      "page": 1,
+      "totalPages": 500,
+      "items": [
+        "movie:1423191",
+        "movie:1492640",
+        "movie:1032863",
+        "movie:1339713",
+        "movie:1263337",
+        "movie:1101383",
+        "movie:969681",
+        "movie:1368337",
+        "movie:1084244",
+        "movie:1607127",
+        "movie:1248832",
+        "movie:1375441",
+        "movie:1083381",
+        "movie:1465063",
+        "movie:1240889",
+        "movie:1003596",
+        "movie:1108427",
+        "movie:445466",
+        "movie:1477712",
+        "movie:1284465"
+      ],
+      "upstreamOrderMatches": true
+    },
+    {
+      "type": "movie",
+      "page": 2,
+      "totalPages": 500,
+      "items": [
+        "movie:1137844",
+        "movie:1204680",
+        "movie:1384514",
+        "movie:1283515",
+        "movie:1641629",
+        "movie:675871",
+        "movie:1514863",
+        "movie:1153576",
+        "movie:1329016",
+        "movie:950028",
+        "movie:1400940",
+        "movie:1288445",
+        "movie:1212763",
+        "movie:843352",
+        "movie:687163",
+        "movie:1341138",
+        "movie:1279493",
+        "movie:1275779",
+        "movie:1422041",
+        "movie:1228834"
+      ],
+      "upstreamOrderMatches": true
+    },
+    {
+      "type": "tv",
+      "page": 1,
+      "totalPages": 500,
+      "items": [
+        "tv:299939",
+        "tv:247718",
+        "tv:95350",
+        "tv:1413",
+        "tv:108978",
+        "tv:113962",
+        "tv:273207",
+        "tv:275102",
+        "tv:30984",
+        "tv:95480",
+        "tv:287620",
+        "tv:196322",
+        "tv:37854",
+        "tv:103516",
+        "tv:97546",
+        "tv:45790",
+        "tv:94664",
+        "tv:282326",
+        "tv:2190",
+        "tv:82684"
+      ],
+      "upstreamOrderMatches": true
+    },
+    {
+      "type": "tv",
+      "page": 2,
+      "totalPages": 500,
+      "items": [
+        "tv:316197",
+        "tv:82684",
+        "tv:615",
+        "tv:232018",
+        "tv:250203",
+        "tv:239618",
+        "tv:207484",
+        "tv:290720",
+        "tv:280042",
+        "tv:312557",
+        "tv:246473",
+        "tv:305357",
+        "tv:65942",
+        "tv:456",
+        "tv:30983",
+        "tv:320760",
+        "tv:215943",
+        "tv:236235",
+        "tv:94997",
+        "tv:312949"
+      ],
+      "upstreamOrderMatches": true
+    }
+  ],
+  "providers": [
+    {
+      "type": "movie",
+      "id": 550,
+      "region": "IN",
+      "offers": [
+        {
+          "group": "flatrate",
+          "id": 8,
+          "name": "Netflix",
+          "destination": null
+        },
+        {
+          "group": "buy",
+          "id": 3,
+          "name": "Google Play Movies",
+          "destination": null
+        },
+        {
+          "group": "buy",
+          "id": 192,
+          "name": "YouTube",
+          "destination": null
+        }
+      ]
+    },
+    {
+      "type": "tv",
+      "id": 76479,
+      "region": "IN",
+      "offers": [
+        {
+          "group": "flatrate",
+          "id": 119,
+          "name": "Amazon Prime Video",
+          "destination": null
+        },
+        {
+          "group": "flatrate",
+          "id": 2100,
+          "name": "Amazon Prime Video with Ads",
+          "destination": null
+        }
+      ]
+    },
+    {
+      "type": "movie",
+      "id": 550,
+      "region": "US",
+      "offers": [
+        {
+          "group": "rent",
+          "id": 10,
+          "name": "Amazon Video",
+          "destination": null
+        },
+        {
+          "group": "rent",
+          "id": 2,
+          "name": "Apple TV Store",
+          "destination": null
+        },
+        {
+          "group": "rent",
+          "id": 3,
+          "name": "Google Play Movies",
+          "destination": null
+        },
+        {
+          "group": "rent",
+          "id": 192,
+          "name": "YouTube",
+          "destination": null
+        },
+        {
+          "group": "rent",
+          "id": 7,
+          "name": "Fandango At Home",
+          "destination": null
+        },
+        {
+          "group": "buy",
+          "id": 10,
+          "name": "Amazon Video",
+          "destination": null
+        },
+        {
+          "group": "buy",
+          "id": 2,
+          "name": "Apple TV Store",
+          "destination": null
+        },
+        {
+          "group": "buy",
+          "id": 3,
+          "name": "Google Play Movies",
+          "destination": null
+        },
+        {
+          "group": "buy",
+          "id": 192,
+          "name": "YouTube",
+          "destination": null
+        },
+        {
+          "group": "buy",
+          "id": 7,
+          "name": "Fandango At Home",
+          "destination": null
+        }
+      ]
+    }
+  ],
+  "result": "passed"
+}
