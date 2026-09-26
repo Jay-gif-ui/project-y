@@ -8,4 +8,5 @@ export const DISCOVERY_CONFIG = {
   indiaGlobalProbesPerType: 10,
   indiaManualLimit: 10,
   pageSize: 24,
+  globalHomeLimit: 10,
 } as const;
