@@ -8,6 +8,7 @@ import { discoveryParams, rankDiscovery, type DiscoveryCandidate, type Discovery
 import { COUNTRY_POOL_PAGES, COUNTRY_TREND_PROBE_LIMIT, countryPageSlice, countryTrendingDates, countryTrendingParams, mediaKey, rankCountryDiscovery, selectCountryMix, type CountryCandidate, type CountryMediaFilter, type CountryPeriod, type CountrySort, type CountrySurface } from "@/lib/country-trending";
 import { type Media, type MediaType, type WatchProviders } from "@/lib/media";
 import { normalizeWatchProviders, providerList } from "@/lib/watch-providers";
+import { theatricalRelease, type TheatricalRelease } from "@/lib/theatrical";
 
 export { imageUrl, type Media, type MediaType, type Provider, type WatchProviders } from "@/lib/media";
 
@@ -46,6 +47,17 @@ export async function getCollection(type: MediaType, collection: "popular" | "to
 }
 
 export type GlobalTrendingData = { items: Media[]; page: number; totalPages: number };
+export async function getHomeTrending(type: MediaType): Promise<TmdbResult<Media[]>> {
+  const unique = new Map<string, Media>();
+  for (let page = 1; page <= DISCOVERY_CONFIG.globalHomeMaxPages; page++) {
+    const result = await getGlobalTrending(type, page);
+    if (!result.data) return unique.size ? { data: [...unique.values()], partial: true } : { error: result.error };
+    for (const media of result.data.items) if (!unique.has(mediaKey(media))) unique.set(mediaKey(media), media);
+    if (unique.size >= DISCOVERY_CONFIG.globalHomePerType || page >= result.data.totalPages) break;
+  }
+  return { data: [...unique.values()] };
+}
+
 export async function getGlobalTrending(filter: "all" | MediaType = "all", requestedPage = 1): Promise<TmdbResult<GlobalTrendingData>> {
   const type = filter === "movie" || filter === "tv" ? filter : "all";
   // TMDB exposes at most 500 pages. Filtering must not replace its weekly order
@@ -268,5 +280,28 @@ export async function getWatchProviders(type: MediaType, id: number, region: str
   if (!result.data) return result;
   const data = normalizeWatchProviders(result.data, normalizedRegion);
   return data ? { data } : { error: "upstream" };
+}
+
+export type TitleAvailability = {
+  providers?: WatchProviders;
+  providerError: boolean;
+  theatrical: TheatricalRelease | null;
+  theatricalError: boolean;
+};
+
+export async function getMovieTheatricalRelease(id: number, region: string, now = new Date()): Promise<TmdbResult<TheatricalRelease | null>> {
+  if (!Number.isSafeInteger(id) || id < 1 || !isEnabledCountryCode(region.toUpperCase())) return { error: "not-found" };
+  const result = await request<Record<string, unknown>>(`/movie/${id}/release_dates`);
+  if (!result.data) return { error: result.error };
+  if (!Array.isArray(result.data.results)) return { error: "upstream" };
+  return { data: theatricalRelease({ release_dates: result.data }, region, now) };
+}
+
+export async function getTitleAvailability(type: MediaType, id: number, region: string, now = new Date()): Promise<TitleAvailability> {
+  const [providers, theatrical] = await Promise.all([
+    getWatchProviders(type, id, region),
+    type === "movie" ? getMovieTheatricalRelease(id, region, now) : Promise.resolve({ data: null } as TmdbResult<TheatricalRelease | null>),
+  ]);
+  return { providers: providers.data, providerError: Boolean(providers.error), theatrical: theatrical.data ?? null, theatricalError: Boolean(theatrical.error) };
 }
 export async function diagnoseCollections():Promise<Diagnostic[]>{const targets=[{name:"Trending Movies",endpoint:"/trending/movie/week"},{name:"Popular Movies",endpoint:"/movie/popular"},{name:"Top Rated Movies",endpoint:"/movie/top_rated"},{name:"Popular TV Shows",endpoint:"/tv/popular"},{name:"Trending TV Shows",endpoint:"/trending/tv/week"}];const apiKey=key();if(!apiKey)return targets.map(target=>({...target,success:false,status:null,durationMs:0,hasResults:false,resultCount:0,error:"not-configured" as const}));return Promise.all(targets.map(async target=>{const started=Date.now(),controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),REQUEST_TIMEOUT_MS);const url=new URL(`${API}${target.endpoint}`);url.searchParams.set("api_key",apiKey);url.searchParams.set("language","en-US");try{const response=await fetch(url,{cache:"no-store",signal:controller.signal});const durationMs=Date.now()-started;if(!response.ok)return{...target,success:false,status:response.status,durationMs,hasResults:false,resultCount:0,error:"http" as const};const body=await response.json() as {results?:unknown};const count=Array.isArray(body?.results)?body.results.length:0;return{...target,success:true,status:response.status,durationMs,hasResults:count>0,resultCount:count};}catch(error){const durationMs=Date.now()-started;return{...target,success:false,status:null,durationMs,hasResults:false,resultCount:0,error:(error instanceof DOMException&&error.name==="AbortError"?"timeout":"network") as "timeout"|"network"};}finally{clearTimeout(timeout);}}));}

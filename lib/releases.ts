@@ -36,7 +36,8 @@ export function selectReleaseItems(candidates: ReleaseCandidate[], now = new Dat
   const result = new Map<string, Media>();
   for (const { media, events, available } of candidates) {
     if (!Number.isSafeInteger(media.id) || media.id < 1) continue;
-    const datedEvents = events.filter(event => validReleaseDate(event.date));
+    const datedEvents = events.filter(event => validReleaseDate(event.date)
+      && (media.mediaType !== "movie" || (event.regional && ["theatrical", "digital"].includes(event.kind))));
     const regional = datedEvents.some(event => event.regional);
     const eligible = datedEvents.filter(event => (!regional || event.regional) && event.date >= recentStart && event.date <= upcomingEnd
       && (status === "all" || (status === "upcoming" ? event.date > today : event.date <= today)));

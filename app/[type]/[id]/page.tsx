@@ -8,7 +8,7 @@ import { MovieGrid } from "@/components/movie-grid";
 import { Navbar } from "@/components/navbar";
 import { WatchProviders } from "@/components/watch-providers";
 import { WishlistButton } from "@/components/wishlist-button";
-import { getTitleDetails, getWatchProviders, imageUrl, type MediaType } from "@/lib/tmdb";
+import { getTitleDetails, getTitleAvailability, imageUrl, type MediaType } from "@/lib/tmdb";
 import { COUNTRY_PREFERENCE_COOKIE, getCountry } from "@/lib/countries";
 
 type PageProps = { params: Promise<{ type: string; id: string }> };
@@ -29,16 +29,15 @@ export default async function TitlePage({ params }: PageProps) {
   const titleId = Number(id);
   const country = getCountry((await cookies()).get(COUNTRY_PREFERENCE_COOKIE)?.value);
   const [detailResult, providerResult] = await Promise.all([
-    getTitleDetails(type, titleId), getWatchProviders(type, titleId, country.tmdbRegion),
+    getTitleDetails(type, titleId), getTitleAvailability(type, titleId, country.tmdbRegion),
   ]);
   if (!detailResult.data) {
     if (detailResult.error === "not-found") notFound();
     return <><Navbar /><main className="shell title-error"><p className="eyebrow">Service update</p><h1>Title details are temporarily unavailable.</h1><p>We could not load this title from the movie service. Please try again shortly.</p><Link href="/" className="primary-link">Back to discovery</Link></main><Footer /></>;
   }
   const title = detailResult.data;
-  const providers = providerResult.data ?? { flatrate: [], rent: [], buy: [], free: [], ads: [] };
   const trailer = title.videos.find(video => video.official && video.type === "Trailer") ?? title.videos.find(video => video.type === "Trailer");
-  const facts = [["Release date", title.releaseDate], ["Runtime", title.runtime ? `${title.runtime} min` : undefined], ["Genres", title.genres.join(", ") || undefined], ["Original language", title.originalLanguage], ["Status", title.status], ["Production", title.companies.join(", ") || undefined], ["Countries", title.countries.join(", ") || undefined], ["Budget", formatMoney(title.budget)], ["Revenue", formatMoney(title.revenue)]];
+  const facts = [[type === "movie" ? "Original release date" : "First air date", title.releaseDate], ["Runtime", title.runtime ? `${title.runtime} min` : undefined], ["Genres", title.genres.join(", ") || undefined], ["Original language", title.originalLanguage], ["Status", title.status], ["Production", title.companies.join(", ") || undefined], ["Countries", title.countries.join(", ") || undefined], ["Budget", formatMoney(title.budget)], ["Revenue", formatMoney(title.revenue)]];
 
   return <><Navbar /><main className="title-page">
     <section className="title-hero" aria-labelledby="title-name">
@@ -70,7 +69,7 @@ export default async function TitlePage({ params }: PageProps) {
     </nav>
     <div className="shell detail-layout">
       <div className="detail-main">
-        <WatchProviders mediaType={type} titleId={titleId} initialProviders={providers} initialRegion={country.code} initialError={Boolean(providerResult.error)} />
+        <WatchProviders mediaType={type} titleId={titleId} initialAvailability={providerResult} initialRegion={country.code} />
         <section className="detail-section" id="synopsis" aria-labelledby="synopsis-title">
           <p className="eyebrow">The story</p><h2 id="synopsis-title">Synopsis</h2>
           <p className="overview">{title.overview || "No overview is available for this title."}</p>

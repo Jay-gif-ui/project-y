@@ -15,7 +15,7 @@ function regionalAvailability(raw: Raw, region: string): boolean | undefined {
 }
 export function regionalMovieEvents(raw: Raw, region: string): ReleaseEvent[] {
   const releases = raw.release_dates as { results?: unknown } | undefined;
-  return records(releases?.results).filter(item => item.iso_3166_1 === region).flatMap(item => records(item.release_dates)).flatMap(item => {
+  return records(releases?.results).filter(item => item.iso_3166_1 === region.toUpperCase()).flatMap(item => records(item.release_dates)).flatMap(item => {
     const date = typeof item.release_date === "string" ? item.release_date.slice(0, 10) : "";
     return validReleaseDate(date) && Number.isFinite(Date.parse(String(item.release_date))) && [2, 3, 4].includes(Number(item.type)) ? [{ date, kind: Number(item.type) === 4 ? "digital" as const : "theatrical" as const, regional: true }] : [];
   });

@@ -29,7 +29,7 @@ test('Netflix, Prime Video and Apple TV use exact supplied destinations, includi
   }
   // These are supplied-link fixtures, not proof that live TMDB supplies these URLs.
   const missing = normalizeWatchProviders({ results: { IN: { flatrate: fixtures.map(item => provider(item.provider_id, item.provider_name)) } } }, 'IN');
-  assert.ok(missing.flatrate.every(item => providerAction(item, 'flatrate') === undefined));
+  assert.deepEqual(Array.from(missing.flatrate, item => providerAction(item, 'flatrate').href), ['https://www.netflix.com/', 'https://www.primevideo.com/', 'https://tv.apple.com/']);
 });
 
 test('country selection keeps actual regional offers and the exact returned watch destination', () => {
@@ -124,4 +124,16 @@ test('only an explicit safe per-provider destination enables an action; no URL i
 test('future click analytics carries title, country, provider, action and timestamp without rewriting links', () => {
   const detail = providerClickDetail({ titleId: 550, mediaType: 'movie', country: 'IN', provider: { id: 8, name: 'Test service' }, actionType: 'flatrate' }, '2026-09-25T18:00:00.000Z');
   assert.deepEqual(plain(detail), { titleId: 550, mediaType: 'movie', country: 'IN', providerId: 8, providerName: 'Test service', actionType: 'flatrate', timestamp: '2026-09-25T18:00:00.000Z' });
+});
+
+test('verified official fallbacks retain TMDB provider identity and do not imply additional offers', () => {
+  const names = ['Netflix', 'Amazon Prime Video', 'Apple TV Store', 'JioHotstar', 'Zee5', 'Sony Liv'];
+  const urls = ['https://www.netflix.com/', 'https://www.primevideo.com/', 'https://tv.apple.com/', 'https://www.hotstar.com/', 'https://www.zee5.com/', 'https://www.sonyliv.com/'];
+  names.forEach((name, index) => {
+    const item = { id: index + 1, name };
+    assert.equal(providerAction(item, 'flatrate').href, urls[index]);
+    assert.equal(providerAction({ ...item, watchUrl: 'https://www.justwatch.com/in/movie/test' }, 'rent').href, urls[index]);
+  });
+  for (const name of ['Unknown service', 'Netflix lookalike', 'Unverified Amazon Channel', '__proto__', 'constructor']) assert.equal(providerAction({id:8,name},'flatrate'),undefined);
+  assert.equal(getProviderOffers(normalizeWatchProviders({results:{}},'IN')).length,0);
 });

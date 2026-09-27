@@ -13,6 +13,25 @@ function service(responder) {
 const movie = (id, extra = {}) => ({ id, media_type: 'movie', title: `Movie ${id}`, popularity: 1000 - id, ...extra });
 const tv = id => ({ id, media_type: 'tv', name: `TV ${id}` });
 
+test('home returns at least six unique movies and shows, continuing the existing weekly feed when needed', async () => {
+  const { api, calls }=service(url=>{
+    const item=url.pathname.includes('/tv/')?tv:movie;
+    const page=Number(url.searchParams.get('page'));
+    return Response.json({total_pages:2,results:page===1?[item(1),item(1),item(2),item(3),{id:99,adult:true}]:[item(3),item(4),item(5),item(6),item(7)]});
+  });
+  for(const type of ['movie','tv']) {
+    const result=await api.getHomeTrending(type);
+    assert.deepEqual(Array.from(result.data.slice(0,6),item=>item.id),[1,2,3,4,5,6]);
+    assert.equal(new Set(result.data.map(item=>item.id)).size,result.data.length);
+  }
+  assert.ok(calls.every(call=>call.path.includes('/trending/')&&!call.params.region));
+});
+
+test('home never fabricates cards when the upstream feed has fewer than six results', async () => {
+  const {api}=service(()=>Response.json({total_pages:1,results:[movie(1)]}));
+  assert.equal((await api.getHomeTrending('movie')).data.length,1);
+});
+
 test('global All preserves combined TMDB order and excludes people, adult, malformed and duplicate entries', async () => {
   const { api, calls } = service(() => Response.json({ total_pages: 5, results: [tv(80), movie(90), {id:1,media_type:'person',name:'Person'}, movie(2,{adult:true}), movie(90), movie(4,{title:''}), tv(90), null] }));
   const result = await api.getGlobalTrending();

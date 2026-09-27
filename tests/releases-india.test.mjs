@@ -20,6 +20,17 @@ test('provider listings never stand in for a verified regional movie date',()=>{
   }
 });
 
+test('1992/2005/2010/2015 popularity and offers never qualify without a current regional event',()=>{
+  for(const year of [1992,2005,2010,2015]) {
+    const item=media(year,`${year}-01-01`,{popularity:1e9,voteCount:1e9,discoverySignal:'daily-trend'});
+    const data={'watch/providers':{results:{IN:offer}},release_dates:{results:[{iso_3166_1:'IN',release_dates:[{type:3,release_date:`${year}-01-01`}]},{iso_3166_1:'US',release_dates:[{type:3,release_date:'2026-09-24'}]}]}};
+    assert.equal(selectReleaseItems([releaseCandidate(item,data,'IN')],now).length,0);
+    assert.equal(selectReleaseItems([{media:item,events:[{date:'2026-09-24',kind:'premiere',regional:false}]}],now).length,0);
+    data.release_dates.results[0].release_dates.push({type:3,release_date:'2026-09-24'});
+    assert.equal(selectReleaseItems([releaseCandidate(item,data,'IN')],now)[0].releaseEvent.date,'2026-09-24');
+  }
+});
+
 test('verified theatre and digital releases survive missing OTT offers without inventing availability',()=>{
   for(const type of [3,4]) {
     const data={release_dates:{results:[{iso_3166_1:'IN',release_dates:[{type,release_date:'2026-09-24T00:00:00Z'}]}]},'watch/providers':{results:{}}};

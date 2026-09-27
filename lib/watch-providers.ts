@@ -1,7 +1,8 @@
 import type { MediaType, Provider, WatchProviders } from "@/lib/media";
+import { officialProviderHomepage } from "@/lib/provider-links";
 
 export const OFFER_TYPES = [
-  { key: "flatrate", label: "Stream" },
+  { key: "flatrate", label: "Streaming" },
   { key: "rent", label: "Rent" },
   { key: "buy", label: "Buy" },
   { key: "free", label: "Free" },
@@ -23,7 +24,7 @@ function validDestination(raw: unknown): string | undefined {
 }
 
 export function providerAction(provider: Provider, type: OfferType): { href: string; label: string } | undefined {
-  const href = validDestination(provider.watchUrl);
+  const href = validDestination(provider.watchUrl) ?? officialProviderHomepage(provider);
   if (!href) return undefined;
   return { href, label: `${type === "rent" ? "Rent" : type === "buy" ? "Buy" : "Watch"} on ${provider.name}` };
 }
@@ -58,8 +59,8 @@ export function providerList(raw: unknown): Provider[] {
     providers.set(id, {
       id, name,
       logoPath: typeof item.logo_path === "string" && item.logo_path.startsWith("/") ? item.logo_path : undefined,
-      // Only an explicit URL on this provider's offer can become a provider CTA.
-      // Current TMDB responses omit it. Never substitute results[country].link.
+      // Preserve actual offer URLs. The action resolver can use a verified homepage,
+      // but must never substitute results[country].link or invent a title URL.
       watchUrl,
     });
   }

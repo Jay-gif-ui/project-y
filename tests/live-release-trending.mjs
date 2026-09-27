@@ -22,6 +22,7 @@ const tmdb = load('lib/tmdb.ts'), releases = load('lib/tmdb-releases.ts');
 const { regionalMovieEvents } = load('lib/release-metadata.ts');
 const { releaseDates } = load('lib/releases.ts');
 const { providerAction } = load('lib/watch-providers.ts');
+const { officialProviderHomepage } = load('lib/provider-links.ts');
 const now = new Date(), dates = releaseDates(now);
 const identity = item => `${item.mediaType}:${item.id}`;
 const report = { auditedAt: now.toISOString(), dates, network: process.env.DISCOVERY_AUDIT_DNS ?? 'system DNS', failures, countries: [], global: [], providers: [] };
@@ -65,12 +66,26 @@ try {
       assert.deepEqual(Array.from(providers[group], item => item.id), (raw[group] ?? []).map(item => item.provider_id));
       for (const item of providers[group]) {
         const action = providerAction(item, group), original = raw[group].find(entry => entry.provider_id === item.id);
-        if (action) assert.ok([original.link,original.url].includes(action.href), 'Destination must be returned on this offer');
+        if (action) assert.ok([original.link,original.url,officialProviderHomepage(item)].includes(action.href), 'Destination must be supplied or a verified official homepage');
         offers.push({ group, id: item.id, name: item.name, destination: action?.href ?? null });
       }
     }
     assert.ok(offers.some(item => item.id === expectedId), `Expected provider ${expectedId} missing in sample`);
     report.providers.push({ type, id, region, offers });
+  }
+  report.theatrical = [];
+  for (const region of ['IN','US','GB']) {
+    const result = await tmdb.getTitleAvailability('movie',1423191,region,now);
+    assert.equal(result.providerError,false); assert.equal(result.theatricalError,false);
+    const raw = source.get('/3/movie/1423191/release_dates?page=1');
+    assert.ok(regionalMovieEvents({release_dates:raw},region).some(event=>event.kind==='theatrical'&&event.date===result.theatrical?.date));
+    report.theatrical.push({region,...result});
+  }
+  report.homeTrending = [];
+  for (const type of ['movie','tv']) {
+    const items=check(await tmdb.getHomeTrending(type),type).slice(0,6);
+    assert.equal(items.length,6); assert.equal(new Set(items.map(identity)).size,6);
+    report.homeTrending.push({type,items:items.map(identity)});
   }
   report.result = 'passed';
   console.log('Live regional release, global trending order/pagination and provider checks passed.');

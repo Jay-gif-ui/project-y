@@ -7,7 +7,7 @@ import { MovieGrid } from "@/components/movie-grid";
 import { Navbar } from "@/components/navbar";
 import { CountryDiscovery } from "@/components/country-discovery";
 import { GenreExplorer } from "@/components/genre-explorer";
-import { getCollection, getGenres, getCountryDiscovery } from "@/lib/tmdb";
+import { getHomeTrending, getGenres, getCountryDiscovery } from "@/lib/tmdb";
 import { DISCOVERY_CONFIG } from "@/data/discovery-config";
 import { COUNTRY_PREFERENCE_COOKIE, getCountry } from "@/lib/countries";
 import { getCountryReleases } from "@/lib/tmdb-releases";
@@ -17,8 +17,8 @@ export default async function Home() {
   // cookies() keeps rendering country-specific; explicit fetch caching remains enabled.
   const country = getCountry((await cookies()).get(COUNTRY_PREFERENCE_COOKIE)?.value);
   const now = new Date();
-  const moviePromise = getCollection("movie", "trending");
-  const tvPromise = getCollection("tv", "trending");
+  const moviePromise = getHomeTrending("movie");
+  const tvPromise = getHomeTrending("tv");
   const [movies, tv, available, releases, movieGenres, tvGenres] = await Promise.all([
     moviePromise, tvPromise,
     getCountryDiscovery(country.tmdbRegion, { surface: "home" }, { movie: moviePromise, tv: tvPromise }, now),
@@ -35,12 +35,12 @@ export default async function Home() {
         <p className="section-description">Movies and TV shows trending worldwide this week, in TMDB’s original order.</p>
       </div><Link className="see-all" href="/trending/global" prefetch={false} aria-label="See all global trending titles">See All <ArrowIcon /></Link></div>
       <div id="movies" className="discovery-row">
-        <h3>Trending movies</h3>
-        {movies.error ? <p className="section-status" role="status">Trending movies are temporarily unavailable. Please try again shortly.</p> : <MovieGrid movies={movies.data?.slice(0, Math.ceil(DISCOVERY_CONFIG.globalHomeLimit / 2)) ?? []} showRank />}
+        <h3>Global Trending Movies</h3>
+        {movies.error ? <p className="section-status" role="status">Trending movies are temporarily unavailable. Please try again shortly.</p> : <MovieGrid movies={movies.data?.slice(0, DISCOVERY_CONFIG.globalHomePerType) ?? []} showRank />}
       </div>
       <div id="tv-shows" className="discovery-row">
-        <h3>Trending TV shows</h3>
-        {tv.error ? <p className="section-status" role="status">Trending TV shows are temporarily unavailable. Please try again shortly.</p> : <MovieGrid movies={tv.data?.slice(0, Math.floor(DISCOVERY_CONFIG.globalHomeLimit / 2)) ?? []} showRank />}
+        <h3>Global Trending TV Shows</h3>
+        {tv.error ? <p className="section-status" role="status">Trending TV shows are temporarily unavailable. Please try again shortly.</p> : <MovieGrid movies={tv.data?.slice(0, DISCOVERY_CONFIG.globalHomePerType) ?? []} showRank />}
       </div>
     </section>
     <GenreExplorer genres={{ movie: movieGenres.data ?? [], tv: tvGenres.data ?? [] }} year={discoveryDates(now).year} />
