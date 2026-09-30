@@ -9,6 +9,7 @@ import { COUNTRY_POOL_PAGES, COUNTRY_TREND_PROBE_LIMIT, countryPageSlice, countr
 import { type Media, type MediaType, type WatchProviders } from "@/lib/media";
 import { normalizeWatchProviders, providerList } from "@/lib/watch-providers";
 import { theatricalRelease, type TheatricalRelease } from "@/lib/theatrical";
+import { regionalPlatforms, type OttPlatform } from "@/lib/ott";
 
 export { imageUrl, type Media, type MediaType, type Provider, type WatchProviders } from "@/lib/media";
 
@@ -91,6 +92,16 @@ export async function getGenres(type: MediaType): Promise<TmdbResult<Genre[]>> {
 }
 
 export type CountryDiscoveryData = { items: Media[]; localIds: string[]; localTotal: number; internationalTotal: number; total: number; page: number; totalPages: number };
+export async function getRegionalPlatforms(region: string): Promise<TmdbResult<OttPlatform[]>> {
+  region = region.toUpperCase();
+  if (!isEnabledCountryCode(region)) return { error: "not-found" };
+  const results = await Promise.all((["movie", "tv"] as const).map(type =>
+    request<RawCollection>(`/watch/providers/${type}`, { language: "en-US", watch_region: region }, 86400)
+  ));
+  const usable = results.map(result => Boolean(result.data && Array.isArray(result.data.results)));
+  if (usable.every(value => !value)) return { error: results.find(result => result.error)?.error ?? "upstream" };
+  return { data: regionalPlatforms(providerList(results[0].data?.results), providerList(results[1].data?.results)), partial: usable.some(value => !value) };
+}
 type CountryTrends = { movie: Promise<TmdbResult<Media[]>>; tv: Promise<TmdbResult<Media[]>> };
 
 export async function getDailyTrending(type: MediaType): Promise<TmdbResult<Media[]>> {

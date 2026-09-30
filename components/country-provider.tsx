@@ -1,7 +1,7 @@
 "use client";
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { COUNTRY_PREFERENCE_COOKIE, COUNTRY_PREFERENCE_STORAGE_KEY, getCountry, isEnabledCountryCode, type Country } from "@/lib/countries";
+import { COUNTRY_PREFERENCE_COOKIE, COUNTRY_PREFERENCE_STORAGE_KEY, getCountry, isEnabledCountryCode, resolveAccountCountry, type Country } from "@/lib/countries";
 import { useAuth } from "@/components/auth-provider";
 import { getSupabaseBrowserClient } from "@/lib/supabase-browser";
 
@@ -12,64 +12,65 @@ export function CountryProvider({ children, initialCountryCode }: { children: Re
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
   const [countryCode, setCountryCode] = useState(() => getCountry(initialCountryCode).code);
-  const [accountCountryCode, setAccountCountryCode] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const currentCode = useRef(countryCode);
+  const [account, setAccount] = useState<{ userId: string; code: string | null } | null>(null);
+  const [initialized, setInitialized] = useState(false);
   const [refreshing, startTransition] = useTransition();
-  const hasSavedPreference = useRef(isEnabledCountryCode(initialCountryCode));
-  const initialized = useRef(false);
   const persist = useCallback((code: string) => {
-    try { window.localStorage.setItem(COUNTRY_PREFERENCE_STORAGE_KEY, code); } catch { /* Cookies still work if browser storage is disabled. */ }
-    document.cookie = `${COUNTRY_PREFERENCE_COOKIE}=${code}; Path=/; Max-Age=31536000; SameSite=Lax`;
+    try { window.localStorage.setItem(COUNTRY_PREFERENCE_STORAGE_KEY, code); } catch { /* The cookie remains available. */ }
+    document.cookie = `${COUNTRY_PREFERENCE_COOKIE}=${code}; Path=/; Max-Age=31536000; SameSite=Lax${location.protocol === "https:" ? "; Secure" : ""}`;
   }, []);
   const applyCountry = useCallback((code: string) => {
-    setCountryCode(code);
     persist(code);
+    if (currentCode.current === code) return;
+    currentCode.current = code;
+    setCountryCode(code);
     startTransition(() => router.refresh());
   }, [persist, router]);
   const setCountry = useCallback((code: string) => {
-    if (!isEnabledCountryCode(code)) return;
-    // Mark immediately so a pending profile lookup cannot replace a navbar choice.
-    hasSavedPreference.current = true;
+    // Signed-in discovery follows the saved onboarding/profile country.
+    if (user || authLoading || !isEnabledCountryCode(code)) return;
     applyCountry(code.toUpperCase());
-  }, [applyCountry]);
+  }, [user, authLoading, applyCountry]);
 
   useEffect(() => {
-    if (initialized.current) return;
-    initialized.current = true;
     let saved: string | null = null;
-    try { saved = window.localStorage.getItem(COUNTRY_PREFERENCE_STORAGE_KEY); } catch { /* Fall back to the server cookie. */ }
-    if (!hasSavedPreference.current && isEnabledCountryCode(saved)) {
-      hasSavedPreference.current = true;
-      applyCountry(saved.toUpperCase());
-    } else {
-      persist(getCountry(initialCountryCode).code);
-    }
-    setLoading(false);
-  }, [initialCountryCode, applyCountry, persist]);
+    try { saved = window.localStorage.getItem(COUNTRY_PREFERENCE_STORAGE_KEY); } catch { /* Fall back to cookie. */ }
+    applyCountry(isEnabledCountryCode(initialCountryCode) ? initialCountryCode.toUpperCase() : getCountry(saved).code);
+    setInitialized(true);
+  }, [initialCountryCode, applyCountry]);
 
+  const userId = user?.id;
+  const signupCountry = user?.user_metadata?.country_code;
   useEffect(() => {
-    if (authLoading) return;
-    if (!user) { setAccountCountryCode(null); return; }
-    const supabase = getSupabaseBrowserClient();
-    if (!supabase) return;
+    if (authLoading || !initialized || !userId) return;
     let active = true;
-    supabase.from("profiles").select("country_code").eq("user_id", user.id).maybeSingle().then(({ data }) => {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10_000);
+    async function reconcileProfile() {
+      let profileCode: unknown;
+      try {
+        const supabase = getSupabaseBrowserClient();
+        const result = await supabase?.from("profiles").select("country_code").eq("user_id", userId!).abortSignal(controller.signal).maybeSingle();
+        profileCode = result?.data?.country_code;
+      } catch { /* Signup metadata also records the user's country. */ }
+      finally { clearTimeout(timeout); }
       if (!active) return;
-      const code = data && isEnabledCountryCode(data.country_code) ? data.country_code.toUpperCase() : null;
-      setAccountCountryCode(code);
-      if (code && !hasSavedPreference.current) {
-        hasSavedPreference.current = true;
-        applyCountry(code);
-      }
-    });
-    return () => { active = false; };
-  }, [authLoading, user, applyCountry]);
-  const value = useMemo(() => ({ country: getCountry(countryCode), accountCountry: accountCountryCode ? getCountry(accountCountryCode) : null, setCountry, loading, refreshing }), [countryCode, accountCountryCode, setCountry, loading, refreshing]);
+      const code = resolveAccountCountry(profileCode, signupCountry);
+      if (code) applyCountry(code);
+      setAccount({ userId: userId!, code });
+    }
+    void reconcileProfile();
+    return () => { active = false; clearTimeout(timeout); controller.abort(); };
+  }, [authLoading, initialized, userId, signupCountry, applyCountry]);
+  const accountCode = account?.userId === userId ? account?.code : null;
+  const loading = authLoading || !initialized || Boolean(userId && account?.userId !== userId);
+  const value = useMemo(() => ({ country: getCountry(countryCode), accountCountry: accountCode ? getCountry(accountCode) : null, setCountry, loading, refreshing }), [countryCode, accountCode, setCountry, loading, refreshing]);
   return <CountryContext.Provider value={value}>{children}</CountryContext.Provider>;
 }
-
 export function useCountry() {
   const value = useContext(CountryContext);
   if (!value) throw new Error("useCountry must be used inside CountryProvider");
   return value;
 }
+

@@ -1,3 +1,4 @@
+import { TitleViewTracker } from "@/components/title-view-tracker";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -39,7 +40,7 @@ export default async function TitlePage({ params }: PageProps) {
   const trailer = title.videos.find(video => video.official && video.type === "Trailer") ?? title.videos.find(video => video.type === "Trailer");
   const facts = [[type === "movie" ? "Original release date" : "First air date", title.releaseDate], ["Runtime", title.runtime ? `${title.runtime} min` : undefined], ["Genres", title.genres.join(", ") || undefined], ["Original language", title.originalLanguage], ["Status", title.status], ["Production", title.companies.join(", ") || undefined], ["Countries", title.countries.join(", ") || undefined], ["Budget", formatMoney(title.budget)], ["Revenue", formatMoney(title.revenue)]];
 
-  return <><Navbar /><main className="title-page">
+  return <><Navbar /><main className="title-page"><TitleViewTracker mediaType={type} titleId={titleId} />
     <section className="title-hero" aria-labelledby="title-name">
       {title.backdropPath ? <Image className="title-backdrop" src={imageUrl(title.backdropPath, "w1280")!} alt="" fill priority sizes="100vw" /> : null}
       <div className="title-hero-shade" />

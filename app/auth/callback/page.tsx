@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getSupabaseBrowserClient } from "@/lib/supabase-browser";
-import { COUNTRY_PREFERENCE_COOKIE, COUNTRY_PREFERENCE_STORAGE_KEY, DEFAULT_COUNTRY_CODE, isEnabledCountryCode } from "@/lib/countries";
+import { COUNTRY_PREFERENCE_COOKIE, COUNTRY_PREFERENCE_STORAGE_KEY, DEFAULT_COUNTRY_CODE, resolveAccountCountry } from "@/lib/countries";
 
 export default function AuthCallbackPage() {
   const router = useRouter(); const searchParams = useSearchParams(); const [message, setMessage] = useState("Signing you in…");
@@ -11,7 +11,19 @@ export default function AuthCallbackPage() {
     const supabase = getSupabaseBrowserClient(); const code = searchParams.get("code"); const next = searchParams.get("next"); const destination = next && next.startsWith("/") && !next.startsWith("//") ? next : "/";
     if (!supabase) { setMessage("Authentication has not been configured yet."); return; }
     const client = supabase;
-    async function completeSession() { const { data: { user } } = await client.auth.getUser(); if (user) { const metadataCountry = user.user_metadata.country_code; const countryCode = typeof metadataCountry === "string" && isEnabledCountryCode(metadataCountry) ? metadataCountry.toUpperCase() : DEFAULT_COUNTRY_CODE; const { data: existingProfile } = await client.from("profiles").select("user_id").eq("user_id", user.id).maybeSingle(); if (!existingProfile) { await client.from("profiles").insert({ user_id: user.id, name: typeof user.user_metadata.full_name === "string" ? user.user_metadata.full_name : null, country_code: countryCode }); window.localStorage.setItem(COUNTRY_PREFERENCE_STORAGE_KEY, countryCode); document.cookie = `${COUNTRY_PREFERENCE_COOKIE}=${countryCode}; Path=/; Max-Age=31536000; SameSite=Lax`; } } router.replace(destination); router.refresh(); }
+    async function completeSession() {
+      const { data: { user } } = await client.auth.getUser();
+      if (!user) { setMessage("We couldn’t confirm your session. Please request a new sign-in link."); return; }
+      const { data: existingProfile, error: profileError } = await client.from("profiles").select("user_id,country_code").eq("user_id", user.id).maybeSingle();
+      const countryCode = resolveAccountCountry(existingProfile?.country_code, user.user_metadata.country_code) ?? DEFAULT_COUNTRY_CODE;
+      if (!existingProfile && !profileError) {
+        await client.from("profiles").insert({ user_id: user.id, name: typeof user.user_metadata.full_name === "string" ? user.user_metadata.full_name : null, country_code: countryCode });
+      }
+      // Reconcile returning users too, before the destination's server render.
+      try { window.localStorage.setItem(COUNTRY_PREFERENCE_STORAGE_KEY, countryCode); } catch { /* Cookie persistence remains available. */ }
+      document.cookie = `${COUNTRY_PREFERENCE_COOKIE}=${countryCode}; Path=/; Max-Age=31536000; SameSite=Lax${location.protocol === "https:" ? "; Secure" : ""}`;
+      router.replace(destination); router.refresh();
+    }
     if (code) { client.auth.exchangeCodeForSession(code).then(({ error }) => { if (error) { setMessage("This sign-in link is invalid or has expired. Please request a new one."); return; } completeSession(); }); return; }
     const timer = window.setTimeout(() => client.auth.getSession().then(({ data }) => { if (data.session) completeSession(); else setMessage("This link is invalid, expired, or was opened in a different browser. Please request a new one."); }), 250);
     return () => window.clearTimeout(timer);

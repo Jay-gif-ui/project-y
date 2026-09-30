@@ -25,7 +25,7 @@ test('every supported country and both media types enforce legal availability an
     assert.equal(params.with_origin_country, undefined);
     assert.equal(discoveryParams(type, country.code, now, { local:true }).with_origin_country, country.code);
   }
-  const activity = discoveryParams('tv', 'JP', now, {activity:true, genreId:16});
+  const activity = discoveryParams('tv', 'GB', now, {activity:true, genreId:16});
   assert.equal(activity['air_date.gte'], '2026-06-25');
   assert.equal(activity['air_date.lte'], '2026-09-23');
   assert.equal(activity['first_air_date.gte'], undefined);
@@ -120,9 +120,10 @@ test('partial failures are explicit; empty availability is not replaced by unver
 
 test('official TV genre validation rejects movie-only IDs and genre queries keep region, dates and genre',async()=>{
   const {tmdb,calls}=api(async url=>url.pathname.includes('/genre/')?Response.json({genres:[{id:10759,name:'Action & Adventure'}]}):Response.json({results:[raw(1,'tv')]}));
-  assert.equal((await tmdb.discoverGenre('tv','JP',28,'recent',now)).error,'not-found');
-  const result=await tmdb.discoverGenre('tv','JP',10759,'recent',now);
+  assert.equal((await tmdb.discoverGenre('tv','GB',28,'recent',now)).error,'not-found');
+  const result=await tmdb.discoverGenre('tv','GB',10759,'recent',now);
   assert.equal(result.data.length,1);
-  for(const call of calls.filter(call=>call.path.includes('/discover/'))){assert.equal(call.params.with_genres,'10759');assert.equal(call.params.watch_region,'JP');}
+  for(const call of calls.filter(call=>call.path.includes('/discover/'))){assert.equal(call.params.with_genres,'10759');assert.equal(call.params.watch_region,'GB');}
   assert.equal(calls[0].options.next.revalidate,86400);
 });
+
